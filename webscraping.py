@@ -194,7 +194,6 @@ def export_to_json(voitures: voiture, chemin_sortie: str):
         print("Erreur lors de l'exportation en format json.")
         return None
 
-
 def fusionner_fichiers_json(fichiers_entree):
     # Liste pour stocker les données de tous les fichiers JSON
     donnees_finales = []
@@ -206,3 +205,4 @@ def fusionner_fichiers_json(fichiers_entree):
             donnees_finales.extend(donnees_fichier)
 
     return donnees_finales
+
