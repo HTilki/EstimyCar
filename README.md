@@ -23,3 +23,8 @@ Le scraping fonctionne essentiellement à l'aide de [BeautifulSoup](https://www.
 - Scraper toutes les annonces sur le site : Done
 - Réussir à parser les données dans une table et nettoyer la base : Done
 
+#### Machine Learning
+
+- Faire du pre-processing : Nettoyer la base de données pour avoir une base avec le moins de NA possible (important pour la partie machine learning)
+- Faire n modèles pour n marques, en prenant en compte les marques avec le plus de données : En cours
+- Choisir le meilleur et le sauvegarder : Done
