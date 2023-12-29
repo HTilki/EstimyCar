@@ -98,6 +98,7 @@ def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     MOTIF1 = r'(?P<cylindre>\d+\.\d+)\s+(?:(?P<moteur>[\w-]+)\s+)?(?P<puissance>\d+)\s+(?P<finition>\w+.*)'
     MOTIF2 = r'(?P<cylindre>\d+\.\d+)\s+(?P<puissance>\d+)'
     MOTIF_ELEC = r'(?P<puissance>\d+ch)\s+(?P<batterie>\d+kWh)\s+(?P<finition>\w+.*)'
+    MOTIF_ELEC2 = r'(?P<puissance>\d+ch)\s+(?P<batterie>\d+kWh+)'
     MOTIF_CYLINDRE = r'(?P<cylindre>\d+\.\d+)'
     data = data.with_columns(
         pl.col('cylindre').str.extract(MOTIF_CYLINDRE, 1).alias("cylindre_2"),
@@ -107,7 +108,9 @@ def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
         pl.col('cylindre').str.extract(MOTIF2, 2).alias("puissance_2"),
         pl.col('cylindre').str.extract(MOTIF_ELEC, 1).alias("puissance_elec"),
         pl.col('cylindre').str.extract(MOTIF_ELEC, 2).alias("batterie"),
-        pl.col('cylindre').str.extract(MOTIF_ELEC, 3).alias("finition_2")
+        pl.col('cylindre').str.extract(MOTIF_ELEC, 3).alias("finition_2"),
+        pl.col('cylindre').str.extract(MOTIF_ELEC2, 1).alias("puissance_elec_2"),
+        pl.col('cylindre').str.extract(MOTIF_ELEC2, 2).alias("batterie_2")
     )
     return data
 
@@ -124,11 +127,22 @@ def clean_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     .otherwise(pl.col("puissance"))
     .alias("puissance")
     ).with_columns(
+    pl.when(pl.col("puissance").is_null())
+    .then(pl.col("puissance_elec_2"))
+    .otherwise(pl.col("puissance"))
+    .alias("puissance")
+    ).with_columns(
     pl.when(pl.col("finition").is_null())
     .then(pl.col("finition_2"))
     .otherwise(pl.col("finition"))
     .alias("finition")
     ).drop(['cylindre', 'puissance_2', 'finition_2', 'puissance_elec']
+    ).with_columns(
+    pl.when(pl.col("batterie").is_null())
+    .then(pl.col("batterie_2"))
+    .otherwise(pl.col("batterie"))
+    .alias("batterie")
+    ).drop(['cylindre', 'puissance_2', 'finition_2', 'puissance_elec', 'puissance_elec_2', 'batterie_2']
            ).rename({'cylindre_2': "cylindre"})
     return data
 
