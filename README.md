@@ -28,3 +28,9 @@ Le scraping fonctionne essentiellement à l'aide de [BeautifulSoup](https://www.
 - Faire du pre-processing : Nettoyer la base de données pour avoir une base avec le moins de NA possible (important pour la partie machine learning)
 - Faire n modèles pour n marques, en prenant en compte les marques avec le plus de données : En cours
 - Choisir le meilleur et le sauvegarder : Done
+
+#### Application
+- Faire une application estimateur de prix + autre idée. : En cours
+- Trouver un moyen pour ne pas avoir à charger la base de données à chaque action de l'utilisateur (base SQL ?) : Done
+- Avoir un interface épurée avec une partie recherche d'annonce : En cours
+- Faire la partie estimateur de prix, si données manquantes à l'entrée, proposer plusieurs estimation (via graph plotly par exemple) : A faire
