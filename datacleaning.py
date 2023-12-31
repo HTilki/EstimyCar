@@ -5,15 +5,15 @@ def recup_marque_modele_generation(row: tuple, nom_marques_modeles: pl.DataFrame
     """
     Récupère les informations sur la marque, le modèle et la génération d'un véhicule.
 
-    Parameters:
+    ## Parameters:
         row (tuple): Tuple contenant une chaîne de caractères représentant les informations du véhicule.
         nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et  les modèles associés des véhicules. 
 
-    Returns:
+    ## Returns:
         - Un tuple contenant la marque, le modèle et la génération du véhicule s'ils sont identifiés.
         - Sinon retourne None si aucune correspondance n'est trouvée.
 
-    Example:
+    ## Example:
         >>> row_ex = ("CITROEN C3 2010",)
         >>> car_ex = pl.DataFrame({
         ...     "marque": ["CITROEN"],
@@ -44,15 +44,15 @@ def get_marque_modele_generation(data: pl.DataFrame, nom_marques_modeles: pl.Dat
     """
     Extrait les informations sur la marque, le modèle et la génération à partir des données fournies.
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
         nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et  les modèles associés des véhicules. 
 
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars contenant les informations sur la marque, le modèle et la génération extraites des données fournies.
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
         ... "marque": ["CITROEN C3 2010", "MERCEDES 280 SL 1971"],
         ...  #...
@@ -80,13 +80,13 @@ def get_km_prix_annee(data: pl.DataFrame) -> pl.DataFrame:
     """
     Traite les données des colonnes "kilométrage", "prix" et "année" dans le DataFrame fourni.
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars traité, avec les colonnes '"kilométrage", "prix" et "année" converties dans le bon format.
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "kilometrage": ["100 000 km", "75 000 km", "120 000 km"],
         ...     "prix": ["15 000 €", "20 000 €", "12 500 €"],
@@ -113,13 +113,13 @@ def get_garantie(data : pl .DataFrame) -> pl.DataFrame :
     """
     Traite les données de la colonne "garantie" dans le DataFrame fourni.
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars traité, avec la colonne "garantie" nettoyer et convertie dans le bon format.
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "garantie": ["Livraison", "NA", "Garantie 12 mois", "3 mois", "-300 mois"]
         ...     # ... 
@@ -146,14 +146,14 @@ def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     """
     Divise et extrait les informations de cylindre, puissance, moteur, batterie et finition à partir de la colonne "cylindre".
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars traité, avec les nouvelles colonnes "cylindre_2"", "moteur", "puissance", "finition", 
         "puissance_2", "puissance_elec", "batterie", "finition_2" extraites de la colonne "cylindre".
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY", 
                             "2.0 HDI 90", "320ch 75kWh"]
@@ -175,6 +175,7 @@ def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     """
     MOTIF1 = r'(?P<cylindre>\d+\.\d+)\s+(?:(?P<moteur>[\w-]+)\s+)?(?P<puissance>\d+)\s+(?P<finition>\w+.*)'
     MOTIF2 = r'(?P<cylindre>\d+\.\d+)\s+(?P<puissance>\d+)'
+    MOTIF3 = r'(?P<cylindre>\d+\.\d+)\s+(?P<moteur>[\w-]+)\s+?(?P<puissance>\d+)'
     MOTIF_ELEC = r'(?P<puissance>\d+ch)\s+(?P<batterie>\d+kWh)\s+(?P<finition>\w+.*)'
     MOTIF_ELEC2 = r'(?P<puissance>\d+ch)\s+(?P<batterie>\d+kWh+)'
     MOTIF_CYLINDRE = r'(?P<cylindre>\d+\.\d+)'
@@ -184,6 +185,8 @@ def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
         pl.col('cylindre').str.extract(MOTIF1, 3).alias("puissance"),
         pl.col('cylindre').str.extract(MOTIF1, 4).alias("finition"),
         pl.col('cylindre').str.extract(MOTIF2, 2).alias("puissance_2"),
+        pl.col('cylindre').str.extract(MOTIF3, 2).alias("moteur_2"),
+        pl.col('cylindre').str.extract(MOTIF3, 3).alias("puissance_3"),
         pl.col('cylindre').str.extract(MOTIF_ELEC, 1).alias("puissance_elec"),
         pl.col('cylindre').str.extract(MOTIF_ELEC, 2).alias("batterie"),
         pl.col('cylindre').str.extract(MOTIF_ELEC, 3).alias("finition_2"),
@@ -197,13 +200,13 @@ def clean_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     """
     Nettoie et organise les données de puissance et de finition à partir de colonnes spécifiques.
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars avec les colonnes "puissance" et "finition" restructurées et renommées.
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY", 
                             "2.0 HDI 90", "320ch 75kWh"]
@@ -228,6 +231,11 @@ def clean_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     .alias("puissance")
     ).with_columns(
     pl.when(pl.col("puissance").is_null())
+    .then(pl.col("puissance_3"))
+    .otherwise(pl.col("puissance"))
+    .alias("puissance")
+    ).with_columns(
+    pl.when(pl.col("puissance").is_null())
     .then(pl.col("puissance_elec"))
     .otherwise(pl.col("puissance"))
     .alias("puissance")
@@ -247,7 +255,12 @@ def clean_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     .then(pl.col("batterie_2"))
     .otherwise(pl.col("batterie"))
     .alias("batterie")
-    ).drop(['cylindre', 'puissance_2', 'finition_2', 'puissance_elec', 'puissance_elec_2', 'batterie_2']
+    ).with_columns(
+    pl.when(pl.col("moteur").is_null())
+    .then(pl.col("moteur_2"))
+    .otherwise(pl.col("moteur"))
+    .alias("moteur")
+    ).drop(['cylindre', 'moteur_2', 'puissance_2', 'puissance_3', 'finition_2', 'puissance_elec', 'puissance_elec_2', 'batterie_2']
            ).rename({'cylindre_2': "cylindre"})
     return data
 
@@ -255,15 +268,15 @@ def convert_puissance(data: pl.DataFrame) -> pl.DataFrame:
     """
     Modifie le format des données de la colonne "puissance" du DataFrame donné.
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars avec la colonne "puissance" convertie au format spécifié.
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
-        ...     "puissance": ["320ch", "130ch", "60ch", None, None, None]
+        ...     "puissance": ["320", "130ch", "60ch", None]
         ...     # ... 
         ... })
 
@@ -273,8 +286,6 @@ def convert_puissance(data: pl.DataFrame) -> pl.DataFrame:
         | 320       |
         | 130       |
         | 60        |
-        | null      |
-        | null      |
         | null      |
 
     """
@@ -287,13 +298,13 @@ def get_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     """
     Effectue une série de traitements sur les colonnes du DataFrame pour obtenir des données formatées sur les cylindres des véhicules.
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame:  DataFrame Polars avec les colonnes formatées sur les cylindres et la puissance.
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY", 
                             "2.0 HDI 90", "320ch 75kWh"]
@@ -301,6 +312,14 @@ def get_cylindre(data: pl.DataFrame) -> pl.DataFrame:
         ... })
 
         >>> get_cylindre(data_ex)
+        | cylindre | moteur    | puissance | finition            | batterie |
+        |----------|-----------|-----------|---------------------|----------|
+        | "1.6"    | "BLUEHDI" |  100      | "SHINE"             | null     |
+        | "1.2"    | "PURETECH"|  130      | "FEEL PACK BUSINESS"| null     |
+        | "1.1"    | null      |  60       | "MIAMI"             | null     |
+        | null     | null      | null      | null                | null     |
+        | "2.0"    | null      | null      | null                | null     |
+        | null     | null      |  320      | null                | "75kWh"  |
 
     """
     data = (data.pipe(split_cylindre)
@@ -316,13 +335,13 @@ def filter_data(data: pl.DataFrame) -> pl.DataFrame:
     les lignes ayant une énergie marquée comme "erreur", ainsi que les lignes n'ayant pas de puissance.
 
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars filtré selon les spécifications indiquées.
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "annee": [2022, 2023, 2017, 2024, 2023],
         ...     "kilometrage": [45000, 60000, 1500000, 55000, 80700],
