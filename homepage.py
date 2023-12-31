@@ -69,7 +69,7 @@ if user_role == "Acheteur":
 
     #prix
     prix_min, prix_max = display_prix_selection()
- 
+
     with tab_data:
         col1.metric(
             label="Nombre total de voitures", 
@@ -88,5 +88,9 @@ if user_role == "Acheteur":
     else:
         st.session_state.reset = False
 
-with tab2:
-    st.balloons()
+    with tab2:
+        st.balloons()
+        
+elif user_role == "Vendeur":
+    marque = marques_mutliselect(nom_marques_modeles)
+
