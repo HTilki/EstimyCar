@@ -285,3 +285,61 @@ def calcul_delta(marques: list, modeles: list, annee_min: int, annee_max: int, k
                     AND prix between {prix_min} AND {prix_max};
                     """).pl().item()
                     )
+
+def get_unique_generation(marque: str, modele: str) -> list:
+    generations = duckdb.sql(
+        f"""
+        SELECT DISTINCT(generation) as unique_gen
+        FROM 'data/database.parquet'
+        WHERE marque == '{marque.upper()}' 
+        AND modele == '{modele.upper()}'
+        AND generation IS NOT NULL
+        ORDER BY unique_gen
+        """).df()
+    return list(generations['unique_gen'])    
+
+def get_unique_moteur(marque: str, modele: str) -> list:
+    moteurs = duckdb.sql(
+        f"""
+        SELECT DISTINCT(moteur) as unique_mot
+        FROM 'data/database.parquet'
+        WHERE marque == '{marque.upper()}' 
+        AND modele == '{modele.upper()}'
+        AND moteur IS NOT NULL
+        ORDER BY unique_mot 
+        """).df()
+    return list(moteurs['unique_mot'])
+
+def get_unique_cylindre(marque: str, modele: str) -> list:
+    cylindres = duckdb.sql(
+        f"""
+        SELECT DISTINCT(cylindre) as unique_cyl
+        FROM 'data/database.parquet'
+        WHERE marque == '{marque.upper()}' 
+        AND modele == '{modele.upper()}'
+        AND cylindre IS NOT NULL
+        ORDER BY unique_cyl
+        """).df()
+    return list(cylindres['unique_cyl'])
+
+def get_unique_finition(marque: str, modele: str) -> list:
+    finitions = duckdb.sql(
+        f"""
+        SELECT DISTINCT(finition) as unique_fin
+        FROM 'data/database.parquet'
+        WHERE marque == '{marque.upper()}' 
+        AND modele == '{modele.upper()}'
+        AND finition IS NOT NULL
+        ORDER BY unique_fin
+        """).df()
+    return list(finitions['unique_fin'])
+
+def get_unique_batterie() -> list:
+    batteries = duckdb.sql(
+        f"""
+        SELECT DISTINCT(batterie) as unique_bat
+        FROM 'data/database.parquet'
+        WHERE batterie IS NOT NULL
+        ORDER BY unique_bat
+        """).df()
+    return list(batteries['unique_bat'])

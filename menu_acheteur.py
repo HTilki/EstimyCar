@@ -2,6 +2,29 @@ import streamlit as st
 import polars as pl
 from requete_dataframe import get_plage_annee
 
+
+def style_markdown():
+    st.markdown(
+        """
+        <style>
+                .block-container {
+                    padding-top: 2rem;
+                    padding-bottom: 0rem;
+                    padding-left: 2rem;
+                    padding-right: 2rem;
+                }
+                .st-emotion-cache-16txtl3{
+                    padding-top: 2rem;
+                    padding-right: 0rem;
+                    padding-bottom: 1rem;
+                    padding-left: 0rem;
+                }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def display_km_selection():
 
     kmmin, kmmax = st.sidebar.columns([1, 1])
