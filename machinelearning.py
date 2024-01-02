@@ -9,6 +9,7 @@ et la gestion des modèles sauvegardés.
 import polars as pl
 import pandas as pd
 import numpy as np
+import plotly.express as px
 import warnings
 from sklearn.base import RegressorMixin
 from sklearn.linear_model import LinearRegression
@@ -355,6 +356,70 @@ def predict_prix(data: pl.DataFrame, marque: str) -> np.ndarray:
     try:
         modele, preprocessor = charger_modeles(marque)
         prediction = modele.predict(preprocessor.transform(data.to_pandas()))
+        prediction = np.round(prediction, decimals=2)
         return prediction
     except Exception as e:
         print(f"Erreur lors de la prédiction du prix. {e}")
+
+def predict_prix_autre_km(data: pl.DataFrame, marque: str) -> None:
+    """
+    Prédit les prix des véhicules pour une marque donnée en utilisant le modèle chargé, en simulant différents kilométrages.
+
+    ## Parameters:
+        data (pl.DataFrame): DataFrame Polars contenant les données des véhicules d'origine.
+        marque (str): Nom de la marque pour laquelle les prix sont prédits.
+
+    ## Returns:
+        None
+
+    ## Example:
+        >>> predict_prix_autre_km(data_origine, 'PORSCHE')
+        # Prédit les prix des véhicules pour la marque PORSCHE en utilisant le modèle chargé,
+        # en simulant différents kilométrages.
+    """
+    data_fictif = data.with_columns(type_km=pl.lit("Kilométrage fictif"))
+    data = data.with_columns(type_km=pl.lit("Kilométrage aujourd'hui"))
+
+    for i in range(0, 310000, 10000):
+        data = pl.concat([data,
+                          data_fictif.with_columns(kilometrage=i).cast({"kilometrage": pl.Int64})])
+
+    prix_predit = predict_prix(data.drop('type_km'), marque)
+
+    data = data.with_columns(
+        pl.Series(name='Prix estimé', values=prix_predit)
+    ).sort(
+        "kilometrage"
+    ).with_columns(
+        pl.col("Prix estimé").map_batches(_convert_list_float).alias("Prix estimé")
+    )
+
+    fig = px.line(data, 
+                x="kilometrage", 
+                y="Prix estimé", 
+                title="Prix estimé en fonction du kilométrage du véhicule",
+                markers=True,
+                color="type_km",
+                )
+    fig.update_layout(legend_title_text=None)
+    fig.update_layout(xaxis=dict(tickformat='d'),
+                      yaxis=dict(tickformat='d'))
+    fig.show()
+
+
+def _convert_list_float(series: pl.Series) -> pl.Series:
+    """
+    Convertit une série de listes en une série de valeurs flottantes.
+
+    ## Parameters:
+        series (pl.Series): Série Polars contenant des listes de valeurs.
+
+    ## Returns:
+        pl.Series: Série Polars contenant des valeurs flottantes.
+
+    ## Example:
+        >>> _convert_list_float(data['Prix estimé'])
+        # Convertit une série de listes de prix en une série de valeurs flottantes.
+    """
+    return pl.Series(values=[val[0] for val in series])
+
