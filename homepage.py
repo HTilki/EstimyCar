@@ -57,6 +57,7 @@ if user_role == "Acheteur":
 if user_role == "Vendeur":
 
     tab_prediction = st.tabs(["Estimation"])
+    estimation, estimation_km = st.columns(2)
     st.sidebar.header("Caractéristiques")
     
     marque = marque_select()
@@ -72,5 +73,9 @@ if user_role == "Vendeur":
     # changer class de batterie en int ???
     generation = generation_select(marque, modele)
     finition = finition_select(marque, modele)
-    predict_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
+    with estimation:
+        predict_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
+
+    with estimation_km:
+        predict_km_fictif_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
 

@@ -1,7 +1,7 @@
 import streamlit as st
 import polars as pl
 from requete_dataframe import get_plage_annee, get_unique_moteur, get_unique_marque, get_unique_modele, get_unique_cylindre, get_unique_finition, get_unique_batterie, get_unique_generation
-from machinelearning import predict_prix
+from machinelearning import predict_prix, predict_prix_autre_km
 from numpy import ndarray
 
 def display_km():
@@ -160,4 +160,11 @@ def transform_input(marque: str, modele: str, annee: int, moteur: str, cylindre:
     return data
 
 def format_prediction(prix_predit: ndarray) -> str:
-    return str(round(prix_predit[0, 0], 2)) + '€' 
+    return str(prix_predit[0, 0]) + ' €' 
+
+
+def predict_km_fictif_button(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str):
+    if st.button('Estimer la valeur de votre véhicule selon le kilométrage.'):
+        data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
+        fig = predict_prix_autre_km(data, marque)
+        st.plotly_chart(fig)
