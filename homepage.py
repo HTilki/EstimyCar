@@ -29,7 +29,7 @@ if user_role == "Acheteur":
     st.sidebar.header("Caractéristiques")
     marques = marques_mutliselect(nom_marques_modeles)
     modeles = modeles_multiselect(nom_marques_modeles, marques)
-    annee_min, annee_max = display_annee()
+    annee_min, annee_max = display_annee(user_role)
     km_min, km_max = display_km_selection()
     boite = boite_multiselect()
     energie = energie_multiselect()
@@ -59,9 +59,9 @@ if user_role == "Vendeur":
     tab_prediction = st.tabs(["Estimation"])
     st.sidebar.header("Caractéristiques")
     
-    marque = marque_select(nom_marques_modeles)
-    modele = modele_select(nom_marques_modeles, marque)
-    annee = select_annee()
+    marque = marque_select()
+    modele = modele_select(marque)
+    annee = select_annee(user_role, marque, modele)
     moteur = moteur_select(marque, modele)
     cylindre = cylindre_select(marque, modele)
     puissance = display_puissance()
@@ -72,5 +72,5 @@ if user_role == "Vendeur":
     # changer class de batterie en int ???
     generation = generation_select(marque, modele)
     finition = finition_select(marque, modele)
-
+    predict_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
 

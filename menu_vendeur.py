@@ -1,6 +1,8 @@
 import streamlit as st
 import polars as pl
-from requete_dataframe import get_plage_annee, get_unique_moteur, get_unique_cylindre, get_unique_finition, get_unique_batterie, get_unique_generation
+from requete_dataframe import get_plage_annee, get_unique_moteur, get_unique_marque, get_unique_modele, get_unique_cylindre, get_unique_finition, get_unique_batterie, get_unique_generation
+from machinelearning import predict_prix
+from numpy import ndarray
 
 def display_km():
     km = st.sidebar.number_input("Kilométrage",  step=10000, min_value=0, max_value=1000000)
@@ -10,20 +12,14 @@ def display_puissance():
     ch = st.sidebar.number_input("Puissance",  step=10, min_value=0, max_value=1500)
     return ch
 
-def marque_select(nom_marques_modeles: pl.DataFrame) -> str:
-    marque = nom_marques_modeles['marque'].unique().to_list()
-    marque.sort()
-    choix_marque = st.sidebar.selectbox("Marque", marque,
+def marque_select() -> str:
+    marques = get_unique_marque()
+    choix_marque = st.sidebar.selectbox("Marque", marques,
                                         placeholder="Choisir une marque")
     return choix_marque
     
-def modele_select(nom_marques_modeles: pl.DataFrame, choix_marque: str) -> str:
-    modeles = []
-    for marque, modeles_list in zip(nom_marques_modeles['marque'], nom_marques_modeles['modeles']):
-        if marque in choix_marque:
-            modeles.extend(modeles_list)
-    modeles = list(set(modeles))
-    modeles.sort()
+def modele_select(choix_marque: str) -> str:
+    modeles = get_unique_modele(choix_marque)
     choix_modele = st.sidebar.selectbox("Modèle", modeles,
                                         placeholder="Choisir un modèle")
     return choix_modele
@@ -37,7 +33,9 @@ def generation_select(choix_marque: str, choix_modele: str) -> str:
         choix_generation_2 = st.sidebar.text_input("Autre choix de génération",
                                                placeholder="Saisissez la génération")
         return choix_generation_2
-    else: 
+    elif choix_generation == None: 
+        return 'null'
+    else:
         return choix_generation
 
 
@@ -50,7 +48,9 @@ def moteur_select(choix_marque: str, choix_modele: str) -> str:
         choix_moteur_2 = st.sidebar.text_input("Autre choix de moteur",
                                                placeholder="Saisissez votre moteur")
         return choix_moteur_2
-    else: 
+    elif choix_moteur == None: 
+        return 'null'
+    else : 
         return choix_moteur
 
 
@@ -63,7 +63,9 @@ def cylindre_select(choix_marque: str, choix_modele: str) -> str:
         choix_cylindre_2 = st.sidebar.text_input("Autre choix de cylindre",
                                                placeholder="Exemple: 4.0")
         return choix_cylindre_2
-    else: 
+    elif choix_cylindre == None: 
+        return 'null'
+    else : 
         return choix_cylindre
     
 def finition_select(choix_marque: str, choix_modele: str) -> str:
@@ -75,7 +77,9 @@ def finition_select(choix_marque: str, choix_modele: str) -> str:
         choix_finition_2 = st.sidebar.text_input("Autre choix de finition",
                                                placeholder="Choisir une finition")
         return choix_finition_2
-    else: 
+    elif choix_finition == None: 
+        return 'null'
+    else : 
         return choix_finition
 
 
@@ -85,10 +89,13 @@ def boite_select() -> str:
                                  index=None,
                                  placeholder="Choisir un type de boite"
                                 )
-    return boite
+    if boite != None:
+        return boite
+    else:
+        return 'null'
 
-def select_annee() -> int:
-    annee_min, annee_max = get_plage_annee()
+def select_annee(user_role, marque, modele) -> int:
+    annee_min, annee_max = get_plage_annee(user_role, marque, modele)
     annee = range(annee_min, annee_max + 1, 1)
     annee_choisi = st.sidebar.select_slider(
         "Année",
@@ -107,8 +114,10 @@ def energie_select() -> str:
         "Bicarburation essence / gpl"]
     energie = st.sidebar.selectbox("Énergie", type_energie,
                                     placeholder="Choisir un type d'énergie")
-    return energie
-
+    if energie != None:
+        return energie
+    else:
+        return 'null'
 
 def batterie_select(energie: str) -> str:
     if energie == "Électrique":
@@ -122,4 +131,33 @@ def batterie_select(energie: str) -> str:
             return choix_batterie_2
         else: 
             return choix_batterie
+    else: 
+        return 'null'
     
+
+def predict_button(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str):
+    if st.button('Estimer la valeur du véhicule.'):
+        data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
+        st.write('Prix estimé : ', format_prediction(predict_prix(data, marque)))
+
+def transform_input(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str) -> pl.DataFrame:
+    data = pl.DataFrame(
+        {
+            'annee': annee, 
+            'kilometrage': km,
+            'boite': boite,
+            'energie': energie,
+            'marque': marque,
+            'modele': modele,
+            'generation': generation,
+            'cylindre': cylindre,
+            'moteur': moteur,
+            'puissance': puissance,
+            'finition': finition,
+            'batterie': batterie
+        }
+    )
+    return data
+
+def format_prediction(prix_predit: ndarray) -> str:
+    return str(round(prix_predit[0, 0], 2)) + '€' 

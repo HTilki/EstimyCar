@@ -1,6 +1,6 @@
 import duckdb
 from polars import DataFrame
-
+from numpy import ndarray
 
 def get_count_car(marques: list, modeles: list, annee_min: int, annee_max: int, km_min: int, km_max: int, boite: list, energie: list, prix_min: int, prix_max: int) -> int:
     try:           
@@ -192,13 +192,24 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             AND prix between {prix_min} AND {prix_max};
             """).pl()
     
-def get_plage_annee():
-    return duckdb.sql(
-            f"""
-            SELECT MIN(annee) as annee_min,
-            MAX(annee) as annee_max
-            FROM 'data/database.parquet'
-            """).pl().to_numpy()[0]
+def get_plage_annee(user_role: str, marque: str = "", modele: str = "") -> ndarray:
+    if user_role == "Acheteur":
+        return duckdb.sql(
+                f"""
+                SELECT MIN(annee) as annee_min,
+                MAX(annee) as annee_max
+                FROM 'data/database.parquet'
+                """).pl().to_numpy()[0]
+    
+    if user_role == "Vendeur":
+        return duckdb.sql(
+                f"""
+                SELECT MIN(annee) as annee_min,
+                MAX(annee) as annee_max
+                FROM 'data/database.parquet'
+                WHERE marque == '{marque.upper()}' 
+                AND modele == '{modele.upper()}'
+                """).pl().to_numpy()[0]
 
 
 def calcul_delta(marques: list, modeles: list, annee_min: int, annee_max: int, km_min: int, km_max: int, boite: list, energie: list, prix_min: int, prix_max: int):
@@ -285,6 +296,27 @@ def calcul_delta(marques: list, modeles: list, annee_min: int, annee_max: int, k
                     AND prix between {prix_min} AND {prix_max};
                     """).pl().item()
                     )
+    
+def get_unique_marque() -> list:
+    marques = duckdb.sql(
+        f"""
+        SELECT DISTINCT(marque) as unique_mar
+        FROM 'data/database.parquet'
+        WHERE marque IS NOT NULL
+        ORDER BY unique_mar
+        """).df()
+    return list(marques['unique_mar']) 
+
+def get_unique_modele(marque: str) -> list:
+    modeles = duckdb.sql(
+        f"""
+        SELECT DISTINCT(modele) as unique_mod
+        FROM 'data/database.parquet'
+        WHERE marque == '{marque.upper()}'
+        AND modele IS NOT NULL
+        ORDER BY unique_mod
+        """).df()
+    return list(modeles['unique_mod'])
 
 def get_unique_generation(marque: str, modele: str) -> list:
     generations = duckdb.sql(

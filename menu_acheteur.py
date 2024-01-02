@@ -79,8 +79,8 @@ def boite_multiselect() -> list:
         boite = type_boite
     return boite
 
-def display_annee():
-    annee_min, annee_max = get_plage_annee()
+def display_annee(user_role):
+    annee_min, annee_max = get_plage_annee(user_role)
     annee = range(annee_min, annee_max + 1, 1)
     annee_min, annee_max = st.sidebar.select_slider(
         "Année",
