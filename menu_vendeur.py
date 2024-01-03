@@ -1,12 +1,28 @@
 import streamlit as st
 import polars as pl
-from requete_dataframe import get_plage_annee, get_unique_moteur, get_unique_marque, get_unique_modele, get_unique_cylindre, get_unique_finition, get_unique_batterie, get_unique_generation
-from machinelearning import predict_prix, predict_prix_autre_km
-from numpy import ndarray
+from requetes_dataframe import *
+from requetes_val_unique import *
 
-def display_km():
-    km = st.sidebar.number_input("Kilométrage",  step=10000, min_value=0, max_value=1000000)
-    return km
+def display_km(user_role):
+    if user_role == "Vendeur":
+        km = st.sidebar.number_input("Kilométrage",  step=10000, min_value=0, max_value=1000000)
+        return km
+    elif user_role == "Acheteur":
+        kmmin, kmmax = st.sidebar.columns([1, 1])
+        with kmmin:
+            km_min = st.number_input("Km min",  step=10000, min_value=0, max_value=1000000)
+        with kmmax:
+            km_max = st.number_input("Km max", step=10000, min_value=0, value=1000000, max_value=1000000)
+        if km_min > km_max:
+            st.warning("⚠️ La valeur min doit être inférieure à max !")
+        st.markdown("""
+        <style>
+            button.step-up {display: none;}
+            button.step-down {display: none;}
+            div[data-baseweb] {border-radius: 4px;}
+        </style>""",
+        unsafe_allow_html=True)
+        return km_min, km_max
 
 def display_puissance():
     ch = st.sidebar.number_input("Puissance",  step=10, min_value=0, max_value=1500)
@@ -94,7 +110,7 @@ def boite_select() -> str:
     else:
         return 'null'
 
-def select_annee(user_role, marque, modele) -> int:
+def select_annee(user_role: str, marque: str = "", modele: str = "") -> int:
     annee_min, annee_max = get_plage_annee(user_role, marque, modele)
     annee = range(annee_min, annee_max + 1, 1)
     annee_choisi = st.sidebar.select_slider(
@@ -134,37 +150,3 @@ def batterie_select(energie: str) -> str:
     else: 
         return 'null'
     
-
-def predict_button(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str):
-    if st.button('Estimer la valeur du véhicule.'):
-        data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
-        st.write('Prix estimé : ', format_prediction(predict_prix(data, marque)))
-
-def transform_input(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str) -> pl.DataFrame:
-    data = pl.DataFrame(
-        {
-            'annee': annee, 
-            'kilometrage': km,
-            'boite': boite,
-            'energie': energie,
-            'marque': marque,
-            'modele': modele,
-            'generation': generation,
-            'cylindre': cylindre,
-            'moteur': moteur,
-            'puissance': puissance,
-            'finition': finition,
-            'batterie': batterie
-        }
-    )
-    return data
-
-def format_prediction(prix_predit: ndarray) -> str:
-    return str(prix_predit[0, 0]) + ' €' 
-
-
-def predict_km_fictif_button(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str):
-    if st.button('Estimer la valeur de votre véhicule selon le kilométrage.'):
-        data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
-        fig = predict_prix_autre_km(data, marque)
-        st.plotly_chart(fig)

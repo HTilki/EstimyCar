@@ -1,9 +1,8 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 from webscraping import import_marques_modeles
-from requete_dataframe import get_count_car, get_avg_price, calcul_delta
-from fonctions_requete import show_dataframe
-from menu_acheteur import style_markdown, display_km_selection, marques_mutliselect, modeles_multiselect, boite_multiselect, display_annee, energie_multiselect, display_prix_selection
+from requetes_kpi import get_count_car, get_avg_price, calcul_delta
+from fonctions_tab import show_dataframe, predict_button, predict_km_fictif_button
+from menu_acheteur import *
 from menu_vendeur import *
 import polars as pl
 
@@ -30,7 +29,7 @@ if user_role == "Acheteur":
     marques = marques_mutliselect(nom_marques_modeles)
     modeles = modeles_multiselect(nom_marques_modeles, marques)
     annee_min, annee_max = display_annee(user_role)
-    km_min, km_max = display_km_selection()
+    km_min, km_max = display_km(user_role)
     boite = boite_multiselect()
     energie = energie_multiselect()
     prix_min, prix_max = display_prix_selection()
@@ -66,7 +65,7 @@ if user_role == "Vendeur":
     moteur = moteur_select(marque, modele)
     cylindre = cylindre_select(marque, modele)
     puissance = display_puissance()
-    km = display_km()
+    km = display_km(user_role)
     boite = boite_select()
     energie = energie_select()
     batterie = batterie_select(energie)
