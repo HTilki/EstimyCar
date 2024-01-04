@@ -60,7 +60,7 @@ if user_role == "Vendeur":
     
     marque = marques_select(nom_marques_modeles, user_role)
     modele = modeles_select(nom_marques_modeles, marque, user_role)
-    annee = display_annee(user_role, marque, modele)
+    annee = select_annee(user_role, marque, modele)
     moteur = moteur_select(marque, modele)
     cylindre = cylindre_select(marque, modele)
     puissance = display_puissance()

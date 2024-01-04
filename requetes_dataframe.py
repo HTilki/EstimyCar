@@ -47,7 +47,16 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             CASE WHEN generation = 'NA' THEN '' ELSE generation END,
             ' ', finition
             ) as Véhicule, 
-            cylindre, puissance, moteur, annee, boite, energie, prix, lien
+            cylindre, puissance, moteur, annee, boite, energie, prix, 
+            CASE
+                WHEN position_marché = 'Bonne affaire' THEN 'Bonne affaire 👍'
+                WHEN position_marché = 'Très bonne affaire' THEN 'Très bonne affaire 🌟'
+                WHEN position_marché = 'Au dessus du marché' THEN 'Au dessus du marché 💰'
+                WHEN position_marché = 'Offre équitable' THEN 'Offre équitable 🤝'
+                WHEN position_marché = 'Analyse indisponible' THEN 'Analyse indisponible ❌'
+                ELSE position_marché
+            END as Position_marché,
+            lien
             FROM 'data/database.parquet'
             WHERE annee BETWEEN {annee_min} AND {annee_max}
             AND kilometrage BETWEEN {km_min} AND {km_max}
@@ -64,7 +73,16 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             CASE WHEN generation = 'NA' THEN '' ELSE generation END,
             ' ', finition
             ) as Véhicule, 
-            cylindre, puissance, moteur, annee, boite, energie, prix, lien
+            cylindre, puissance, moteur, annee, boite, energie, prix, 
+            CASE
+                WHEN position_marché = 'Bonne affaire' THEN 'Bonne affaire 👍'
+                WHEN position_marché = 'Très bonne affaire' THEN 'Très bonne affaire 🌟'
+                WHEN position_marché = 'Au dessus du marché' THEN 'Au dessus du marché 💰'
+                WHEN position_marché = 'Offre équitable' THEN 'Offre équitable 🤝'
+                WHEN position_marché = 'Analyse indisponible' THEN 'Analyse indisponible ❌'
+                ELSE position_marché
+            END as Position_marché,
+            lien
             FROM 'data/database.parquet'
             WHERE marque IN ({', '.join(f"'{marque}'" for marque in marques)})
             AND annee BETWEEN {annee_min} AND {annee_max}
@@ -82,7 +100,16 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             CASE WHEN generation = 'NA' THEN '' ELSE generation END,
             ' ', finition
             ) as Véhicule, 
-            cylindre, puissance, moteur, annee, boite, energie, prix, lien
+            cylindre, puissance, moteur, annee, boite, energie, prix, 
+            CASE
+                WHEN position_marché = 'Bonne affaire' THEN 'Bonne affaire 👍'
+                WHEN position_marché = 'Très bonne affaire' THEN 'Très bonne affaire 🌟'
+                WHEN position_marché = 'Au dessus du marché' THEN 'Au dessus du marché 💰'
+                WHEN position_marché = 'Offre équitable' THEN 'Offre équitable 🤝'
+                WHEN position_marché = 'Analyse indisponible' THEN 'Analyse indisponible ❌'
+                ELSE position_marché
+            END as Position_marché,
+            lien
             FROM 'data/database.parquet'
             WHERE modele IN ({', '.join(f"'{modele.upper()}'" for modele in modeles)})
             AND annee BETWEEN {annee_min} AND {annee_max}
@@ -100,7 +127,16 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             CASE WHEN generation = 'NA' THEN '' ELSE generation END,
             ' ', finition
             ) as Véhicule, 
-            cylindre, puissance, moteur, annee, boite, energie, prix, lien
+            cylindre, puissance, moteur, annee, boite, energie, prix, 
+            CASE
+                WHEN position_marché = 'Bonne affaire' THEN 'Bonne affaire 👍'
+                WHEN position_marché = 'Très bonne affaire' THEN 'Très bonne affaire 🌟'
+                WHEN position_marché = 'Au dessus du marché' THEN 'Au dessus du marché 💰'
+                WHEN position_marché = 'Offre équitable' THEN 'Offre équitable 🤝'
+                WHEN position_marché = 'Analyse indisponible' THEN 'Analyse indisponible ❌'
+                ELSE position_marché
+            END as Position_marché,
+            lien
             FROM 'data/database.parquet'
             WHERE marque IN ({', '.join(f"'{marque}'" for marque in marques)}) 
             AND modele IN ({', '.join(f"'{modele.upper()}'" for modele in modeles)})
@@ -110,4 +146,5 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             AND energie IN ({', '.join(f"'{erg}'" for erg in energie)})
             AND prix between {prix_min} AND {prix_max};
             """).pl()
- 
+
+    

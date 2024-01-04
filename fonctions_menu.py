@@ -112,26 +112,6 @@ def boite_select(user_role) -> list:
         else:
             return 'null'
 
-def display_annee(user_role, marque: str = "", modele: str = ""):
-    annee_min, annee_max = get_plage_annee(user_role)
-    annee = range(annee_min, annee_max + 1, 1)
-
-    if user_role == "Acheteur":
-        annee_min, annee_max = st.sidebar.select_slider(
-            "Année",
-            options=sorted(annee),
-            value=(min(annee), max(annee))
-            )
-        return annee_min, annee_max
-    elif user_role == "Vendeur":
-        annee_choisi = st.sidebar.select_slider(
-            "Année",
-            options=sorted(annee),
-            value=max(annee)
-        )
-        return annee_choisi
-
-
 def energie_select(user_role) -> list:
     type_energie = [
         "Essence", 
@@ -180,9 +160,30 @@ def display_prix_selection():
     
     return prix_min, prix_max
 
+def display_annee(user_role):
+    annee_min, annee_max = get_plage_annee(user_role)
+    annee = range(annee_min, annee_max + 1, 1)
+    annee_min, annee_max = st.sidebar.select_slider(
+        "Année",
+        options=sorted(annee),
+        value=(min(annee), max(annee))
+        )
+    return annee_min, annee_max
 
 
 # Uniquement vendeur : 
+
+def select_annee(user_role: str, marque: str = "", modele: str = "") -> int:
+    annee_min, annee_max = get_plage_annee(user_role, marque, modele)
+    annee = range(annee_min, annee_max + 1, 1)
+    annee_choisi = st.sidebar.select_slider(
+        "Année",
+        options=sorted(annee),
+        value=max(annee)
+        )
+    return annee_choisi
+
+
 
 def display_puissance():
     ch = st.sidebar.number_input("Puissance",  step=10, min_value=0, max_value=1500)
