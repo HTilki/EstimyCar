@@ -368,13 +368,13 @@ def supp_doublons(data: pl.DataFrame) -> pl.DataFrame:
     """
     Supprime les doublons en se basant sur la colonne "lien".
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars avec les doublons supprimés.
 
-    Example: 
+    ## Example: 
         >>> data_ex = pl.DataFrame({
         ...     "lien": ["https://www.lacentrale.fr/auto-occasion-annonce-69111069227.html", 
         ...             "https://www.lacentrale.fr/auto-occasion-annonce-87102790043.html",
@@ -397,13 +397,13 @@ def supp_na(data: pl.DataFrame) -> pl.DataFrame:
     """
     Supprime les lignes du DataFrame  où la valeur de la colonne "marque"" est manquante (null).
 
-    Parameters:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars avec les lignes contenant des valeurs manquantes dans la colonne "marque" supprimées.
 
-    Example:
+    ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "marque": ["Toyota", "Ford", None, "BMW", None]
         ...     # ...
@@ -432,11 +432,11 @@ def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFra
     6. Suppression des doublons.
     7. Suppression des lignes ayant des valeurs manquantes dans la colonne 'marque'.
 
-    Args:
+    ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
         nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et  les modèles associés des véhicules. 
 
-    Returns:
+    ## Returns:
         pl.DataFrame: DataFrame Polars suite au traitement de pipeline, après avoir appliqué plusieurs étapes de transformation et de nettoyage.
     """
     data = (data.pipe(get_marque_modele_generation, nom_marques_modeles)
