@@ -27,6 +27,18 @@ def style_markdown():
 
 
 def display_km(user_role):
+    """
+    Affiche et gère l'entrée de kilométrage en fonction du rôle de l'utilisateur.
+
+    ## Parameters:
+        user_role (str) : le rôle de l'utilisateur ("Acheteur" ou "Vendeur")
+
+    ## Returns:
+        - Si l'utilisateur est un "Acheteur", affiche et gère la sélection 
+                    du kilométrage minimum et maximum et renvoie ces valeurs sous forme de tuple.
+        - Si l'utilisateur est un "Vendeur", renvoie le kilométrage saisi.
+    """
+
     if user_role == "Vendeur":
         km = st.sidebar.number_input("Kilométrage",  step=10000, min_value=0, max_value=1000000)
         return km
@@ -51,6 +63,19 @@ def display_km(user_role):
 
 
 def marques_select(nom_marques_modeles: pl.DataFrame, user_role) -> list:
+    """
+    Affiche une liste de marques de véhicules pour la sélection en fonction du rôle de l'utilisateur.
+
+    ## Parameters:
+        nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et  les modèles associés des véhicules. 
+        user_role (str): le rôle de l'utilisateur ("Acheteur" ou "Vendeur")
+
+    # #Returns:
+        list: 
+            - Si l'utilisateur est un "Acheteur", renvoie une liste d'une ou plusieurs marques sélectionnées.
+            - Si l'utilisateur est un "Vendeur", renvoie la marque sélectionnée.
+    """
+
     if user_role == "Acheteur":
         brands = nom_marques_modeles['marque'].unique().to_list()
         brands.sort()
@@ -66,6 +91,20 @@ def marques_select(nom_marques_modeles: pl.DataFrame, user_role) -> list:
 
 
 def modeles_select(nom_marques_modeles: pl.DataFrame, choix_marque: list, user_role) -> list:
+    """
+    Renvoie une sélection de modèles de véhicules en fonction de la marque sélectionnée et du rôle de l'utilisateur.
+
+    ## Parameters:
+        nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et  les modèles associés des véhicules. 
+        choix_marque (list): Liste des marques sélectionnées au préalable.
+        user_role (str): le rôle de l'utilisateur ("Acheteur" ou "Vendeur").
+
+    ## Returns:
+        list: 
+            - Si l'utilisateur est un "Acheteur", retourne une liste de modèles sélectionnés correspondant à/aux marque(s) choisie(s).
+            - Si l'utilisateur est un "Vendeur", retourne le modèle sélectionné pour la marque spécifique.
+    """
+
     if user_role == "Acheteur":
         if not choix_marque:  # Si aucune marque n'est sélectionnée
             modeles = [modele for modeles_list in nom_marques_modeles['modeles'] for modele in modeles_list]
@@ -94,6 +133,18 @@ def modeles_select(nom_marques_modeles: pl.DataFrame, choix_marque: list, user_r
 
 
 def boite_select(user_role) -> list:
+    """
+    Retourne une sélection de types de boîte en fonction du rôle de l'utilisateur.
+
+    ## Parameters:
+        user_role (str): le rôle de l'utilisateur ("Acheteur" ou "Vendeur")
+
+    ## Returns:
+        list: 
+            - Si l'utilisateur est un "Acheteur", retourne une liste de types de boîte sélectionnés via une multisélection.
+            - Si l'utilisateur est un "Vendeur", renvoie le type de boîte sélectionné via une liste déroulante. Si aucun choix n'est fait, renvoie "null".
+    """
+
     if user_role == "Acheteur":
         type_boite = ["Automatique", "Manuelle"]
         boite = st.sidebar.multiselect("Boite", type_boite,
@@ -111,8 +162,21 @@ def boite_select(user_role) -> list:
             return boite
         else:
             return 'null'
+        
+
 
 def energie_select(user_role) -> list:
+    """
+    Retourne une sélection de types d'énergie en fonction du rôle de l'utilisateur.
+
+    ## Parameters:
+        user_role (str): le rôle de l'utilisateur ("Acheteur" ou "Vendeur")
+
+    ## Returns:
+        list: 
+            - Si l'utilisateur est un "Acheteur", retourne une liste de types d'énergie sélectionnés via une multisélection.
+            - Si l'utilisateur est un "Vendeur", renvoie le type d'énergie sélectionné via une liste déroulante. Si aucun choix n'est fait, renvoie "null".
+    """
     type_energie = [
         "Essence", 
         "Diesel",
@@ -140,8 +204,10 @@ def energie_select(user_role) -> list:
 
 # Uniquement acheteur :
 
-
 def display_prix_selection():
+    """
+    Affiche des champs de saisie pour sélectionner un prix minimal et maximal.
+    """
 
     prixmin, prixmax = st.sidebar.columns([1, 1])
     with prixmin:
@@ -159,6 +225,8 @@ def display_prix_selection():
     unsafe_allow_html=True)
     
     return prix_min, prix_max
+
+
 
 def display_annee(user_role):
     annee_min, annee_max = get_plage_annee(user_role)
@@ -186,12 +254,28 @@ def select_annee(user_role: str, marque: str = "", modele: str = "") -> int:
 
 
 def display_puissance():
+    """
+    Permet à l'utilisateur de sélectionner la puissance du véhicule. 
+
+    ## Returns:
+        int: La puissance choisie par l'utilisateur.
+    """
     ch = st.sidebar.number_input("Puissance",  step=10, min_value=0, max_value=1500)
     return ch
 
 
 
 def generation_select(choix_marque: str, choix_modele: str) -> str:
+    """
+    Permet à l'utilisateur de choisir la génération du véhicule en fonction de la marque et du modèle sélectionnés.
+
+    ## Parameters:
+        choix_marque (str): Marque sélectionnée.
+        choix_modele (str): Modèle sélectionné.
+
+    ## Returns:
+        str: La génération sélectionnée.
+    """
     generations = get_unique_generation(choix_marque, choix_modele) + ["Autre choix..."]
     choix_generation = st.sidebar.selectbox("Génération", generations,
                                         index=None,
@@ -208,6 +292,16 @@ def generation_select(choix_marque: str, choix_modele: str) -> str:
 
 
 def moteur_select(choix_marque: str, choix_modele: str) -> str:
+    """
+    Permet à l'utilisateur de choisir le moteur du véhicule en fonction de la marque et du modèle sélectionnés.
+
+    ## Parameters:
+        choix_marque (str): Marque sélectionnée.
+        choix_modele (str): Modèle sélectionné.
+
+    ## Returns:
+        str: Le moteur sélectionné.
+    """
     moteurs = get_unique_moteur(choix_marque, choix_modele) + ["Autre choix..."]
     choix_moteur = st.sidebar.selectbox("Moteur", moteurs,
                                         index=None,
@@ -224,6 +318,16 @@ def moteur_select(choix_marque: str, choix_modele: str) -> str:
 
 
 def cylindre_select(choix_marque: str, choix_modele: str) -> str:
+    """
+    Permet à l'utilisateur de choisir le cylindre du véhicule en fonction de la marque et du modèle sélectionnés.
+
+    ## Parameters:
+        choix_marque (str): Marque sélectionnée.
+        choix_modele (str): Modèle sélectionné.
+
+    ## Returns:
+        str: Le cyylindre sélectionné.
+    """
     cylindres = get_unique_cylindre(choix_marque, choix_modele) + ["Autre choix..."]
     choix_cylindre = st.sidebar.selectbox("Cylindre", cylindres,
                                         index=None,
@@ -240,6 +344,16 @@ def cylindre_select(choix_marque: str, choix_modele: str) -> str:
 
     
 def finition_select(choix_marque: str, choix_modele: str) -> str:
+    """
+    Permet à l'utilisateur de choisir la finition du véhicule en fonction de la marque et du modèle sélectionnés.
+
+    ## Parameters:
+        choix_marque (str): Marque sélectionnée.
+        choix_modele (str): Modèle sélectionné.
+
+    ## Returns:
+        str: La finition sélectionnée.
+    """
     finitions = get_unique_finition(choix_marque, choix_modele) + ["Autre choix..."]
     choix_finition = st.sidebar.selectbox("Finition", finitions,
                                         index=None,
@@ -256,6 +370,15 @@ def finition_select(choix_marque: str, choix_modele: str) -> str:
 
 
 def batterie_select(energie: str) -> str:
+    """
+    Permet à l'utilisateur de choisir la génération du véhicule en fonction du type d'énergie sélectionné.
+    
+    ## Parameters:
+        energie (str): Type d'énergie sélectionné.
+
+    ## Returns:
+        str: La batterie sélectionnée.
+    """
     if energie == "Électrique":
         batteries = get_unique_batterie() + ["Autre choix..."]
         choix_batterie = st.sidebar.selectbox("Batterie", batteries,
