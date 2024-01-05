@@ -4,6 +4,9 @@ import plotly.express as px
 import streamlit as st
 
 def get_avg_price_by_brand():
+    """
+    Affiche un barplot représentant le prix moyen par marque de véhicule.
+    """
     prix_moyen_m = duckdb.sql(
         f"""
         SELECT marque, AVG(prix) AS prix_moyen
@@ -21,6 +24,9 @@ def get_avg_price_by_brand():
 
 
 def get_price_histogram():
+    """
+    Affiche un histogramme représentant la distribution des prix des véhicules compris entre 0 et 150 000€.
+    """
     prices = duckdb.sql(
         f"""
         SELECT prix
@@ -28,12 +34,17 @@ def get_price_histogram():
         WHERE prix BETWEEN 0 AND 150000
         """).df()
 
-    fig = px.histogram(prices, x= "prix", nbins=30, title= "Distribution des prix des véhicules", color= "prix")
+    fig = px.histogram(prices, x= "prix", nbins=30, title= "Distribution des prix des véhicules")
     fig.update_xaxes(title= "Prix")
+    fig.update_traces(marker=dict(color='#d62728', opacity=0.7))
     fig.update_yaxes(showticklabels=False)
     st.plotly_chart(fig, use_container_width=True, height=600)
 
+
 def get_count_models_by_brand():
+    """
+    Affiche un barplot indiquant le nombre de modèles par marque de véhicule.
+    """
     count_models = duckdb.sql(
         f"""
         SELECT marque, COUNT(DISTINCT modele) AS nombre_modeles
@@ -52,6 +63,9 @@ def get_count_models_by_brand():
 
 
 def show_selected_chart():
+    """
+    Permet à l'utilisateur d'afficher différents types de graphiques liés aux données des véhicules.
+    """
     selected_chart = st.selectbox("Choisir le graphique à afficher", 
                                         ("Nombre de modèles par marque", 
                                         "Prix moyen par marque", 
