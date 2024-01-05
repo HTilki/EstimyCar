@@ -4,6 +4,7 @@ from requetes_kpi import get_count_car, get_avg_price, calcul_delta
 from fonctions_tab import show_dataframe, predict_button, predict_km_fictif_button
 from fonctions_menu import *
 import polars as pl
+from requetes_stats import *
 
 nom_marques_modeles = pl.DataFrame(import_marques_modeles())
 
@@ -22,7 +23,7 @@ user_role = st.sidebar.selectbox("Selectionnez votre profil", ["Acheteur", "Vend
 
 if user_role == "Acheteur":
     nb_annonces, prix_moyen = st.columns(2)
-    tab_data, tab2 = st.tabs(["🗃 Data", ":balloon: fni"])
+    tab_data, tab_stats, tab2 = st.tabs(["🗃 Data", "📊 Statistiques Descriptives", ":balloon: fni"])
     
     st.sidebar.header("Caractéristiques")
     marques = marques_select(nom_marques_modeles, user_role)
@@ -47,6 +48,9 @@ if user_role == "Acheteur":
         st.experimental_rerun()  # Rerun the script
     else:
         st.session_state.reset = False
+
+    with tab_stats:
+        show_selected_chart()
 
     with tab2:
         st.balloons()

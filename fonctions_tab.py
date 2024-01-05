@@ -150,3 +150,5 @@ def predict_km_fictif_button(marque: str, modele: str, annee: int, moteur: str, 
         data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
         fig = predict_prix_autre_km(data, marque)
         st.plotly_chart(fig)
+
+
