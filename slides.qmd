@@ -1,0 +1,251 @@
+---
+title: "CarScraping"
+subtitle: "<script>const currentDT = new Date().toLocaleDateString();document.write(currentDT);</script>"
+author: "`Aybuké BICAT` & `Hassan TILKI`"
+format: 
+  revealjs:
+    slide-number: true
+    mermaid-format: svg
+    chalkboard: true
+    transition: slide
+    background-transition: fade
+    theme: simple
+    incremental: true   
+    footer: "--- Machine Learning ---"
+    logo: https://corentinducloux.fr/dossier_img/mecen_transparent.png
+    controls : true
+    preview-links: auto
+    view-distance: 20
+    reference-location: document
+    include-in-header:
+        - text: |
+            <style>
+            #title-slide .title {
+            font-size: 1.75em;
+            }
+            </style>
+jupyter: python3
+---
+
+
+
+## Introduction
+
+:::{.notes}
+on s'est intéressé au marché de la voiture et on s'est posé la question de ce qu'on peut prédire sur les voitures. Quand on pense à ça, on pense forcément au prix, comment prédire le prix d'un véhivule?
+
+La plupart des français utilisent la côte argus mais est-ce que vous vous êtes déjà demandé comment celle-ci fonctionne?
+
+
+
+
+- Argus :
+Elle est basée sur le cours-moyen d'argus qui est constitué à l'aide de professionnels du secteur, d'un concessionnaire allant jusqu'au constructeur, mais aussi à l'aide de simples particuliers et des annonces de ventes de véhicule.
+
+
+En apprenant cela, nous avons eu comme objectif de créer notre propre estimateur de prix de voiture.
+
+Pour ce faire, vu qu'on est que 2 jeunes étudiants et ne sommes pas entourés de professionnels, la seule option que nus avons est de scraper des annonces de voitures d'occasion en ligne. 
+
+Avant de vous montrer comment on a scrapper tout ça on va directement passer au + croustillant qui est une démonstration de l'application que nous avons créée.
+
+Présentation Streamlit:
+
+on se retrouvr sur l'accueil de notre app, qui est une app streamlit. On va vous expliquer plus tard ce que c'est.
+Sur notre app, nous avons 3 onglets : accueil, acheteur et vendeur.
+
+Démo acheteur, démo vendeur.
+On va pouvoir visualiser 
+
+démo acheteur : Hassan est-ce que tu es interessé par l'achat d'un véhicule?
+
+
+si lien inexistant : c'était tellement une bonne affaire qu'elle est déjà partie...
+
+démo vendeur : toutes les données présentes dans l'onglet acheteur ont servi à entrainer les modèles de prédiction. 
+
+on a une sorte de transparence sur comment est calculée la côte. 
+
+Est-ce que vous avez une voiture à vendre? ou des caractéristiques 
+:::
+
+
+
+*CarScraping qu'est-ce que c'est ?*
+
+- Comment se calcule la **Côte ARGUS** ?
+
+> Elle est basée sur le cours-moyen d'argus qui est constitué à l'aide de professionnels du secteur, d'un concessionnaire allant jusqu'au constructeur, mais aussi à l'aide de simples particuliers et des annonces de ventes de véhicule.
+
+- Le projet de CarScraping est un projet où les données ont été scrapées depuis 
+
+
+
+
+## Web Scraping
+
+:::{.notes}
+Alors maintenant qu'on a vu le produit final, on va le disséquer pour voir comment on en est arrivé là avec une approche technique! 
+
+Vous avez vu le voir peut être mais il y a des liens dans l'onglet acheteur qui renvoie vers le site "La Centrale".
+
+Alors nous avons scrapé ce site et l'intégralité des 300 000 annonces qui étaient présentes sur le site au moment du scraping. 
+
+Pour la partie scraping 
+
+pas d'utilisation de Selenium car le site bloque tous les bot.
+
+:::
+
+- \+ de 300k annonces
+- \+ de 150 marques
+- \+ de 900 modèles
+- Utilisation de `request` et `bs4` uniquement
+
+
+## Processus du Scraping : 1/3
+
+:::{.notes}
+
+On a un module `webscraping.py` qui nous permet d'extraire toutes ces données depuis le site. 
+
+On va vous montrer le processus de scraping en 3 parties : récupération des noms des marques, puis la récupération des annonces, et enfin la récupération des caractéristiques.
+
+
+Il faut savoir que le nombre maximum de pages sur La Centrale est de 500.
+
+Avec 16 annonces par page, on n'atteint pas les 300k annonces annoncés dans l'accueil du site.
+
+Pour y parvenir, nous avons décidé de scraper 500 pages d'annonces par marque et par modèles de véhicule à l'aide de requêtes http.
+
+Pour obtenir ces différentes marques, il suffit juste d'aller dans l'accueil du site, de cliquer sur la listbox "Modèle" et d'ensuite télécharger la page.
+
+
+
+:::
+
+- Récupération de la liste des marques et des modèles associés.
+
+![](imgs/modelelistbox.png)
+
+- Transformer en format JSON :
+
+```{json}
+{
+    "ABARTH": [
+        "124",
+        "500",
+        "595",
+        "punto evo",
+        "scorpion"
+    ],
+    "AC": [
+        "aceca",
+        "cobra"
+    ],
+    "AIWAYS": [
+        "u5"
+    ],
+}
+```
+
+
+## Processus du Scraping : (2/3)
+:::{.notes}
+
+Une fois qu'on a récupéré les marques, on peut maintenant à l'aide d'une boucle et de fonctions bien ficellées, extraire toutes les annonces sur le site. 
+*extrait f° recup_pages()*
+
+On va récupérer les annonces directement depuis l'url pour pouvoir pallier le problème des 500 pages maximum.
+
+Cette f° s'inscrit dans une plus grande f° qui regroupe tout le scraping qui est `extraire_toutes_annonces()`
+:::
+
+- Extraction de toutes les annonces disponibles sur le site à l'aide de la fonction `recup_page(marque, modele, number_page)`
+
+```py
+def recup_page(numero_page, marque, modele):
+    adresse = f"https://www.lacentrale.fr/listing?makesModelsCommercialNames={marque.upper()}%3A{traitement_modele_url(modele)}&options=&page={numero_page}"
+``` 
+
+- extract_toutes_annonces() à expliquer
+
+
+## Processus du Scraping : (3/3)
+
+:::{.notes}
+
+Une fois toutes les pages récuperées, on récupère chacune des caractéristiques du v"hicule pour chq annonce. 
+Et c'est la f° recup_data_voiture() qui fait appel à recup_info_voitures() qui elle aussi fait appel à pls fonctions dédiées à pls caractéristiques. 
+
+Chacune des caractéristiques des voitures est stockée dans une dataclass `voiture`. Et une fois le tout executé, les données sont exportés sous format brut JSON. 
+
+le nb d'annonces étant très conséquent et l'extraction étant très longue, nous avons fait l'extraction en 4 parties. Nous avons obtenus donc  'fichiers json qu'on a fusionner en un fichier à l'aide de la f° `fusionner_fichiers_json()`. 
+
+:::
+
+
+- Extraction des caractéristiques des véhicules.
+
+
+- extrait du json
+
+
+## Data cleaning
+
+:::{.notes}
+
+Une fois notre fichier json obtenue, chose inevitable nous avons des données mal renseignées, des pb de types de données mais aussi des informations à extraire de ces données brutes.
+
+Pour récupérer le + d'informations possibles sur ces données, nous avons décidé d'utiliser la librairie polars, ce qui rend le tout très lisible et très efficace.
+
+
+Dans cette partie, nous allons vous présenter rapidement les pb qu'on a rncontrées, et les fonctions qui ont servi à les règler et qui nous ont permis de nettoyer la base de données et d'avoir une BDD exploitable.
+
+
+- modele_marque_generation
+
+pb rencontré, nom de la f°, et la sortie.  (faire figurer l'ex des docstring)
+
+:::
+
+- 
+
+## gazoduc
+
+:::{.notes}
+f° qui permet de faire tout le traitement automatiquement à l'aide des autres fonctions. 
+
+
+
+export de la base en parquet : exlpiquer avantages de parquet
+
+:::
+
+## Machine learning
+
+
+:::{.notes}
+- split
+- les modèles
+- les grilles de paramètres associées
+- trouver le meilleur modèle (CV)
+- export du Modèle et préprocesseur
+- import du modèle et utilisation pour prédiction
+
+:::
+
+
+
+
+## Streamlit
+
+
+:::{.notes}
+expliquer streamlit
+- onglet acheteur : fonctionnement avec des requêtes, 
+- onglet vendeur : import du modèle et prédictions estimation du prix 
+
+
+
+:::

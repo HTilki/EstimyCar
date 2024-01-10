@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="CarScraping",
     page_icon="🚗",
     layout="wide")
-st.title("🚗 CarScraping")
+st.title(":orange[🚗 CarScraping]")
 
 st.sidebar.title("Menu")
 style_markdown()
@@ -41,6 +41,7 @@ if user_role == "Acheteur":
         prix_moyen.metric(
             "Prix moyen", 
             value=get_avg_price(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max))
+        
         show_dataframe(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max)
 
     if st.sidebar.button("Reset"):

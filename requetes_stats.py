@@ -37,7 +37,7 @@ def get_price_histogram():
     fig = px.histogram(prices, x= "prix", nbins=30, title= "Distribution des prix des véhicules")
     fig.update_xaxes(title= "Prix")
     fig.update_traces(marker=dict(color='#d62728', opacity=0.7))
-    fig.update_yaxes(showticklabels=False)
+    fig.update_yaxes(title= "Nombre de voitures")
     st.plotly_chart(fig, use_container_width=True, height=600)
 
 
