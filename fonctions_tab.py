@@ -30,15 +30,38 @@ def show_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int,
                             height=600,
                             column_config={
                                 'annee': st.column_config.NumberColumn(
+                                    "Année 📅",
                                     format="%d"
                                     ),
                                     'prix': st.column_config.NumberColumn(
-                                        "Prix (en euros)",
+                                        "Prix 💰 (en euros)",
                                         format="%d €"
                                         ),
                                         'lien': st.column_config.LinkColumn(
-                                            "Lien"
+                                            "Lien 🔗"
+                                        ),
+                                        'energie': st.column_config.TextColumn(
+                                            "Énergie ⚡️"
+                                        ),
+                                        'boite': st.column_config.TextColumn(
+                                            "Boîte 🛠️"
+                                        ),
+                                        'cylindre': st.column_config.NumberColumn(
+                                            "Cylindre 🛢️"
+                                        ),
+                                        'puissance': st.column_config.NumberColumn(
+                                            "Puissance 💥"
+                                        ),
+                                        'moteur': st.column_config.TextColumn(
+                                            "Moteur 🐎"
+                                        ),
+                                        'Véhicule': st.column_config.TextColumn(
+                                            "Véhicule 🚘"
+                                        ),
+                                        'Position_marché' : st.column_config.TextColumn(
+                                            "Position Marché ⚖️"
                                         )
+
                                     }
                                     )
     except:
