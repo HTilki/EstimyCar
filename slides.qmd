@@ -227,9 +227,9 @@ export de la base en parquet : exlpiquer avantages de parquet
 
 :::{.notes}
 - split
-- les modèles
-- les grilles de paramètres associées
-- trouver le meilleur modèle (CV)
+- les modèles -> pourquoi avoir choisi ces modèles ? car après test, ces modèles se sont averée être meilleurs.
+- les grilles de paramètres associées -> pourquoi ces grilles ? car après test, se sont les résultats qui sont sortie le plus souvent.
+- trouver le meilleur modèle (CV) -> on montre la fonction 
 - export du Modèle et préprocesseur
 - import du modèle et utilisation pour prédiction
 
