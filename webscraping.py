@@ -8,7 +8,7 @@ import time
 from serde.json import to_json
 
 
-def recup_nom_vehicule(annonce : str): 
+def recup_nom_vehicule(annonce: str) -> str: 
     nom_vehicule = annonce.find_all('h2', class_='Text_Text_text Vehiculecard_Vehiculecard_title Text_Text_subtitle2')
     return nom_vehicule[0].text
 
@@ -112,7 +112,7 @@ def traitement_modele_url(modele) -> str:
     return modele
 
 # Fonction qui récupère les informations d'une page spécifique
-def recup_page(numero_page, marque, modele):
+def recup_page(numero_page: int, marque: str, modele: str):
     #rajouter de la gestion d'erreur en fonction du nombre de page et donc si la requete http marche.
     adresse = f"https://www.lacentrale.fr/listing?makesModelsCommercialNames={marque.upper()}%3A{traitement_modele_url(modele)}&options=&page={numero_page}"
     max_attempts = 3  # Nombre maximal de tentatives

@@ -8,10 +8,10 @@
 <link href="slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.4.539">
 
   <meta name="author" content="Aybuké BICAT &amp; Hassan TILKI">
-  <title>CarScraping</title>
+  <title>🚙 CarScraping</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -31,7 +31,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -223,7 +223,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -397,7 +398,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">CarScraping</h1>
+  <h1 class="title">🚙 CarScraping</h1>
   <p class="subtitle"><script>const currentDT = new Date().toLocaleDateString();document.write(currentDT);</script></p>
 
 <div class="quarto-title-authors">
@@ -441,13 +442,14 @@
       }</style></aside>
 <p><em>CarScraping qu’est-ce que c’est ?</em></p>
 <ul>
-<li class="fragment">Comment se calcule la <strong>Côte ARGUS</strong> ?</li>
+<li>Comment se calcule la <strong>Côte ARGUS</strong> ?</li>
 </ul>
 <blockquote>
 <p>Elle est basée sur le cours-moyen d’argus qui est constitué à l’aide de professionnels du secteur, d’un concessionnaire allant jusqu’au constructeur, mais aussi à l’aide de simples particuliers et des annonces de ventes de véhicule.</p>
 </blockquote>
 <ul>
-<li class="fragment">Le projet de CarScraping est un projet où les données ont été scrapées depuis</li>
+<li><p>Inconvénient : Payant, manque de transparence.</p></li>
+<li><p><strong>Objectif</strong> : créer notre propre côte ARGUS gratuite et sans filtre !</p></li>
 </ul>
 </section>
 <section id="web-scraping" class="slide level2">
@@ -457,6 +459,7 @@
 <p>Vous avez vu le voir peut être mais il y a des liens dans l’onglet acheteur qui renvoie vers le site “La Centrale”.</p>
 <p>Alors nous avons scrapé ce site et l’intégralité des 300 000 annonces qui étaient présentes sur le site au moment du scraping.</p>
 <p>Pour la partie scraping</p>
+<p>On va vous montrer le processus de scraping en 3 parties : récupération des noms des marques, puis la récupération des annonces, et enfin la récupération des caractéristiques.</p>
 <p>pas d’utilisation de Selenium car le site bloque tous les bot.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -469,18 +472,21 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<blockquote>
+<p>C’est une technique d’extraction de données présentes sur des sites web par l’utilisation d’un script ou programme informatique.</p>
+</blockquote>
+<p>Données récupérées depuis <strong>La Centrale</strong> :</p>
 <ul>
-<li class="fragment">+ de 300k annonces</li>
-<li class="fragment">+ de 150 marques</li>
-<li class="fragment">+ de 900 modèles</li>
-<li class="fragment">Utilisation de <code>request</code> et <code>bs4</code> uniquement</li>
+<li>+ de <strong>300 000</strong> annonces</li>
+<li>+ de <strong>150</strong> marques</li>
+<li>+ de <strong>900</strong> modèles</li>
 </ul>
+<p>Extraction en 3 parties : - Récupération des noms des marques - Récupération des annonces - Récupération des caractéristiques</p>
 </section>
 <section id="processus-du-scraping-13" class="slide level2">
 <h2>Processus du Scraping : 1/3</h2>
 <aside class="notes">
 <p>On a un module <code>webscraping.py</code> qui nous permet d’extraire toutes ces données depuis le site.</p>
-<p>On va vous montrer le processus de scraping en 3 parties : récupération des noms des marques, puis la récupération des annonces, et enfin la récupération des caractéristiques.</p>
 <p>Il faut savoir que le nombre maximum de pages sur La Centrale est de 500.</p>
 <p>Avec 16 annonces par page, on n’atteint pas les 300k annonces annoncés dans l’accueil du site.</p>
 <p>Pour y parvenir, nous avons décidé de scraper 500 pages d’annonces par marque et par modèles de véhicule à l’aide de requêtes http.</p>
@@ -497,35 +503,30 @@
           display:block!important;
       }</style></aside>
 <ul>
-<li class="fragment">Récupération de la liste des marques et des modèles associés.</li>
+<li><p>Utilisation des 2 packages python : <code>request</code> et <code>bs4</code>.</p></li>
+<li><p>Récupération de la liste des marques et des modèles associés.</p></li>
+<li><p>Transformer en format JSON.</p></li>
 </ul>
+<div style="max-height: 100px; overflow-y: scroll;">
 
-<img data-src="imgs/modelelistbox.png" class="r-stretch"><ul>
-<li class="fragment">Transformer en format JSON :</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>{</span>
-<span id="cb1-2"><a href="#cb1-2"></a>    "ABARTH": [</span>
-<span id="cb1-3"><a href="#cb1-3"></a>        "124",</span>
-<span id="cb1-4"><a href="#cb1-4"></a>        "500",</span>
-<span id="cb1-5"><a href="#cb1-5"></a>        "595",</span>
-<span id="cb1-6"><a href="#cb1-6"></a>        "punto evo",</span>
-<span id="cb1-7"><a href="#cb1-7"></a>        "scorpion"</span>
-<span id="cb1-8"><a href="#cb1-8"></a>    ],</span>
-<span id="cb1-9"><a href="#cb1-9"></a>    "AC": [</span>
-<span id="cb1-10"><a href="#cb1-10"></a>        "aceca",</span>
-<span id="cb1-11"><a href="#cb1-11"></a>        "cobra"</span>
-<span id="cb1-12"><a href="#cb1-12"></a>    ],</span>
-<span id="cb1-13"><a href="#cb1-13"></a>    "AIWAYS": [</span>
-<span id="cb1-14"><a href="#cb1-14"></a>        "u5"</span>
-<span id="cb1-15"><a href="#cb1-15"></a>    ],</span>
-<span id="cb1-16"><a href="#cb1-16"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
+<div class="fragment">
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href=""></a>{</span>
+<span id="cb1-2"><a href=""></a>    "AC": [</span>
+<span id="cb1-3"><a href=""></a>        "aceca",</span>
+<span id="cb1-4"><a href=""></a>        "cobra"</span>
+<span id="cb1-5"><a href=""></a>    ],</span>
+<span id="cb1-6"><a href=""></a>    "AIWAYS": [</span>
+<span id="cb1-7"><a href=""></a>        "u5"</span>
+<span id="cb1-8"><a href=""></a>    ],</span>
+<span id="cb1-9"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div></section>
 <section id="processus-du-scraping-23" class="slide level2">
 <h2>Processus du Scraping : (2/3)</h2>
 <aside class="notes">
 <p>Une fois qu’on a récupéré les marques, on peut maintenant à l’aide d’une boucle et de fonctions bien ficellées, extraire toutes les annonces sur le site. <em>extrait f° recup_pages()</em></p>
 <p>On va récupérer les annonces directement depuis l’url pour pouvoir pallier le problème des 500 pages maximum.</p>
-<p>Cette f° s’inscrit dans une plus grande f° qui regroupe tout le scraping qui est <code>extraire_toutes_annonces()</code></p>
+<p>Cette fonction : <code>extraire_toutes_annonces()</code>, en contient d’autre. Ce qui permet d’iterer sur chaque marques et modeles disponible, grace au fichier JSON crée préalablement. Ensuite on effectue une requete http a l’aide de requetes (on montre l’exemple de la fonction recup_page).</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -538,19 +539,78 @@
           display:block!important;
       }</style></aside>
 <ul>
-<li class="fragment">Extraction de toutes les annonces disponibles sur le site à l’aide de la fonction <code>recup_page(marque, modele, number_page)</code></li>
-</ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> recup_page(numero_page, marque, modele):</span>
-<span id="cb2-2"><a href="#cb2-2"></a>    adresse <span class="op">=</span> <span class="ss">f"https://www.lacentrale.fr/listing?makesModelsCommercialNames=</span><span class="sc">{</span>marque<span class="sc">.</span>upper()<span class="sc">}</span><span class="ss">%3A</span><span class="sc">{</span>traitement_modele_url(modele)<span class="sc">}</span><span class="ss">&amp;options=&amp;page=</span><span class="sc">{</span>numero_page<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<li>Extraction de toutes les annonces disponibles sur le site à l’aide de la fonction <code>extract_toutes_annonces()</code>, elle permet :
 <ul>
-<li class="fragment">extract_toutes_annonces() à expliquer</li>
+<li>d’iterer sur chaque marques et modèles de véhicule</li>
+<li>d’extraire les pages correspondantes</li>
+</ul></li>
 </ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a><span class="kw">def</span> recup_page(numero_page: <span class="bu">int</span>, marque: <span class="bu">str</span>, modele: <span class="bu">str</span>) <span class="op">-&gt;</span> BeautifulSoup:</span>
+<span id="cb2-2"><a href=""></a>    adresse <span class="op">=</span> <span class="ss">f"https://www.lacentrale.fr/listing?makesModelsCommercialNames=</span><span class="sc">{</span>marque<span class="sc">.</span>upper()<span class="sc">}</span><span class="ss">%3A</span><span class="sc">{</span>modele<span class="sc">.</span>upper()<span class="sc">}</span><span class="ss">&amp;options=&amp;page=</span><span class="sc">{</span>numero_page<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb2-3"><a href=""></a>    ...</span>
+<span id="cb2-4"><a href=""></a>    requete <span class="op">=</span> rq.get(url<span class="op">=</span>adresse)</span>
+<span id="cb2-5"><a href=""></a>    page <span class="op">=</span> BeautifulSoup(requete.content, <span class="st">"html.parser"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>d’avoir une sortie sous forme de liste d’annonces</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="kw">def</span> recup_annonces(page: BeautifulSoup) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb3-2"><a href=""></a>    annonces <span class="op">=</span> page.find_all(<span class="st">'div'</span>, class_<span class="op">=</span><span class="st">'searchCardContainer'</span>)</span>
+<span id="cb3-3"><a href=""></a>    <span class="cf">return</span> <span class="bu">list</span>(annonces)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="processus-du-scraping-33" class="slide level2">
 <h2>Processus du Scraping : (3/3)</h2>
 <aside class="notes">
-<p>Une fois toutes les pages récuperées, on récupère chacune des caractéristiques du v”hicule pour chq annonce. Et c’est la f° recup_data_voiture() qui fait appel à recup_info_voitures() qui elle aussi fait appel à pls fonctions dédiées à pls caractéristiques.</p>
-<p>Chacune des caractéristiques des voitures est stockée dans une dataclass <code>voiture</code>. Et une fois le tout executé, les données sont exportés sous format brut JSON.</p>
+<p>Une fois toutes les pages récuperées, sous cette forme de liste <strong>pointe la slide</strong>, on récupère chacune des caractéristiques du v”hicule pour chq annonce. La fonction permettant de récuperer toutes les caractéristiques d’une annonce s’appelle recup_info_voitures() qui elle aussi fait appel à pls fonctions dédiées à pls caractéristiques. Ces fonctions permette à l’aide de bs4, de recuperer des information précise stocké dans certain élement de la page.</p>
+<p>Chacune des caractéristiques des voitures est stockée dans une dataclass <code>voiture</code>.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+<img data-src="imgs/sorties_annonces.png" class="quarto-figure quarto-figure-center r-stretch" width="0"><ul>
+<li>Extraction des caractéristiques des véhicules.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="kw">def</span> recup_informations_voiture(annonce: <span class="bu">str</span>) <span class="op">-&gt;</span> voiture:</span>
+<span id="cb4-2"><a href=""></a>    marque <span class="op">=</span> recup_nom_vehicule(annonce)</span>
+<span id="cb4-3"><a href=""></a>    cylindre <span class="op">=</span> recup_cylindre(annonce)</span>
+<span id="cb4-4"><a href=""></a>    annee, kilometrage, boite, energie <span class="op">=</span> recup_caracteristiques(annonce)</span>
+<span id="cb4-5"><a href=""></a>    prix <span class="op">=</span> recup_prix(annonce)</span>
+<span id="cb4-6"><a href=""></a>    position_marché <span class="op">=</span> recup_position_marché(annonce)</span>
+<span id="cb4-7"><a href=""></a>    garantie <span class="op">=</span> recup_garantie(annonce)</span>
+<span id="cb4-8"><a href=""></a>    lien <span class="op">=</span> recup_href(annonce)</span>
+<span id="cb4-9"><a href=""></a>    <span class="cf">return</span> voiture(marque<span class="op">=</span>marque, cylindre<span class="op">=</span>cylindre, annee<span class="op">=</span>annee, kilometrage<span class="op">=</span>kilometrage, boite<span class="op">=</span>boite, energie<span class="op">=</span>energie, prix<span class="op">=</span>prix, position_marché<span class="op">=</span>position_marché, garantie<span class="op">=</span>garantie, lien<span class="op">=</span>lien)</span>
+<span id="cb4-10"><a href=""></a></span>
+<span id="cb4-11"><a href=""></a><span class="kw">def</span> recup_nom_vehicule(annonce: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>: </span>
+<span id="cb4-12"><a href=""></a>    nom_vehicule <span class="op">=</span> annonce.find_all(<span class="st">'h2'</span>, class_<span class="op">=</span><span class="st">'Text_Text_text Vehiculecard_Vehiculecard_title Text_Text_subtitle2'</span>)</span>
+<span id="cb4-13"><a href=""></a>    <span class="cf">return</span> nom_vehicule[<span class="dv">0</span>].text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section class="slide level2">
+
+<p>Un extrait du fichier JSON obtenu :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href=""></a>[</span>
+<span id="cb5-2"><a href=""></a>    {</span>
+<span id="cb5-3"><a href=""></a>        "marque": "CITROEN C3 III",</span>
+<span id="cb5-4"><a href=""></a>        "cylindre": "1.2 PURETECH 110 FEEL",</span>
+<span id="cb5-5"><a href=""></a>        "annee": "2019",</span>
+<span id="cb5-6"><a href=""></a>        "kilometrage": "10 698 km",</span>
+<span id="cb5-7"><a href=""></a>        "boite": "Automatique",</span>
+<span id="cb5-8"><a href=""></a>        "energie": "Essence",</span>
+<span id="cb5-9"><a href=""></a>        "prix": "15 990 €",</span>
+<span id="cb5-10"><a href=""></a>        "position_marché": "Bonne affaire",</span>
+<span id="cb5-11"><a href=""></a>        "garantie": "Garantie 12 mois",</span>
+<span id="cb5-12"><a href=""></a>        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69112858137.html"</span>
+<span id="cb5-13"><a href=""></a>    },</span>
+<span id="cb5-14"><a href=""></a>    ...</span>
+<span id="cb5-15"><a href=""></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<aside class="notes">
+<p>Et une fois le tout executé, les données sont exportés sous format brut JSON.</p>
 <p>le nb d’annonces étant très conséquent et l’extraction étant très longue, nous avons fait l’extraction en 4 parties. Nous avons obtenus donc ’fichiers json qu’on a fusionner en un fichier à l’aide de la f° <code>fusionner_fichiers_json()</code>.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -563,10 +623,6 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<ul>
-<li class="fragment"><p>Extraction des caractéristiques des véhicules.</p></li>
-<li class="fragment"><p>extrait du json</p></li>
-</ul>
 </section>
 <section id="data-cleaning" class="slide level2">
 <h2>Data cleaning</h2>
@@ -589,6 +645,9 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<ul>
+<li></li>
+</ul>
 </section>
 <section id="gazoduc" class="slide level2">
 <h2>gazoduc</h2>
@@ -612,9 +671,9 @@
 <aside class="notes">
 <ul>
 <li>split</li>
-<li>les modèles</li>
-<li>les grilles de paramètres associées</li>
-<li>trouver le meilleur modèle (CV)</li>
+<li>les modèles -&gt; pourquoi avoir choisi ces modèles ? car après test, ces modèles se sont averée être meilleurs.</li>
+<li>les grilles de paramètres associées -&gt; pourquoi ces grilles ? car après test, se sont les résultats qui sont sortie le plus souvent.</li>
+<li>trouver le meilleur modèle (CV) -&gt; on montre la fonction</li>
 <li>export du Modèle et préprocesseur</li>
 <li>import du modèle et utilisation pour prédiction</li>
 </ul>
@@ -645,9 +704,11 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-
-<img src="https://corentinducloux.fr/dossier_img/mecen_transparent.png" class="slide-logo r-stretch"><div class="footer footer-default">
+<div class="quarto-auto-generated-content">
+<p><img src="https://corentinducloux.fr/dossier_img/mecen_transparent.png" class="slide-logo"></p>
+<div class="footer footer-default">
 <p>— Machine Learning —</p>
+</div>
 </div>
 </section>
     </div>
@@ -677,7 +738,6 @@
       Reveal.initialize({
 'controlsAuto': false,
 'previewLinksAuto': true,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -939,10 +999,9 @@
         // clear code selection
         e.clearSelection();
       });
-      function tippyHover(el, contentFn) {
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -952,8 +1011,17 @@
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
