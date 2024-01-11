@@ -1,5 +1,5 @@
 ---
-title: "🚙 CarScraping"
+title: "🚙 CarScraping 🚙"
 subtitle: "<script>const currentDT = new Date().toLocaleDateString();document.write(currentDT);</script>"
 author: "`Aybuké BICAT` & `Hassan TILKI`"
 format:
@@ -10,7 +10,7 @@ format:
     transition: slide
     background-transition: fade
     theme: simple
-    incremental: false  
+    incremental: true  
     footer: "--- Machine Learning ---"
     logo: https://corentinducloux.fr/dossier_img/mecen_transparent.png
     controls : true
@@ -302,15 +302,15 @@ pb rencontré, nom de la f°, et la sortie.  (faire figurer l'ex des docstring)
 
 - Séparer la marque, le modèle et la génération à l'aide de `get_marque_modele_generation()`
 
-> [`'CITROEN C3 III'`]{.fragment .semi-fade-out} [->]{.fragment} [`('CITROEN', 'C3', 'III')`]{.fragment}
+$\rightarrow$ [`'CITROEN C3 III'`]{.fragment .semi-fade-out} [->]{.fragment} [`('CITROEN', 'C3', 'III')`]{.fragment}
 
 - Corriger le type des variables `kilometre`, `prix` et `annee` avec `get_km_prix_annee` : 
 
-> [`"100 000 km", "15 000 €", "2015"`]{.fragment .semi-fade-out} [->]{.fragment} [`(100000, 15000, 2015)`]{.fragment}
+$\rightarrow$ [`"100 000 km", "15 000 €", "2015"`]{.fragment .semi-fade-out} [->]{.fragment} [`(100000, 15000, 2015)`]{.fragment}
 
 - Diviser la chaine de caractere de `cylindre` en plusieurs variable avec `get_cylindre`: 
 
-> [`"6.3 V8 460 GT"`]{.fragment .semi-fade-out} [->]{.fragment} [`('6.3', 'V8', 460, 'GT')`]{.fragment}
+$\rightarrow$ [`"6.3 V8 460 GT"`]{.fragment .semi-fade-out} [->]{.fragment} [`('6.3', 'V8', 460, 'GT')`]{.fragment}
 
 ## Le gazoduc 🛢️
 
@@ -333,7 +333,7 @@ Une fois le dataframe nettoyé il sera exporté en format parquet car parquet a 
 
 C'est une fonction qui applique un pipeline de traitement de données sur le DataFrame donné.
  
-```python
+```py
 def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFrame:
     data = (data.pipe(get_marque_modele_generation, nom_marques_modeles)🛢️
                 .pipe(get_km_prix_annee)                                🛢️
@@ -346,12 +346,58 @@ def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFra
     return data
 ```
 
-- Extrait dataframe
+<div style="overflow-x: auto;">
+  <table style="max-width: 800px; font-size: 18px;">
+    <caption>Extrait du dataframe</caption>
+    <thead>
+      <tr>
+        <th>année</th>
+        <th>kilométrage</th>
+        <th>boîte</th>
+        <th>énergie</th>
+        <th>prix</th>
+        <th>position marché</th>
+        <th>garantie</th>
+        <th>lien</th>
+        <th>marque</th>
+        <th>modèle</th>
+        <th>génération</th>
+        <th>cylindre</th>
+        <th>moteur</th>
+        <th>puissance</th>
+        <th>finition</th>
+        <th>batterie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2020</td>
+        <td>107410</td>
+        <td>Manuelle</td>
+        <td>Essence</td>
+        <td>13050</td>
+        <td>Offre équitable</td>
+        <td>12</td>
+        <td><a href="https://www.lacentrale.fr/auto-occasion-annonc...">Lien vers l'annonce</a></td>
+        <td>CITROEN</td>
+        <td>C3</td>
+        <td>III</td>
+        <td>1.2</td>
+        <td>PURETECH</td>
+        <td>82</td>
+        <td>S&S FEEL BUSINESS</td>
+        <td>None</td>
+        <td>-</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-Ce dataframe sera exporté en format parquet qui possède un avantage important : 
--   permet de stocker des bases volumineuse. 
 
-## Machine learning
+
+Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases volumineuse à moindre coût. 
+
+## 📖 Machine learning 📖
 
 
 :::{.notes}
@@ -364,8 +410,103 @@ Ce dataframe sera exporté en format parquet qui possède un avantage important 
 
 :::
 
+Pour des raisons d'efficacité pour la prédiction, chaque marque de véhicule aura son propre modèle de prédiction.
+
+Ces modèles de prédiction ne peuvent être choisi au hasard. Il faut effectuer des tests et choisir le modèle le plus adapté.
 
 
+
+- package utilisé : `sklearn`
+
+L'utilisation de ce package à plusieurs avantages, tel que ça documentation et une utilisation avec des Pipelines possibles. Cependant, il ne fonctionne pas avec des bases de données `Polars`.
+
+
+- split des données avec `split_data`
+- preprocesseur avec `get_preprocessor`
+- modèles et grille de parametres avec `set_models` et `get_params`
+- pour récupérer et exporter les meilleurs modèle : `get_all_models`
+- `predict_prix`
+
+## Le split 👨‍👩‍👧‍👦
+
+
+Données d'entrainement: échantillon de 80% d'observations de la marque
+
+Données de test: les 20% restants.
+
+Le split est effectué à l'aide de `split_data` : 
+
+```py
+def split_data(data: pl.DataFrame, marque: str) -> tuple[pl.DataFrame, pl.DataFrame, pd.DataFrame, pd.DataFrame, np.ndarray, np.ndarray]:
+
+    X = data.filter(pl.col("marque") == marque)
+    y = X.select('prix')
+    X = X.select(pl.exclude("position_marché")
+                 ).select(pl.exclude("lien")
+                          ).select(pl.exclude("garantie")
+                                   ).select(pl.exclude("prix"))
+
+    # Split des données en ensembles d'entraînement et de test
+    X_train, X_test, y_train, y_test = train_test_split(X.to_pandas(), y.to_numpy(), test_size=0.2, random_state=21)
+    return X, y, X_train, X_test, y_train, y_test
+
+```
+
+## Le preprocesseur ⏹️
+
+La plupart des modèles ne supportent pas les variables qualitatives et requiert donc un prétraitement. 
+
+`OneHotEncoder` est utilisé pour convertir les caractéristiques catégorielles en une représentation binaire.
+
+Exemple : 
+
+$\rightarrow$ [`'boite' = 'Automatique''`]{.fragment .semi-fade-out} [->]{.fragment} [`boite.Automatique = 1`]{.fragment}
+
+`StandardScaler` est utilisé pour effectuer une mise à l'échelle des caractéristiques numériques. Il standardise les données en soustrayant la moyenne et en divisant par l'écart type, de sorte que chaque caractéristique ait une moyenne de zéro et une variance de un.
+
+## Les modèles 📊
+
+Après quelque test, nous avons décidé d'utiliser uniquement les modèles suivant : 
+
+- Regression linéaire 📈
+- K-neighbors 👬👭
+- Random Forest 🌳
+
+Pour les paramètres, plusieurs grilles ont été testé, voici les résultats intermédiaires qui nous ont permis de déterminer la grille finale.
+
+## Le nombre de voisins 👬👬👬
+
+```{python}
+import polars as pl
+import duckdb
+def cv_result_into_df(modele: str, marques_array: np.ndarray): 
+    for marque in marques_array:
+        if marque[0] == marques_array[0,0]:
+            cv_results = duckdb.sql(
+                f"""
+                SELECT '{marque[0]}' as marque,
+                mean_test_score,
+                '{modele}' as modele,
+                params
+                FROM 'cv_results/cv_results_nestimators copy/{marque[0]}_{modele}_results.json'
+                WHERE rank_test_score = 1
+                """).pl().unnest('params')
+        else :
+            cv_results_2 = duckdb.sql(
+                f"""
+                SELECT '{marque[0]}' as marque,
+                mean_test_score,
+                '{modele}' as modele,
+                params
+                FROM 'cv_results/cv_results_nestimators copy/{marque[0]}_{modele}_results.json'
+               
+                WHERE rank_test_score = 1
+                """).pl().unnest('params')
+            cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
+    return cv_results
+
+    px.bar(cv_result_into_df("KNeighbors", marques_array), x='marque', y='mean_test_score', color = 'n_neighbors')
+```
 
 ## Streamlit
 

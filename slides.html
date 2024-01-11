@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.539">
 
   <meta name="author" content="Aybuké BICAT &amp; Hassan TILKI">
-  <title>🚙 CarScraping</title>
+  <title>🚙 CarScraping 🚙</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -398,7 +398,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">🚙 CarScraping</h1>
+  <h1 class="title">🚙 CarScraping 🚙</h1>
   <p class="subtitle"><script>const currentDT = new Date().toLocaleDateString();document.write(currentDT);</script></p>
 
 <div class="quarto-title-authors">
@@ -442,14 +442,14 @@
       }</style></aside>
 <p><em>CarScraping qu’est-ce que c’est ?</em></p>
 <ul>
-<li>Comment se calcule la <strong>Côte ARGUS</strong> ?</li>
+<li class="fragment">Comment se calcule la <strong>Côte ARGUS</strong> ?</li>
 </ul>
 <blockquote>
 <p>Elle est basée sur le cours-moyen d’argus qui est constitué à l’aide de professionnels du secteur, d’un concessionnaire allant jusqu’au constructeur, mais aussi à l’aide de simples particuliers et des annonces de ventes de véhicule.</p>
 </blockquote>
 <ul>
-<li><p>Inconvénient : Payant, manque de transparence.</p></li>
-<li><p><strong>Objectif</strong> : créer notre propre côte ARGUS gratuite et sans filtre !</p></li>
+<li class="fragment"><p>Inconvénient : Payant, manque de transparence.</p></li>
+<li class="fragment"><p><strong>Objectif</strong> : créer notre propre côte ARGUS gratuite et sans filtre !</p></li>
 </ul>
 </section>
 <section id="web-scraping" class="slide level2">
@@ -477,9 +477,9 @@
 </blockquote>
 <p>Données récupérées depuis <strong>La Centrale</strong> :</p>
 <ul>
-<li>+ de <strong>300 000</strong> annonces</li>
-<li>+ de <strong>150</strong> marques</li>
-<li>+ de <strong>900</strong> modèles</li>
+<li class="fragment">+ de <strong>300 000</strong> annonces</li>
+<li class="fragment">+ de <strong>150</strong> marques</li>
+<li class="fragment">+ de <strong>900</strong> modèles</li>
 </ul>
 <p>Extraction en 3 parties : - Récupération des noms des marques - Récupération des annonces - Récupération des caractéristiques</p>
 </section>
@@ -503,9 +503,9 @@
           display:block!important;
       }</style></aside>
 <ul>
-<li><p>Utilisation des 2 packages python : <code>request</code> et <code>bs4</code>.</p></li>
-<li><p>Récupération de la liste des marques et des modèles associés.</p></li>
-<li><p>Transformer en format JSON.</p></li>
+<li class="fragment"><p>Utilisation des 2 packages python : <code>request</code> et <code>bs4</code>.</p></li>
+<li class="fragment"><p>Récupération de la liste des marques et des modèles associés.</p></li>
+<li class="fragment"><p>Transformer en format JSON.</p></li>
 </ul>
 <div style="max-height: 100px; overflow-y: scroll;">
 
@@ -539,10 +539,10 @@
           display:block!important;
       }</style></aside>
 <ul>
-<li>Extraction de toutes les annonces disponibles sur le site à l’aide de la fonction <code>extract_toutes_annonces()</code>, elle permet :
+<li class="fragment">Extraction de toutes les annonces disponibles sur le site à l’aide de la fonction <code>extract_toutes_annonces()</code>, elle permet :
 <ul>
-<li>d’iterer sur chaque marques et modèles de véhicule</li>
-<li>d’extraire les pages correspondantes</li>
+<li class="fragment">d’iterer sur chaque marques et modèles de véhicule</li>
+<li class="fragment">d’extraire les pages correspondantes</li>
 </ul></li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a><span class="kw">def</span> recup_page(numero_page: <span class="bu">int</span>, marque: <span class="bu">str</span>, modele: <span class="bu">str</span>) <span class="op">-&gt;</span> BeautifulSoup:</span>
@@ -551,7 +551,7 @@
 <span id="cb2-4"><a href=""></a>    requete <span class="op">=</span> rq.get(url<span class="op">=</span>adresse)</span>
 <span id="cb2-5"><a href=""></a>    page <span class="op">=</span> BeautifulSoup(requete.content, <span class="st">"html.parser"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li>d’avoir une sortie sous forme de liste d’annonces</li>
+<li class="fragment">d’avoir une sortie sous forme de liste d’annonces</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="kw">def</span> recup_annonces(page: BeautifulSoup) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
 <span id="cb3-2"><a href=""></a>    annonces <span class="op">=</span> page.find_all(<span class="st">'div'</span>, class_<span class="op">=</span><span class="st">'searchCardContainer'</span>)</span>
@@ -575,7 +575,7 @@
       }</style></aside>
 
 <img data-src="imgs/sorties_annonces.png" class="quarto-figure quarto-figure-center r-stretch" width="0"><ul>
-<li>Extraction des caractéristiques des véhicules.</li>
+<li class="fragment">Extraction des caractéristiques des véhicules.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="kw">def</span> recup_informations_voiture(annonce: <span class="bu">str</span>) <span class="op">-&gt;</span> voiture:</span>
 <span id="cb4-2"><a href=""></a>    marque <span class="op">=</span> recup_nom_vehicule(annonce)</span>
@@ -648,14 +648,14 @@
           display:block!important;
       }</style></aside>
 <ul>
-<li>Essentiel pour pouvoir exploiter les données.</li>
-<li>Permet de récupérer + d’informations.</li>
+<li class="fragment">Essentiel pour pouvoir exploiter les données.</li>
+<li class="fragment">Permet de récupérer + d’informations.</li>
 </ul>
 <p>Pour le nettoyage de la base de données, nous avons utilisé le package <code>Polars</code> 🐻‍❄️, qui possède de nombreux avantages comme :</p>
 <ul>
-<li>la création de pipelines 🛢️</li>
-<li>un code plus lisible 👀</li>
-<li>dans certains cas, + efficace que <code>Pandas</code> 🐼</li>
+<li class="fragment">la création de pipelines 🛢️</li>
+<li class="fragment">un code plus lisible 👀</li>
+<li class="fragment">dans certains cas, + efficace que <code>Pandas</code> 🐼</li>
 </ul>
 <p>C’est le module <code>datacleaning.py</code> qui contient toutes les fonctions essentiels pour résoudre certains problèmes.</p>
 </section>
@@ -679,40 +679,28 @@
           display:block!important;
       }</style></aside>
 <ul>
-<li>Séparer la marque, le modèle et la génération à l’aide de <code>get_marque_modele_generation()</code></li>
+<li class="fragment">Séparer la marque, le modèle et la génération à l’aide de <code>get_marque_modele_generation()</code></li>
 </ul>
-<blockquote>
-<p><span class="fragment semi-fade-out"><code>'CITROEN C3 III'</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>('CITROEN', 'C3', 'III')</code></span></p>
-</blockquote>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="fragment semi-fade-out"><code>'CITROEN C3 III'</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>('CITROEN', 'C3', 'III')</code></span></p>
 <ul>
-<li>Corriger le type des variables <code>kilometre</code>, <code>prix</code> et <code>annee</code> avec <code>get_km_prix_annee</code> :</li>
+<li class="fragment">Corriger le type des variables <code>kilometre</code>, <code>prix</code> et <code>annee</code> avec <code>get_km_prix_annee</code> :</li>
 </ul>
-<blockquote>
-<p><span class="fragment semi-fade-out"><code>"100 000 km", "15 000 €", "2015"</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>(100000, 15000, 2015)</code></span></p>
-</blockquote>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="fragment semi-fade-out"><code>"100 000 km", "15 000 €", "2015"</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>(100000, 15000, 2015)</code></span></p>
 <ul>
-<li>Diviser la chaine de caractere de <code>cylindre</code> en plusieurs variable avec <code>get_cylindre</code>:</li>
+<li class="fragment">Diviser la chaine de caractere de <code>cylindre</code> en plusieurs variable avec <code>get_cylindre</code>:</li>
 </ul>
-<blockquote>
-<p><span class="fragment semi-fade-out"><code>"6.3 V8 460 GT"</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>('6.3', 'V8', 460, 'GT')</code></span></p>
-</blockquote>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="fragment semi-fade-out"><code>"6.3 V8 460 GT"</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>('6.3', 'V8', 460, 'GT')</code></span></p>
 </section>
 <section id="le-gazoduc" class="slide level2">
 <h2>Le gazoduc 🛢️</h2>
-<p>C’est une fonction qui applique un pipeline de traitement de données sur le DataFrame donné.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="kw">def</span> gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) <span class="op">-&gt;</span> pl.DataFrame:</span>
-<span id="cb7-2"><a href=""></a>    data <span class="op">=</span> (data.pipe(get_marque_modele_generation, nom_marques_modeles)🛢️</span>
-<span id="cb7-3"><a href=""></a>                .pipe(get_km_prix_annee)                                🛢️</span>
-<span id="cb7-4"><a href=""></a>                .pipe(get_garantie)                                     🛢️</span>
-<span id="cb7-5"><a href=""></a>                .pipe(get_cylindre)                                     🛢️</span>
-<span id="cb7-6"><a href=""></a>                .pipe(filter_data)                                      🛢️</span>
-<span id="cb7-7"><a href=""></a>                .pipe(supp_doublons)                                    🛢️  </span>
-<span id="cb7-8"><a href=""></a>                .pipe(supp_na)                                          🛢️</span>
-<span id="cb7-9"><a href=""></a>        )</span>
-<span id="cb7-10"><a href=""></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <aside class="notes">
 <p>f° qui permet de faire tout le traitement automatiquement à l’aide des autres fonctions.</p>
-<p>export de la base en parquet : exlpiquer avantages de parquet</p>
+<p>Comme on peut le voir, il y a d’autre fonction dans cette pipeline que l’on ne vous a pas présenté. On va donc le faire très rapidement.</p>
+<p>get_garantie traite les données de la colonne “garantie” dans en transformant le Garantie 12 mois en gardant uniquement les valeurs numériques. Elle contient aussi d’autre filtre pour écarter les valeurs abérantes</p>
+<p>filter_data permet de supprimer les valeurs abérante pour le kilométrage et l’année 2024.</p>
+<p>supp_doublons permet de supprimer les annonces en double en ce basant sur les liens des annonces.</p>
+<p>supp_na: Elle permet aussi de supprimer les valeurs manquantes pour la puissance. et pour les marques et modeles de véhicule</p>
+<p>Une fois le dataframe nettoyé il sera exporté en format parquet car parquet a une Compression efficace et permet d’avoir des économies de stockage.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -724,9 +712,135 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<p>C’est une fonction qui applique un pipeline de traitement de données sur le DataFrame donné.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="kw">def</span> gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) <span class="op">-&gt;</span> pl.DataFrame:</span>
+<span id="cb7-2"><a href=""></a>    data <span class="op">=</span> (data.pipe(get_marque_modele_generation, nom_marques_modeles)🛢️</span>
+<span id="cb7-3"><a href=""></a>                .pipe(get_km_prix_annee)                                🛢️</span>
+<span id="cb7-4"><a href=""></a>                .pipe(get_garantie)                                     🛢️</span>
+<span id="cb7-5"><a href=""></a>                .pipe(get_cylindre)                                     🛢️</span>
+<span id="cb7-6"><a href=""></a>                .pipe(filter_data)                                      🛢️</span>
+<span id="cb7-7"><a href=""></a>                .pipe(supp_doublons)                                    🛢️  </span>
+<span id="cb7-8"><a href=""></a>                .pipe(supp_na)                                          🛢️</span>
+<span id="cb7-9"><a href=""></a>        )</span>
+<span id="cb7-10"><a href=""></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div style="overflow-x: auto;">
+<table style="max-width: 800px; font-size: 18px;">
+<caption>
+Extrait du dataframe
+</caption>
+<thead>
+<tr>
+<th>
+année
+</th>
+<th>
+kilométrage
+</th>
+<th>
+boîte
+</th>
+<th>
+énergie
+</th>
+<th>
+prix
+</th>
+<th>
+position marché
+</th>
+<th>
+garantie
+</th>
+<th>
+lien
+</th>
+<th>
+marque
+</th>
+<th>
+modèle
+</th>
+<th>
+génération
+</th>
+<th>
+cylindre
+</th>
+<th>
+moteur
+</th>
+<th>
+puissance
+</th>
+<th>
+finition
+</th>
+<th>
+batterie
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+2020
+</td>
+<td>
+107410
+</td>
+<td>
+Manuelle
+</td>
+<td>
+Essence
+</td>
+<td>
+13050
+</td>
+<td>
+Offre équitable
+</td>
+<td>
+12
+</td>
+<td>
+<a href="https://www.lacentrale.fr/auto-occasion-annonc...">Lien vers l’annonce</a>
+</td>
+<td>
+CITROEN
+</td>
+<td>
+C3
+</td>
+<td>
+III
+</td>
+<td>
+1.2
+</td>
+<td>
+PURETECH
+</td>
+<td>
+82
+</td>
+<td>
+S&amp;S FEEL BUSINESS
+</td>
+<td>
+None
+</td>
+<td>
+-
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ce dataframe sera exporté en format <code>.parquet</code> qui permet de stocker des bases volumineuse à moindre coût.</p>
 </section>
 <section id="machine-learning" class="slide level2">
-<h2>Machine learning</h2>
+<h2>📖 Machine learning 📖</h2>
 <aside class="notes">
 <ul>
 <li>split</li>
@@ -747,6 +861,55 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<p>Pour des raisons d’efficacité pour la prédiction, chaque marque de véhicule aura son propre modèle de prédiction.</p>
+<p>Ces modèles de prédiction ne peuvent être choisi au hasard. Il faut effectuer des tests et choisir le modèle le plus adapté.</p>
+<ul>
+<li class="fragment">package utilisé : <code>sklearn</code></li>
+</ul>
+<p>L’utilisation de ce package à plusieurs avantages, tel que ça documentation et une utilisation avec des Pipelines possibles. Cependant, il ne fonctionne pas avec des bases de données <code>Polars</code>.</p>
+<ul>
+<li class="fragment">split des données avec <code>split_data</code></li>
+<li class="fragment">preprocesseur avec <code>get_preprocessor</code></li>
+<li class="fragment">modèles et grille de parametres avec <code>set_models</code> et <code>get_params</code></li>
+<li class="fragment">pour récupérer et exporter les meilleurs modèle : <code>get_all_models</code></li>
+<li class="fragment"><code>predict_prix</code></li>
+</ul>
+</section>
+<section id="le-split" class="slide level2">
+<h2>Le split 👨‍👩‍👧‍👦</h2>
+<p>Données d’entrainement: échantillon de 80% d’observations de la marque</p>
+<p>Données de test: les 20% restants.</p>
+<p>Le split est effectué à l’aide de <code>split_data</code> :</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="kw">def</span> split_data(data: pl.DataFrame, marque: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[pl.DataFrame, pl.DataFrame, pd.DataFrame, pd.DataFrame, np.ndarray, np.ndarray]:</span>
+<span id="cb8-2"><a href=""></a></span>
+<span id="cb8-3"><a href=""></a>    X <span class="op">=</span> data.<span class="bu">filter</span>(pl.col(<span class="st">"marque"</span>) <span class="op">==</span> marque)</span>
+<span id="cb8-4"><a href=""></a>    y <span class="op">=</span> X.select(<span class="st">'prix'</span>)</span>
+<span id="cb8-5"><a href=""></a>    X <span class="op">=</span> X.select(pl.exclude(<span class="st">"position_marché"</span>)</span>
+<span id="cb8-6"><a href=""></a>                 ).select(pl.exclude(<span class="st">"lien"</span>)</span>
+<span id="cb8-7"><a href=""></a>                          ).select(pl.exclude(<span class="st">"garantie"</span>)</span>
+<span id="cb8-8"><a href=""></a>                                   ).select(pl.exclude(<span class="st">"prix"</span>))</span>
+<span id="cb8-9"><a href=""></a></span>
+<span id="cb8-10"><a href=""></a>    <span class="co"># Split des données en ensembles d'entraînement et de test</span></span>
+<span id="cb8-11"><a href=""></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X.to_pandas(), y.to_numpy(), test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">21</span>)</span>
+<span id="cb8-12"><a href=""></a>    <span class="cf">return</span> X, y, X_train, X_test, y_train, y_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="le-preprocesseur" class="slide level2">
+<h2>Le preprocesseur ⏹️</h2>
+<p>La plupart des modèles ne supportent pas les variables qualitatives et requiert donc un prétraitement.</p>
+<p><code>OneHotEncoder</code> est utilisé pour convertir les caractéristiques catégorielles en une représentation binaire.</p>
+<p>Exemple :</p>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="fragment semi-fade-out"><code>'boite' = 'Automatique''</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>boite.Automatique = 1</code></span></p>
+<p><code>StandardScaler</code> est utilisé pour effectuer une mise à l’échelle des caractéristiques numériques. Il standardise les données en soustrayant la moyenne et en divisant par l’écart type, de sorte que chaque caractéristique ait une moyenne de zéro et une variance de un.</p>
+</section>
+<section id="les-modèles" class="slide level2">
+<h2>Les modèles 📊</h2>
+<p>Après quelque test, nous avons décidé d’utiliser uniquement les modèles suivant :</p>
+<ul>
+<li class="fragment">Regression linéaire 📈</li>
+<li class="fragment">K-neighbors 👬👭</li>
+<li class="fragment">Random Forest 🌳</li>
+</ul>
+<p>Pour les paramètres, plusieurs grilles ont été testé, voici les résultats intermédiaires qui nous ont permis de determiner la grille finale.</p>
 </section>
 <section id="streamlit" class="slide level2">
 <h2>Streamlit</h2>
