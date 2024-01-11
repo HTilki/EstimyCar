@@ -477,8 +477,19 @@ Pour les paramètres, plusieurs grilles ont été testé, voici les résultats i
 ## Le nombre de voisins 👬👬👬
 
 ```{python}
+import numpy as np
 import polars as pl
 import duckdb
+import plotly.express as px
+marques_array = duckdb.sql(
+    """Select marque from (
+    SELECT COUNT(*) as nb_annonces,
+    marque
+    FROM 'data/database.parquet'
+    GROUP BY marque
+    ORDER BY nb_annonces DESC)
+    """).pl().head(40)
+marques_array = marques_array.to_numpy()
 def cv_result_into_df(modele: str, marques_array: np.ndarray): 
     for marque in marques_array:
         if marque[0] == marques_array[0,0]:
@@ -488,7 +499,7 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
                 mean_test_score,
                 '{modele}' as modele,
                 params
-                FROM 'cv_results/cv_results_nestimators copy/{marque[0]}_{modele}_results.json'
+                FROM 'cv_results_nestimators copy/{marque[0]}_{modele}_results.json'
                 WHERE rank_test_score = 1
                 """).pl().unnest('params')
         else :
@@ -498,14 +509,14 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
                 mean_test_score,
                 '{modele}' as modele,
                 params
-                FROM 'cv_results/cv_results_nestimators copy/{marque[0]}_{modele}_results.json'
+                FROM 'cv_results_nestimators copy/{marque[0]}_{modele}_results.json'
                
                 WHERE rank_test_score = 1
                 """).pl().unnest('params')
             cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
     return cv_results
 
-    px.bar(cv_result_into_df("KNeighbors", marques_array), x='marque', y='mean_test_score', color = 'n_neighbors')
+px.bar(cv_result_into_df("KNeighbors", marques_array), x='marque', y='mean_test_score', color = 'n_neighbors')
 ```
 
 ## Streamlit
