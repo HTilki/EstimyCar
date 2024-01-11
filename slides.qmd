@@ -28,135 +28,140 @@ format:
            
 jupyter: python3
 ---
- 
- 
- 
+
+
+
 ## Introduction
- 
+
 :::{.notes}
 on s'est intéressé au marché de la voiture et on s'est posé la question de ce qu'on peut prédire sur les voitures. Quand on pense à ça, on pense forcément au prix, comment prédire le prix d'un véhivule?
- 
+
 La plupart des français utilisent la côte argus mais est-ce que vous vous êtes déjà demandé comment celle-ci fonctionne?
- 
+
 - Argus :
 Elle est basée sur le cours-moyen d'argus qui est constitué à l'aide de professionnels du secteur, d'un concessionnaire allant jusqu'au constructeur, mais aussi à l'aide de simples particuliers et des annonces de ventes de véhicule.
- 
- 
+
+
 En apprenant cela, nous avons eu comme objectif de créer notre propre estimateur de prix de voiture.
- 
+
 Pour ce faire, vu qu'on est que 2 jeunes étudiants et ne sommes pas entourés de professionnels, la seule option que nus avons est de scraper des annonces de voitures d'occasion en ligne.
- 
+
 Avant de vous montrer comment on a scrapper tout ça on va directement passer au + croustillant qui est une démonstration de l'application que nous avons créée.
- 
+
 Présentation Streamlit:
- 
+
 on se retrouvr sur l'accueil de notre app, qui est une app streamlit. On va vous expliquer plus tard ce que c'est.
 Sur notre app, nous avons 3 onglets : accueil, acheteur et vendeur.
- 
+
 Démo acheteur, démo vendeur.
 On va pouvoir visualiser
- 
+
 démo acheteur : Hassan est-ce que tu es interessé par l'achat d'un véhicule?
- 
- 
+
+
 si lien inexistant : c'était tellement une bonne affaire qu'elle est déjà partie...
- 
+
 démo vendeur : toutes les données présentes dans l'onglet acheteur ont servi à entrainer les modèles de prédiction.
- 
+
 on a une sorte de transparence sur comment est calculée la côte.
- 
+
 Est-ce que vous avez une voiture à vendre? ou des caractéristiques
 :::
- 
- 
- 
+
+
+
 *CarScraping qu'est-ce que c'est ?*
- 
+
 - Comment se calcule la **Côte ARGUS** ?
- 
+
+:::{.fragment}
 > Elle est basée sur le cours-moyen d'argus qui est constitué à l'aide de professionnels du secteur, d'un concessionnaire allant jusqu'au constructeur, mais aussi à l'aide de simples particuliers et des annonces de ventes de véhicule.
- 
-- Inconvénient : Payant, manque de transparence.
- 
+:::
+
+- **Inconvénients** : Payant, manque de transparence.
+
 - **Objectif** : créer notre propre côte ARGUS gratuite et sans filtre  !
- 
- 
- 
-## Web Scraping 🕸️
- 
+
+
+## Web Scraping 🕸️ {background-image="imgs/webscraping.jpeg" background-opacity="0.1"}
+
 :::{.notes}
 Alors maintenant qu'on a vu le produit final, on va le disséquer pour voir comment on en est arrivé là avec une approche technique!
- 
+
 Vous avez vu le voir peut être mais il y a des liens dans l'onglet acheteur qui renvoie vers le site "La Centrale".
- 
+
 Alors nous avons scrapé ce site et l'intégralité des 300 000 annonces qui étaient présentes sur le site au moment du scraping.
- 
+
 Pour la partie scraping
- 
- 
+
+
 On va vous montrer le processus de scraping en 3 parties : récupération des noms des marques, puis la récupération des annonces, et enfin la récupération des caractéristiques.
- 
+
 pas d'utilisation de Selenium car le site bloque tous les bot.
- 
+
 :::
- 
+
 > C'est une technique d'extraction de données présentes sur des sites  web par l'utilisation d'un script ou programme informatique.
- 
+
+:::{.fragment}
 Données récupérées depuis **La Centrale** :
- 
-- \+ de **300 000** annonces
-- \+ de **150** marques
-- \+ de **900** modèles
- 
- 
-Extraction en 3 parties :
+:::
+
+- \+ de <span style="color:#4682B4">**300 000**</span> annonces
+- \+ de <span style="color:#4682B4">**150**</span> marques
+- \+ de <span style="color:#4682B4">**900**</span> modèles
+
+:::{.fragment}
+Extraction en **3 parties** :
+
   - Récupération des noms des marques
   - Récupération des annonces
   - Récupération des caractéristiques
- 
- 
- 
-## Processus du Scraping : 1/3
- 
-:::{.notes}
- 
-On a un module `webscraping.py` qui nous permet d'extraire toutes ces données depuis le site.
- 
- 
-Il faut savoir que le nombre maximum de pages sur La Centrale est de 500.
- 
-Avec 16 annonces par page, on n'atteint pas les 300k annonces annoncés dans l'accueil du site.
- 
-Pour y parvenir, nous avons décidé de scraper 500 pages d'annonces par marque et par modèles de véhicule à l'aide de requêtes http.
- 
-Pour obtenir ces différentes marques, il suffit juste d'aller dans l'accueil du site, de cliquer sur la listbox "Modèle" et d'ensuite télécharger la page.
- 
- 
- 
 :::
- 
+
+
+## Processus du Scraping : 1/3
+
+:::{.notes}
+
+On a un module `webscraping.py` qui nous permet d'extraire toutes ces données depuis le site.
+
+
+Il faut savoir que le nombre maximum de pages sur La Centrale est de 500.
+
+Avec 16 annonces par page, on n'atteint pas les 300k annonces annoncés dans l'accueil du site.
+
+Pour y parvenir, nous avons décidé de scraper 500 pages d'annonces par marque et par modèles de véhicule à l'aide de requêtes http.
+
+Pour obtenir ces différentes marques, il suffit juste d'aller dans l'accueil du site, de cliquer sur la listbox "Modèle" et d'ensuite télécharger la page.
+
+
+
+:::
+
 - Utilisation des 2 packages python : `request` et `bs4`.
- 
+
 - Récupération de la liste des marques et des modèles associés.
-  
- 
+
+:::{.fragment}
+![](imgs/modelelistbox.png){fig-align="center" height="240"}
+:::
+
 - Transformer en format JSON.
- 
-<div style="max-height: 100px; overflow-y: scroll;">
- 
+
+
+
 :::{.fragment}
 ```{json}
-{
-    "AC": [
+{   "AC": [
         "aceca",
         "cobra"
     ],
     "AIWAYS": [
         "u5"
-    ],
-}
+    ], ...}
 ```
- 
+
 :::
 
 ## Processus du Scraping : (2/3)
@@ -174,8 +179,9 @@ Cette fonction : `extraire_toutes_annonces()`, en contient d'autre. Ce qui perme
 - Extraction de toutes les annonces disponibles sur le site à l'aide de la fonction `extract_toutes_annonces()`, elle permet :
   - d'iterer sur chaque marques et modèles de véhicule
   - d'extraire les pages correspondantes
-
-```py
+  
+:::{.fragment}
+```{py}
 def recup_page(numero_page: int, marque: str, modele: str) -> BeautifulSoup:
     adresse = f"https://www.lacentrale.fr/listing?makesModelsCommercialNames={marque.upper()}%3A{modele.upper()}&options=&page={numero_page}"
     ...
@@ -183,13 +189,16 @@ def recup_page(numero_page: int, marque: str, modele: str) -> BeautifulSoup:
     page = BeautifulSoup(requete.content, "html.parser")
 ``` 
   - d'avoir une sortie sous forme de liste d'annonces
-  
-```py
+:::
+
+:::{.fragment}
+```{py}
 def recup_annonces(page: BeautifulSoup) -> list:
     annonces = page.find_all('div', class_='searchCardContainer')
     return list(annonces)
 ``` 
 
+:::
 
 ## Processus du Scraping : (3/3)
 
@@ -205,7 +214,9 @@ Chacune des caractéristiques des voitures est stockée dans une dataclass `voit
 
 - Extraction des caractéristiques des véhicules.
 
-```py
+:::{.fragment}
+
+```{py}
 def recup_informations_voiture(annonce: str) -> voiture:
     marque = recup_nom_vehicule(annonce)
     cylindre = recup_cylindre(annonce)
@@ -221,6 +232,7 @@ def recup_nom_vehicule(annonce: str) -> str:
     return nom_vehicule[0].text
 ```
 
+:::
 ----
 
 
@@ -240,6 +252,7 @@ json/
   {} data_m_p.json
   {} data_r_z.json
 ```
+
 
 Un extrait du fichier JSON obtenu : 
 ```{json}
@@ -265,7 +278,8 @@ On les fusionne à l'aide de la fonction `fusionner_fichiers_json` pour obtenir 
 
 
 
-## 🧼 Data cleaning 🧹
+## 🧼 Data cleaning 🧹{background-image="imgs/datacleaning3.jpeg" background-opacity="0.2"}
+
 
 :::{.notes}
 
@@ -278,14 +292,16 @@ Pour récupérer le + d'informations possibles sur ces données, nous avons déc
 - Essentiel pour pouvoir exploiter les données.
 - Permet de récupérer + d'informations.
 
-
+:::{.fragment}
 Pour le nettoyage de la base de données, nous avons utilisé le package `Polars` 🐻‍❄️, qui possède de nombreux avantages comme :  
-
+:::
 -   la création de pipelines 🛢️
 -   un code plus lisible 👀
 -   dans certains cas, + efficace que `Pandas` 🐼
 
+:::{.fragment}
 C'est le module `datacleaning.py` qui contient toutes les fonctions essentiels pour résoudre certains problèmes.
+:::
 
 ## Les problèmes rencontrées ⚠️
 
@@ -302,17 +318,24 @@ pb rencontré, nom de la f°, et la sortie.  (faire figurer l'ex des docstring)
 
 - Séparer la marque, le modèle et la génération à l'aide de `get_marque_modele_generation()`
 
+:::{.fragment}
 $\rightarrow$ [`'CITROEN C3 III'`]{.fragment .semi-fade-out} [->]{.fragment} [`('CITROEN', 'C3', 'III')`]{.fragment}
+:::
 
 - Corriger le type des variables `kilometre`, `prix` et `annee` avec `get_km_prix_annee` : 
 
+:::{.fragment}
 $\rightarrow$ [`"100 000 km", "15 000 €", "2015"`]{.fragment .semi-fade-out} [->]{.fragment} [`(100000, 15000, 2015)`]{.fragment}
+:::
 
 - Diviser la chaine de caractere de `cylindre` en plusieurs variable avec `get_cylindre`: 
 
+:::{.fragment}
 $\rightarrow$ [`"6.3 V8 460 GT"`]{.fragment .semi-fade-out} [->]{.fragment} [`('6.3', 'V8', 460, 'GT')`]{.fragment}
+:::
 
-## Le gazoduc 🛢️
+
+## Le gazoduc 🛢️{background-image="imgs/gazoduc1.jpeg" background-opacity="0.1"}
 
 :::{.notes}
 f° qui permet de faire tout le traitement automatiquement à l'aide des autres fonctions. 
@@ -397,7 +420,8 @@ def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFra
 
 Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases volumineuse à moindre coût. 
 
-## 📖 Machine learning 📖
+## 📖 Machine learning 📖{background-image="imgs/ML1.jpeg" background-opacity="0.1"}
+
 
 
 :::{.notes}
@@ -410,7 +434,7 @@ Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases 
 
 :::
 
-Pour des raisons d'efficacité pour la prédiction, chaque marque de véhicule aura son propre modèle de prédiction.
+Pour des raisons d'efficacité pour la prédiction, **chaque marque de véhicule aura son propre modèle de prédiction**.
 
 Ces modèles de prédiction ne peuvent être choisi au hasard. Il faut effectuer des tests et choisir le modèle le plus adapté.
 
@@ -418,21 +442,22 @@ Ces modèles de prédiction ne peuvent être choisi au hasard. Il faut effectuer
 
 - package utilisé : `sklearn`
 
-L'utilisation de ce package à plusieurs avantages, tel que ça documentation et une utilisation avec des Pipelines possibles. Cependant, il ne fonctionne pas avec des bases de données `Polars`.
-
+:::{.fragment}
+L'utilisation de ce package à plusieurs avantages, tel que sa documentation et une utilisation avec des **pipelines** possibles. Cependant, il ne fonctionne pas avec des bases de données `Polars`.
+:::
 
 - split des données avec `split_data`
 - preprocesseur avec `get_preprocessor`
-- modèles et grille de parametres avec `set_models` et `get_params`
-- pour récupérer et exporter les meilleurs modèle : `get_all_models`
+- modèles et grille de paramètres avec `set_models` et `get_params`
+- pour récupérer et exporter les meilleurs modèles : `get_all_models`
 - `predict_prix`
 
 ## Le split 👨‍👩‍👧‍👦
 
 
-Données d'entrainement: échantillon de 80% d'observations de la marque
+**Données d'entrainement** : échantillon de <span style="color:#4682B4">**80%**</span> d'observations de la marque
 
-Données de test: les 20% restants.
+**Données de test** : les <span style="color:#4682B4">**20%**</span> restants.
 
 Le split est effectué à l'aide de `split_data` : 
 
@@ -442,9 +467,9 @@ def split_data(data: pl.DataFrame, marque: str) -> tuple[pl.DataFrame, pl.DataFr
     X = data.filter(pl.col("marque") == marque)
     y = X.select('prix')
     X = X.select(pl.exclude("position_marché")
-                 ).select(pl.exclude("lien")
-                          ).select(pl.exclude("garantie")
-                                   ).select(pl.exclude("prix"))
+                ).select(pl.exclude("lien")
+                        ).select(pl.exclude("garantie")
+                                ).select(pl.exclude("prix"))
 
     # Split des données en ensembles d'entraînement et de test
     X_train, X_test, y_train, y_test = train_test_split(X.to_pandas(), y.to_numpy(), test_size=0.2, random_state=21)
@@ -466,13 +491,15 @@ $\rightarrow$ [`'boite' = 'Automatique''`]{.fragment .semi-fade-out} [->]{.fragm
 
 ## Les modèles 📊
 
-Après quelque test, nous avons décidé d'utiliser uniquement les modèles suivant : 
+Après quelques tests, nous avons décidé d'utiliser uniquement les modèles suivant : 
 
 - Regression linéaire 📈
 - K-neighbors 👬👭
 - Random Forest 🌳
 
+:::{.fragment}
 Pour les paramètres, plusieurs grilles ont été testé, voici les résultats intermédiaires qui nous ont permis de déterminer la grille finale.
+:::
 
 ## Le nombre de voisins 👬👬👬
 
@@ -516,10 +543,10 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
             cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
     return cv_results
 
-px.bar(cv_result_into_df("KNeighbors", marques_array), x='marque', y='mean_test_score', color = 'n_neighbors')
+px.bar(cv_result_into_df("KNeighbors", marques_array), x='marque', y='mean_test_score', color = 'n_neighbors', color_continuous_scale=px.colors.sequential.Blues)
 ```
 
-## Streamlit
+## Streamlit 🚀
 
 
 :::{.notes}

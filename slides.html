@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="slides_files/libs/clipboard/clipboard.min.js"></script>
 <script src="slides_files/libs/quarto-html/tabby.min.js"></script>
 <script src="slides_files/libs/quarto-html/popper.min.js"></script>
 <script src="slides_files/libs/quarto-html/tippy.umd.min.js"></script>
@@ -8,7 +8,7 @@
 <link href="slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.539">
+  <meta name="generator" content="quarto-1.3.450">
 
   <meta name="author" content="Aybuké BICAT &amp; Hassan TILKI">
   <title>🚙 CarScraping 🚙</title>
@@ -31,7 +31,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -223,8 +223,7 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    padding-bottom: 0.5rem;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -388,7 +387,7 @@
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
   <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
   <script type="text/javascript">
   window.PlotlyConfig = {MathJaxConfig: 'local'};
@@ -463,15 +462,17 @@
 <ul>
 <li class="fragment">Comment se calcule la <strong>Côte ARGUS</strong> ?</li>
 </ul>
+<div class="fragment">
 <blockquote>
 <p>Elle est basée sur le cours-moyen d’argus qui est constitué à l’aide de professionnels du secteur, d’un concessionnaire allant jusqu’au constructeur, mais aussi à l’aide de simples particuliers et des annonces de ventes de véhicule.</p>
 </blockquote>
+</div>
 <ul>
-<li class="fragment"><p>Inconvénient : Payant, manque de transparence.</p></li>
+<li class="fragment"><p><strong>Inconvénients</strong> : Payant, manque de transparence.</p></li>
 <li class="fragment"><p><strong>Objectif</strong> : créer notre propre côte ARGUS gratuite et sans filtre !</p></li>
 </ul>
 </section>
-<section id="web-scraping" class="slide level2">
+<section id="web-scraping" class="slide level2" data-background-image="imgs/webscraping.jpeg" data-background-opacity="0.1">
 <h2>Web Scraping 🕸️</h2>
 <aside class="notes">
 <p>Alors maintenant qu’on a vu le produit final, on va le disséquer pour voir comment on en est arrivé là avec une approche technique!</p>
@@ -494,13 +495,22 @@
 <blockquote>
 <p>C’est une technique d’extraction de données présentes sur des sites web par l’utilisation d’un script ou programme informatique.</p>
 </blockquote>
+<div class="fragment">
 <p>Données récupérées depuis <strong>La Centrale</strong> :</p>
+</div>
 <ul>
-<li class="fragment">+ de <strong>300 000</strong> annonces</li>
-<li class="fragment">+ de <strong>150</strong> marques</li>
-<li class="fragment">+ de <strong>900</strong> modèles</li>
+<li class="fragment">+ de <span style="color:#4682B4"><strong>300 000</strong></span> annonces</li>
+<li class="fragment">+ de <span style="color:#4682B4"><strong>150</strong></span> marques</li>
+<li class="fragment">+ de <span style="color:#4682B4"><strong>900</strong></span> modèles</li>
 </ul>
-<p>Extraction en 3 parties : - Récupération des noms des marques - Récupération des annonces - Récupération des caractéristiques</p>
+<div class="fragment">
+<p>Extraction en <strong>3 parties</strong> :</p>
+<ul>
+<li class="fragment">Récupération des noms des marques</li>
+<li class="fragment">Récupération des annonces</li>
+<li class="fragment">Récupération des caractéristiques</li>
+</ul>
+</div>
 </section>
 <section id="processus-du-scraping-13" class="slide level2">
 <h2>Processus du Scraping : 1/3</h2>
@@ -524,22 +534,27 @@
 <ul>
 <li class="fragment"><p>Utilisation des 2 packages python : <code>request</code> et <code>bs4</code>.</p></li>
 <li class="fragment"><p>Récupération de la liste des marques et des modèles associés.</p></li>
-<li class="fragment"><p>Transformer en format JSON.</p></li>
 </ul>
-<div style="max-height: 100px; overflow-y: scroll;">
-
 <div class="fragment">
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href=""></a>{</span>
-<span id="cb1-2"><a href=""></a>    "AC": [</span>
-<span id="cb1-3"><a href=""></a>        "aceca",</span>
-<span id="cb1-4"><a href=""></a>        "cobra"</span>
-<span id="cb1-5"><a href=""></a>    ],</span>
-<span id="cb1-6"><a href=""></a>    "AIWAYS": [</span>
-<span id="cb1-7"><a href=""></a>        "u5"</span>
-<span id="cb1-8"><a href=""></a>    ],</span>
-<span id="cb1-9"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="imgs/modelelistbox.png" height="240"></p>
+</figure>
 </div>
-</div></section>
+</div>
+<ul>
+<li class="fragment">Transformer en format JSON.</li>
+</ul>
+<div class="fragment">
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>{   "AC": [</span>
+<span id="cb1-2"><a href="#cb1-2"></a>        "aceca",</span>
+<span id="cb1-3"><a href="#cb1-3"></a>        "cobra"</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    ],</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    "AIWAYS": [</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        "u5"</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    ], ...}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 <section id="processus-du-scraping-23" class="slide level2">
 <h2>Processus du Scraping : (2/3)</h2>
 <aside class="notes">
@@ -564,17 +579,21 @@
 <li class="fragment">d’extraire les pages correspondantes</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a><span class="kw">def</span> recup_page(numero_page: <span class="bu">int</span>, marque: <span class="bu">str</span>, modele: <span class="bu">str</span>) <span class="op">-&gt;</span> BeautifulSoup:</span>
-<span id="cb2-2"><a href=""></a>    adresse <span class="op">=</span> <span class="ss">f"https://www.lacentrale.fr/listing?makesModelsCommercialNames=</span><span class="sc">{</span>marque<span class="sc">.</span>upper()<span class="sc">}</span><span class="ss">%3A</span><span class="sc">{</span>modele<span class="sc">.</span>upper()<span class="sc">}</span><span class="ss">&amp;options=&amp;page=</span><span class="sc">{</span>numero_page<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb2-3"><a href=""></a>    ...</span>
-<span id="cb2-4"><a href=""></a>    requete <span class="op">=</span> rq.get(url<span class="op">=</span>adresse)</span>
-<span id="cb2-5"><a href=""></a>    page <span class="op">=</span> BeautifulSoup(requete.content, <span class="st">"html.parser"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource {py} number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>def recup_page(numero_page: int, marque: str, modele: str) -&gt; BeautifulSoup:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    adresse = f"https://www.lacentrale.fr/listing?makesModelsCommercialNames={marque.upper()}%3A{modele.upper()}&amp;options=&amp;page={numero_page}"</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    ...</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    requete = rq.get(url=adresse)</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    page = BeautifulSoup(requete.content, "html.parser")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li class="fragment">d’avoir une sortie sous forme de liste d’annonces</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="kw">def</span> recup_annonces(page: BeautifulSoup) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
-<span id="cb3-2"><a href=""></a>    annonces <span class="op">=</span> page.find_all(<span class="st">'div'</span>, class_<span class="op">=</span><span class="st">'searchCardContainer'</span>)</span>
-<span id="cb3-3"><a href=""></a>    <span class="cf">return</span> <span class="bu">list</span>(annonces)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource {py} number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>def recup_annonces(page: BeautifulSoup) -&gt; list:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    annonces = page.find_all('div', class_='searchCardContainer')</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    return list(annonces)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="processus-du-scraping-33" class="slide level2">
 <h2>Processus du Scraping : (3/3)</h2>
@@ -593,22 +612,24 @@
           display:block!important;
       }</style></aside>
 
-<img data-src="imgs/sorties_annonces.png" class="quarto-figure quarto-figure-center r-stretch" width="0"><ul>
+<img data-src="imgs/sorties_annonces.png" width="0" class="r-stretch quarto-figure-center"><ul>
 <li class="fragment">Extraction des caractéristiques des véhicules.</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="kw">def</span> recup_informations_voiture(annonce: <span class="bu">str</span>) <span class="op">-&gt;</span> voiture:</span>
-<span id="cb4-2"><a href=""></a>    marque <span class="op">=</span> recup_nom_vehicule(annonce)</span>
-<span id="cb4-3"><a href=""></a>    cylindre <span class="op">=</span> recup_cylindre(annonce)</span>
-<span id="cb4-4"><a href=""></a>    annee, kilometrage, boite, energie <span class="op">=</span> recup_caracteristiques(annonce)</span>
-<span id="cb4-5"><a href=""></a>    prix <span class="op">=</span> recup_prix(annonce)</span>
-<span id="cb4-6"><a href=""></a>    position_marché <span class="op">=</span> recup_position_marché(annonce)</span>
-<span id="cb4-7"><a href=""></a>    garantie <span class="op">=</span> recup_garantie(annonce)</span>
-<span id="cb4-8"><a href=""></a>    lien <span class="op">=</span> recup_href(annonce)</span>
-<span id="cb4-9"><a href=""></a>    <span class="cf">return</span> voiture(marque<span class="op">=</span>marque, cylindre<span class="op">=</span>cylindre, annee<span class="op">=</span>annee, kilometrage<span class="op">=</span>kilometrage, boite<span class="op">=</span>boite, energie<span class="op">=</span>energie, prix<span class="op">=</span>prix, position_marché<span class="op">=</span>position_marché, garantie<span class="op">=</span>garantie, lien<span class="op">=</span>lien)</span>
-<span id="cb4-10"><a href=""></a></span>
-<span id="cb4-11"><a href=""></a><span class="kw">def</span> recup_nom_vehicule(annonce: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>: </span>
-<span id="cb4-12"><a href=""></a>    nom_vehicule <span class="op">=</span> annonce.find_all(<span class="st">'h2'</span>, class_<span class="op">=</span><span class="st">'Text_Text_text Vehiculecard_Vehiculecard_title Text_Text_subtitle2'</span>)</span>
-<span id="cb4-13"><a href=""></a>    <span class="cf">return</span> nom_vehicule[<span class="dv">0</span>].text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource {py} number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>def recup_informations_voiture(annonce: str) -&gt; voiture:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    marque = recup_nom_vehicule(annonce)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    cylindre = recup_cylindre(annonce)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    annee, kilometrage, boite, energie = recup_caracteristiques(annonce)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    prix = recup_prix(annonce)</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    position_marché = recup_position_marché(annonce)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    garantie = recup_garantie(annonce)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    lien = recup_href(annonce)</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    return voiture(marque=marque, cylindre=cylindre, annee=annee, kilometrage=kilometrage, boite=boite, energie=energie, prix=prix, position_marché=position_marché, garantie=garantie, lien=lien)</span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a>def recup_nom_vehicule(annonce: str) -&gt; str: </span>
+<span id="cb4-12"><a href="#cb4-12"></a>    nom_vehicule = annonce.find_all('h2', class_='Text_Text_text Vehiculecard_Vehiculecard_title Text_Text_subtitle2')</span>
+<span id="cb4-13"><a href="#cb4-13"></a>    return nom_vehicule[0].text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section class="slide level2">
 
@@ -633,24 +654,24 @@
   {} data_m_p.json
   {} data_r_z.json</code></pre>
 <p>Un extrait du fichier JSON obtenu :</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href=""></a>[</span>
-<span id="cb6-2"><a href=""></a>    {</span>
-<span id="cb6-3"><a href=""></a>        "marque": "CITROEN C3 III",</span>
-<span id="cb6-4"><a href=""></a>        "cylindre": "1.2 PURETECH 110 FEEL",</span>
-<span id="cb6-5"><a href=""></a>        "annee": "2019",</span>
-<span id="cb6-6"><a href=""></a>        "kilometrage": "10 698 km",</span>
-<span id="cb6-7"><a href=""></a>        "boite": "Automatique",</span>
-<span id="cb6-8"><a href=""></a>        "energie": "Essence",</span>
-<span id="cb6-9"><a href=""></a>        "prix": "15 990 €",</span>
-<span id="cb6-10"><a href=""></a>        "position_marché": "Bonne affaire",</span>
-<span id="cb6-11"><a href=""></a>        "garantie": "Garantie 12 mois",</span>
-<span id="cb6-12"><a href=""></a>        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69112858137.html"</span>
-<span id="cb6-13"><a href=""></a>    },</span>
-<span id="cb6-14"><a href=""></a>    ...</span>
-<span id="cb6-15"><a href=""></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>[</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    {</span>
+<span id="cb6-3"><a href="#cb6-3"></a>        "marque": "CITROEN C3 III",</span>
+<span id="cb6-4"><a href="#cb6-4"></a>        "cylindre": "1.2 PURETECH 110 FEEL",</span>
+<span id="cb6-5"><a href="#cb6-5"></a>        "annee": "2019",</span>
+<span id="cb6-6"><a href="#cb6-6"></a>        "kilometrage": "10 698 km",</span>
+<span id="cb6-7"><a href="#cb6-7"></a>        "boite": "Automatique",</span>
+<span id="cb6-8"><a href="#cb6-8"></a>        "energie": "Essence",</span>
+<span id="cb6-9"><a href="#cb6-9"></a>        "prix": "15 990 €",</span>
+<span id="cb6-10"><a href="#cb6-10"></a>        "position_marché": "Bonne affaire",</span>
+<span id="cb6-11"><a href="#cb6-11"></a>        "garantie": "Garantie 12 mois",</span>
+<span id="cb6-12"><a href="#cb6-12"></a>        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69112858137.html"</span>
+<span id="cb6-13"><a href="#cb6-13"></a>    },</span>
+<span id="cb6-14"><a href="#cb6-14"></a>    ...</span>
+<span id="cb6-15"><a href="#cb6-15"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>On les fusionne à l’aide de la fonction <code>fusionner_fichiers_json</code> pour obtenir un seul fichier contenant toutes les données extraites.</p>
 </section>
-<section id="data-cleaning" class="slide level2">
+<section id="data-cleaning" class="slide level2" data-background-image="imgs/datacleaning3.jpeg" data-background-opacity="0.2">
 <h2>🧼 Data cleaning 🧹</h2>
 <aside class="notes">
 <p>Une fois notre fichier json obtenue, chose inevitable nous avons des données mal renseignées, des pb de types de données mais aussi des informations à extraire de ces données brutes.</p>
@@ -670,13 +691,17 @@
 <li class="fragment">Essentiel pour pouvoir exploiter les données.</li>
 <li class="fragment">Permet de récupérer + d’informations.</li>
 </ul>
+<div class="fragment">
 <p>Pour le nettoyage de la base de données, nous avons utilisé le package <code>Polars</code> 🐻‍❄️, qui possède de nombreux avantages comme :</p>
+</div>
 <ul>
 <li class="fragment">la création de pipelines 🛢️</li>
 <li class="fragment">un code plus lisible 👀</li>
 <li class="fragment">dans certains cas, + efficace que <code>Pandas</code> 🐼</li>
 </ul>
+<div class="fragment">
 <p>C’est le module <code>datacleaning.py</code> qui contient toutes les fonctions essentiels pour résoudre certains problèmes.</p>
+</div>
 </section>
 <section id="les-problèmes-rencontrées" class="slide level2">
 <h2>Les problèmes rencontrées ⚠️</h2>
@@ -700,17 +725,23 @@
 <ul>
 <li class="fragment">Séparer la marque, le modèle et la génération à l’aide de <code>get_marque_modele_generation()</code></li>
 </ul>
+<div class="fragment">
 <p><span class="math inline">\(\rightarrow\)</span> <span class="fragment semi-fade-out"><code>'CITROEN C3 III'</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>('CITROEN', 'C3', 'III')</code></span></p>
+</div>
 <ul>
 <li class="fragment">Corriger le type des variables <code>kilometre</code>, <code>prix</code> et <code>annee</code> avec <code>get_km_prix_annee</code> :</li>
 </ul>
+<div class="fragment">
 <p><span class="math inline">\(\rightarrow\)</span> <span class="fragment semi-fade-out"><code>"100 000 km", "15 000 €", "2015"</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>(100000, 15000, 2015)</code></span></p>
+</div>
 <ul>
 <li class="fragment">Diviser la chaine de caractere de <code>cylindre</code> en plusieurs variable avec <code>get_cylindre</code>:</li>
 </ul>
+<div class="fragment">
 <p><span class="math inline">\(\rightarrow\)</span> <span class="fragment semi-fade-out"><code>"6.3 V8 460 GT"</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>('6.3', 'V8', 460, 'GT')</code></span></p>
+</div>
 </section>
-<section id="le-gazoduc" class="slide level2">
+<section id="le-gazoduc" class="slide level2" data-background-image="imgs/gazoduc1.jpeg" data-background-opacity="0.1">
 <h2>Le gazoduc 🛢️</h2>
 <aside class="notes">
 <p>f° qui permet de faire tout le traitement automatiquement à l’aide des autres fonctions.</p>
@@ -732,17 +763,18 @@
           display:block!important;
       }</style></aside>
 <p>C’est une fonction qui applique un pipeline de traitement de données sur le DataFrame donné.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="kw">def</span> gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) <span class="op">-&gt;</span> pl.DataFrame:</span>
-<span id="cb7-2"><a href=""></a>    data <span class="op">=</span> (data.pipe(get_marque_modele_generation, nom_marques_modeles)🛢️</span>
-<span id="cb7-3"><a href=""></a>                .pipe(get_km_prix_annee)                                🛢️</span>
-<span id="cb7-4"><a href=""></a>                .pipe(get_garantie)                                     🛢️</span>
-<span id="cb7-5"><a href=""></a>                .pipe(get_cylindre)                                     🛢️</span>
-<span id="cb7-6"><a href=""></a>                .pipe(filter_data)                                      🛢️</span>
-<span id="cb7-7"><a href=""></a>                .pipe(supp_doublons)                                    🛢️  </span>
-<span id="cb7-8"><a href=""></a>                .pipe(supp_na)                                          🛢️</span>
-<span id="cb7-9"><a href=""></a>        )</span>
-<span id="cb7-10"><a href=""></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) <span class="op">-&gt;</span> pl.DataFrame:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    data <span class="op">=</span> (data.pipe(get_marque_modele_generation, nom_marques_modeles)🛢️</span>
+<span id="cb7-3"><a href="#cb7-3"></a>                .pipe(get_km_prix_annee)                                🛢️</span>
+<span id="cb7-4"><a href="#cb7-4"></a>                .pipe(get_garantie)                                     🛢️</span>
+<span id="cb7-5"><a href="#cb7-5"></a>                .pipe(get_cylindre)                                     🛢️</span>
+<span id="cb7-6"><a href="#cb7-6"></a>                .pipe(filter_data)                                      🛢️</span>
+<span id="cb7-7"><a href="#cb7-7"></a>                .pipe(supp_doublons)                                    🛢️  </span>
+<span id="cb7-8"><a href="#cb7-8"></a>                .pipe(supp_na)                                          🛢️</span>
+<span id="cb7-9"><a href="#cb7-9"></a>        )</span>
+<span id="cb7-10"><a href="#cb7-10"></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div style="overflow-x: auto;">
+
 <table style="max-width: 800px; font-size: 18px;">
 <caption>
 Extrait du dataframe
@@ -854,11 +886,12 @@ None
 </td>
 </tr>
 </tbody>
+
 </table>
 </div>
 <p>Ce dataframe sera exporté en format <code>.parquet</code> qui permet de stocker des bases volumineuse à moindre coût.</p>
 </section>
-<section id="machine-learning" class="slide level2">
+<section id="machine-learning" class="slide level2" data-background-image="imgs/ML1.jpeg" data-background-opacity="0.1">
 <h2>📖 Machine learning 📖</h2>
 <aside class="notes">
 <ul>
@@ -880,37 +913,39 @@ None
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<p>Pour des raisons d’efficacité pour la prédiction, chaque marque de véhicule aura son propre modèle de prédiction.</p>
+<p>Pour des raisons d’efficacité pour la prédiction, <strong>chaque marque de véhicule aura son propre modèle de prédiction</strong>.</p>
 <p>Ces modèles de prédiction ne peuvent être choisi au hasard. Il faut effectuer des tests et choisir le modèle le plus adapté.</p>
 <ul>
 <li class="fragment">package utilisé : <code>sklearn</code></li>
 </ul>
-<p>L’utilisation de ce package à plusieurs avantages, tel que ça documentation et une utilisation avec des Pipelines possibles. Cependant, il ne fonctionne pas avec des bases de données <code>Polars</code>.</p>
+<div class="fragment">
+<p>L’utilisation de ce package à plusieurs avantages, tel que sa documentation et une utilisation avec des <strong>pipelines</strong> possibles. Cependant, il ne fonctionne pas avec des bases de données <code>Polars</code>.</p>
+</div>
 <ul>
 <li class="fragment">split des données avec <code>split_data</code></li>
 <li class="fragment">preprocesseur avec <code>get_preprocessor</code></li>
-<li class="fragment">modèles et grille de parametres avec <code>set_models</code> et <code>get_params</code></li>
-<li class="fragment">pour récupérer et exporter les meilleurs modèle : <code>get_all_models</code></li>
+<li class="fragment">modèles et grille de paramètres avec <code>set_models</code> et <code>get_params</code></li>
+<li class="fragment">pour récupérer et exporter les meilleurs modèles : <code>get_all_models</code></li>
 <li class="fragment"><code>predict_prix</code></li>
 </ul>
 </section>
 <section id="le-split" class="slide level2">
 <h2>Le split 👨‍👩‍👧‍👦</h2>
-<p>Données d’entrainement: échantillon de 80% d’observations de la marque</p>
-<p>Données de test: les 20% restants.</p>
+<p><strong>Données d’entrainement</strong> : échantillon de <span style="color:#4682B4"><strong>80%</strong></span> d’observations de la marque</p>
+<p><strong>Données de test</strong> : les <span style="color:#4682B4"><strong>20%</strong></span> restants.</p>
 <p>Le split est effectué à l’aide de <code>split_data</code> :</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="kw">def</span> split_data(data: pl.DataFrame, marque: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[pl.DataFrame, pl.DataFrame, pd.DataFrame, pd.DataFrame, np.ndarray, np.ndarray]:</span>
-<span id="cb8-2"><a href=""></a></span>
-<span id="cb8-3"><a href=""></a>    X <span class="op">=</span> data.<span class="bu">filter</span>(pl.col(<span class="st">"marque"</span>) <span class="op">==</span> marque)</span>
-<span id="cb8-4"><a href=""></a>    y <span class="op">=</span> X.select(<span class="st">'prix'</span>)</span>
-<span id="cb8-5"><a href=""></a>    X <span class="op">=</span> X.select(pl.exclude(<span class="st">"position_marché"</span>)</span>
-<span id="cb8-6"><a href=""></a>                 ).select(pl.exclude(<span class="st">"lien"</span>)</span>
-<span id="cb8-7"><a href=""></a>                          ).select(pl.exclude(<span class="st">"garantie"</span>)</span>
-<span id="cb8-8"><a href=""></a>                                   ).select(pl.exclude(<span class="st">"prix"</span>))</span>
-<span id="cb8-9"><a href=""></a></span>
-<span id="cb8-10"><a href=""></a>    <span class="co"># Split des données en ensembles d'entraînement et de test</span></span>
-<span id="cb8-11"><a href=""></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X.to_pandas(), y.to_numpy(), test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">21</span>)</span>
-<span id="cb8-12"><a href=""></a>    <span class="cf">return</span> X, y, X_train, X_test, y_train, y_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> split_data(data: pl.DataFrame, marque: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[pl.DataFrame, pl.DataFrame, pd.DataFrame, pd.DataFrame, np.ndarray, np.ndarray]:</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>    X <span class="op">=</span> data.<span class="bu">filter</span>(pl.col(<span class="st">"marque"</span>) <span class="op">==</span> marque)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    y <span class="op">=</span> X.select(<span class="st">'prix'</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>    X <span class="op">=</span> X.select(pl.exclude(<span class="st">"position_marché"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6"></a>                ).select(pl.exclude(<span class="st">"lien"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a>                        ).select(pl.exclude(<span class="st">"garantie"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a>                                ).select(pl.exclude(<span class="st">"prix"</span>))</span>
+<span id="cb8-9"><a href="#cb8-9"></a></span>
+<span id="cb8-10"><a href="#cb8-10"></a>    <span class="co"># Split des données en ensembles d'entraînement et de test</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X.to_pandas(), y.to_numpy(), test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">21</span>)</span>
+<span id="cb8-12"><a href="#cb8-12"></a>    <span class="cf">return</span> X, y, X_train, X_test, y_train, y_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="le-preprocesseur" class="slide level2">
 <h2>Le preprocesseur ⏹️</h2>
@@ -922,21 +957,24 @@ None
 </section>
 <section id="les-modèles" class="slide level2">
 <h2>Les modèles 📊</h2>
-<p>Après quelque test, nous avons décidé d’utiliser uniquement les modèles suivant :</p>
+<p>Après quelques tests, nous avons décidé d’utiliser uniquement les modèles suivant :</p>
 <ul>
 <li class="fragment">Regression linéaire 📈</li>
 <li class="fragment">K-neighbors 👬👭</li>
 <li class="fragment">Random Forest 🌳</li>
 </ul>
+<div class="fragment">
 <p>Pour les paramètres, plusieurs grilles ont été testé, voici les résultats intermédiaires qui nous ont permis de déterminer la grille finale.</p>
+</div>
 </section>
 <section id="le-nombre-de-voisins" class="slide level2">
 <h2>Le nombre de voisins 👬👬👬</h2>
-<div id="0e220ba6" class="cell" data-execution_count="1">
+<div class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
-<div>                            <div id="a6309344-467d-4027-9bed-3663bbd469e8" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("a6309344-467d-4027-9bed-3663bbd469e8")) {                    Plotly.newPlot(                        "a6309344-467d-4027-9bed-3663bbd469e8",                        [{"alignmentgroup":"True","hovertemplate":"marque=%{x}\u003cbr\u003emean_test_score=%{y}\u003cbr\u003en_neighbors=%{marker.color}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":[8,8,7,10,7,7,10,10,9,6,10,10,8,10,6,9,10,10,10,10,3,7,10,7,8,7,5,3,6,10,2,5,6,4,8,2,4,2,10,7],"coloraxis":"coloraxis","pattern":{"shape":""}},"name":"","offsetgroup":"","orientation":"v","showlegend":false,"textposition":"auto","x":["PEUGEOT","RENAULT","CITROEN","VOLKSWAGEN","MERCEDES","BMW","AUDI","FORD","TOYOTA","OPEL","FIAT","MINI","NISSAN","DS","DACIA","HYUNDAI","KIA","VOLVO","SEAT","SKODA","PORSCHE","JEEP","LAND ROVER","SUZUKI","MAZDA","LEXUS","ALFA ROMEO","JAGUAR","CUPRA","MITSUBISHI","HONDA","TESLA","SMART","MASERATI","ABARTH","FERRARI","MG","CHEVROLET","IVECO","ALPINE"],"xaxis":"x","y":[0.9293857693,0.9168290378,0.9181374995,0.9327725869,0.8996973986,0.9168500465,0.9332908049,0.8374739807,0.9290016108,0.8995325524,0.8923609087,0.9096364463,0.919259894,0.9031011657,0.895681453,0.9414761634,0.9277243226,0.9245239731,0.9159655773,0.7867862118,0.9561521388,0.9421891595,0.9305717115,0.9500009628,0.9427080801,0.8853172209,0.9244554117,0.9003810407,0.7246347567,0.8557349345,0.9252805551,0.8316485644,0.8778596137,0.830274273,0.8019641634,0.5856410058,0.8129843458,0.9392463948,0.7264521489,0.6669690632],"yaxis":"y","type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"marque"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"mean_test_score"}},"coloraxis":{"colorbar":{"title":{"text":"n_neighbors"}},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"legend":{"tracegroupgap":0},"barmode":"relative"},                        {"responsive": true}                    ).then(function(){
+
+<div>                            <div id="6cbcd428-3a81-4633-8460-b581583b6301" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("6cbcd428-3a81-4633-8460-b581583b6301")) {                    Plotly.newPlot(                        "6cbcd428-3a81-4633-8460-b581583b6301",                        [{"alignmentgroup":"True","hovertemplate":"marque=%{x}\u003cbr\u003emean_test_score=%{y}\u003cbr\u003en_neighbors=%{marker.color}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":[8,8,7,10,7,7,10,10,9,6,10,10,8,10,6,9,10,10,10,10,3,7,10,7,8,7,5,3,6,10,2,5,6,4,8,2,4,2,10,7],"coloraxis":"coloraxis","pattern":{"shape":""}},"name":"","offsetgroup":"","orientation":"v","showlegend":false,"textposition":"auto","x":["PEUGEOT","RENAULT","CITROEN","VOLKSWAGEN","MERCEDES","BMW","AUDI","FORD","TOYOTA","OPEL","FIAT","MINI","NISSAN","DS","DACIA","HYUNDAI","KIA","VOLVO","SEAT","SKODA","PORSCHE","JEEP","LAND ROVER","SUZUKI","MAZDA","LEXUS","ALFA ROMEO","JAGUAR","CUPRA","MITSUBISHI","HONDA","TESLA","SMART","MASERATI","ABARTH","FERRARI","MG","CHEVROLET","IVECO","ALPINE"],"xaxis":"x","y":[0.9293857693,0.9168290378,0.9181374995,0.9327725869,0.8996973986,0.9168500465,0.9332908049,0.8374739807,0.9290016108,0.8995325524,0.8923609087,0.9096364463,0.919259894,0.9031011657,0.895681453,0.9414761634,0.9277243226,0.9245239731,0.9159655773,0.7867862118,0.9561521388,0.9421891595,0.9305717115,0.9500009628,0.9427080801,0.8853172209,0.9244554117,0.9003810407,0.7246347567,0.8557349345,0.9252805551,0.8316485644,0.8778596137,0.830274273,0.8019641634,0.5856410058,0.8129843458,0.9392463948,0.7264521489,0.6669690632],"yaxis":"y","type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"marque"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"mean_test_score"}},"coloraxis":{"colorbar":{"title":{"text":"n_neighbors"}},"colorscale":[[0.0,"rgb(247,251,255)"],[0.125,"rgb(222,235,247)"],[0.25,"rgb(198,219,239)"],[0.375,"rgb(158,202,225)"],[0.5,"rgb(107,174,214)"],[0.625,"rgb(66,146,198)"],[0.75,"rgb(33,113,181)"],[0.875,"rgb(8,81,156)"],[1.0,"rgb(8,48,107)"]]},"legend":{"tracegroupgap":0},"margin":{"t":60},"barmode":"relative"},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('a6309344-467d-4027-9bed-3663bbd469e8');
+var gd = document.getElementById('6cbcd428-3a81-4633-8460-b581583b6301');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -963,7 +1001,7 @@ if (outputEl) {{
 </div>
 </section>
 <section id="streamlit" class="slide level2">
-<h2>Streamlit</h2>
+<h2>Streamlit 🚀</h2>
 <aside class="notes">
 <p>expliquer streamlit - onglet acheteur : fonctionnement avec des requêtes, - onglet vendeur : import du modèle et prédictions estimation du prix</p>
 <style type="text/css">
@@ -977,11 +1015,9 @@ if (outputEl) {{
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<div class="quarto-auto-generated-content">
-<p><img src="https://corentinducloux.fr/dossier_img/mecen_transparent.png" class="slide-logo"></p>
-<div class="footer footer-default">
+
+<img src="https://corentinducloux.fr/dossier_img/mecen_transparent.png" class="slide-logo r-stretch"><div class="footer footer-default">
 <p>— Machine Learning —</p>
-</div>
 </div>
 </section>
     </div>
@@ -1011,6 +1047,7 @@ if (outputEl) {{
       Reveal.initialize({
 'controlsAuto': false,
 'previewLinksAuto': true,
+'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1272,9 +1309,10 @@ if (outputEl) {{
         // clear code selection
         e.clearSelection();
       });
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      function tippyHover(el, contentFn) {
         const config = {
           allowHTML: true,
+          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1284,17 +1322,8 @@ if (outputEl) {{
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start',
+          placement: 'bottom-start'
         };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
