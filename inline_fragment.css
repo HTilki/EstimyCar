@@ -1,0 +1,7 @@
+.inline-fragment {
+    display: flex;
+  }
+  
+  .inline-fragment p {
+    padding-right: 10px;
+  }

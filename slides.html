@@ -453,7 +453,7 @@
 </ul>
 </section>
 <section id="web-scraping" class="slide level2">
-<h2>Web Scraping</h2>
+<h2>Web Scraping 🕸️</h2>
 <aside class="notes">
 <p>Alors maintenant qu’on a vu le produit final, on va le disséquer pour voir comment on en est arrivé là avec une approche technique!</p>
 <p>Vous avez vu le voir peut être mais il y a des liens dans l’onglet acheteur qui renvoie vers le site “La Centrale”.</p>
@@ -593,22 +593,6 @@
 </section>
 <section class="slide level2">
 
-<p>Un extrait du fichier JSON obtenu :</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href=""></a>[</span>
-<span id="cb5-2"><a href=""></a>    {</span>
-<span id="cb5-3"><a href=""></a>        "marque": "CITROEN C3 III",</span>
-<span id="cb5-4"><a href=""></a>        "cylindre": "1.2 PURETECH 110 FEEL",</span>
-<span id="cb5-5"><a href=""></a>        "annee": "2019",</span>
-<span id="cb5-6"><a href=""></a>        "kilometrage": "10 698 km",</span>
-<span id="cb5-7"><a href=""></a>        "boite": "Automatique",</span>
-<span id="cb5-8"><a href=""></a>        "energie": "Essence",</span>
-<span id="cb5-9"><a href=""></a>        "prix": "15 990 €",</span>
-<span id="cb5-10"><a href=""></a>        "position_marché": "Bonne affaire",</span>
-<span id="cb5-11"><a href=""></a>        "garantie": "Garantie 12 mois",</span>
-<span id="cb5-12"><a href=""></a>        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69112858137.html"</span>
-<span id="cb5-13"><a href=""></a>    },</span>
-<span id="cb5-14"><a href=""></a>    ...</span>
-<span id="cb5-15"><a href=""></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <aside class="notes">
 <p>Et une fois le tout executé, les données sont exportés sous format brut JSON.</p>
 <p>le nb d’annonces étant très conséquent et l’extraction étant très longue, nous avons fait l’extraction en 4 parties. Nous avons obtenus donc ’fichiers json qu’on a fusionner en un fichier à l’aide de la f° <code>fusionner_fichiers_json()</code>.</p>
@@ -623,12 +607,61 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<p>✅ Résultats 4 fichiers JSON obtenu :</p>
+<pre><code>json/
+  {} data_a_d.json
+  {} data_e_l.json
+  {} data_m_p.json
+  {} data_r_z.json</code></pre>
+<p>Un extrait du fichier JSON obtenu :</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource {json} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href=""></a>[</span>
+<span id="cb6-2"><a href=""></a>    {</span>
+<span id="cb6-3"><a href=""></a>        "marque": "CITROEN C3 III",</span>
+<span id="cb6-4"><a href=""></a>        "cylindre": "1.2 PURETECH 110 FEEL",</span>
+<span id="cb6-5"><a href=""></a>        "annee": "2019",</span>
+<span id="cb6-6"><a href=""></a>        "kilometrage": "10 698 km",</span>
+<span id="cb6-7"><a href=""></a>        "boite": "Automatique",</span>
+<span id="cb6-8"><a href=""></a>        "energie": "Essence",</span>
+<span id="cb6-9"><a href=""></a>        "prix": "15 990 €",</span>
+<span id="cb6-10"><a href=""></a>        "position_marché": "Bonne affaire",</span>
+<span id="cb6-11"><a href=""></a>        "garantie": "Garantie 12 mois",</span>
+<span id="cb6-12"><a href=""></a>        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69112858137.html"</span>
+<span id="cb6-13"><a href=""></a>    },</span>
+<span id="cb6-14"><a href=""></a>    ...</span>
+<span id="cb6-15"><a href=""></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>On les fusionne à l’aide de la fonction <code>fusionner_fichiers_json</code> pour obtenir un seul fichier contenant toutes les données extraites.</p>
 </section>
 <section id="data-cleaning" class="slide level2">
-<h2>Data cleaning</h2>
+<h2>🧼 Data cleaning 🧹</h2>
 <aside class="notes">
 <p>Une fois notre fichier json obtenue, chose inevitable nous avons des données mal renseignées, des pb de types de données mais aussi des informations à extraire de ces données brutes.</p>
 <p>Pour récupérer le + d’informations possibles sur ces données, nous avons décidé d’utiliser la librairie polars, ce qui rend le tout très lisible et très efficace.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<ul>
+<li>Essentiel pour pouvoir exploiter les données.</li>
+<li>Permet de récupérer + d’informations.</li>
+</ul>
+<p>Pour le nettoyage de la base de données, nous avons utilisé le package <code>Polars</code> 🐻‍❄️, qui possède de nombreux avantages comme :</p>
+<ul>
+<li>la création de pipelines 🛢️</li>
+<li>un code plus lisible 👀</li>
+<li>dans certains cas, + efficace que <code>Pandas</code> 🐼</li>
+</ul>
+<p>C’est le module <code>datacleaning.py</code> qui contient toutes les fonctions essentiels pour résoudre certains problèmes.</p>
+</section>
+<section id="les-problèmes-rencontrées" class="slide level2">
+<h2>Les problèmes rencontrées ⚠️</h2>
+<aside class="notes">
 <p>Dans cette partie, nous allons vous présenter rapidement les pb qu’on a rncontrées, et les fonctions qui ont servi à les règler et qui nous ont permis de nettoyer la base de données et d’avoir une BDD exploitable.</p>
 <ul>
 <li>modele_marque_generation</li>
@@ -646,11 +679,37 @@
           display:block!important;
       }</style></aside>
 <ul>
-<li></li>
+<li>Séparer la marque, le modèle et la génération à l’aide de <code>get_marque_modele_generation()</code></li>
 </ul>
+<blockquote>
+<p><span class="fragment semi-fade-out"><code>'CITROEN C3 III'</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>('CITROEN', 'C3', 'III')</code></span></p>
+</blockquote>
+<ul>
+<li>Corriger le type des variables <code>kilometre</code>, <code>prix</code> et <code>annee</code> avec <code>get_km_prix_annee</code> :</li>
+</ul>
+<blockquote>
+<p><span class="fragment semi-fade-out"><code>"100 000 km", "15 000 €", "2015"</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>(100000, 15000, 2015)</code></span></p>
+</blockquote>
+<ul>
+<li>Diviser la chaine de caractere de <code>cylindre</code> en plusieurs variable avec <code>get_cylindre</code>:</li>
+</ul>
+<blockquote>
+<p><span class="fragment semi-fade-out"><code>"6.3 V8 460 GT"</code></span> <span class="fragment">-&gt;</span> <span class="fragment"><code>('6.3', 'V8', 460, 'GT')</code></span></p>
+</blockquote>
 </section>
-<section id="gazoduc" class="slide level2">
-<h2>gazoduc</h2>
+<section id="le-gazoduc" class="slide level2">
+<h2>Le gazoduc 🛢️</h2>
+<p>C’est une fonction qui applique un pipeline de traitement de données sur le DataFrame donné.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="kw">def</span> gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) <span class="op">-&gt;</span> pl.DataFrame:</span>
+<span id="cb7-2"><a href=""></a>    data <span class="op">=</span> (data.pipe(get_marque_modele_generation, nom_marques_modeles)🛢️</span>
+<span id="cb7-3"><a href=""></a>                .pipe(get_km_prix_annee)                                🛢️</span>
+<span id="cb7-4"><a href=""></a>                .pipe(get_garantie)                                     🛢️</span>
+<span id="cb7-5"><a href=""></a>                .pipe(get_cylindre)                                     🛢️</span>
+<span id="cb7-6"><a href=""></a>                .pipe(filter_data)                                      🛢️</span>
+<span id="cb7-7"><a href=""></a>                .pipe(supp_doublons)                                    🛢️  </span>
+<span id="cb7-8"><a href=""></a>                .pipe(supp_na)                                          🛢️</span>
+<span id="cb7-9"><a href=""></a>        )</span>
+<span id="cb7-10"><a href=""></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <aside class="notes">
 <p>f° qui permet de faire tout le traitement automatiquement à l’aide des autres fonctions.</p>
 <p>export de la base en parquet : exlpiquer avantages de parquet</p>

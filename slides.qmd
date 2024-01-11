@@ -82,7 +82,7 @@ Est-ce que vous avez une voiture à vendre? ou des caractéristiques
  
  
  
-## Web Scraping
+## Web Scraping 🕸️
  
 :::{.notes}
 Alors maintenant qu'on a vu le produit final, on va le disséquer pour voir comment on en est arrivé là avec une approche technique!
@@ -223,7 +223,6 @@ def recup_nom_vehicule(annonce: str) -> str:
 
 ----
 
-Un extrait du fichier JSON obtenu : 
 
 :::{.notes}
 Et une fois le tout executé, les données sont exportés sous format brut JSON. 
@@ -231,6 +230,18 @@ Et une fois le tout executé, les données sont exportés sous format brut JSON.
 le nb d'annonces étant très conséquent et l'extraction étant très longue, nous avons fait l'extraction en 4 parties. Nous avons obtenus donc  'fichiers json qu'on a fusionner en un fichier à l'aide de la f° `fusionner_fichiers_json()`. 
 :::
 
+✅ Résultats 4 fichiers JSON obtenu :
+
+
+```
+json/
+  {} data_a_d.json
+  {} data_e_l.json
+  {} data_m_p.json
+  {} data_r_z.json
+```
+
+Un extrait du fichier JSON obtenu : 
 ```{json}
 [
     {
@@ -250,10 +261,11 @@ le nb d'annonces étant très conséquent et l'extraction étant très longue, n
 
 ```
 
+On les fusionne à l'aide de la fonction `fusionner_fichiers_json` pour obtenir un seul fichier contenant toutes les données extraites.
 
 
 
-## Data cleaning
+## 🧼 Data cleaning 🧹
 
 :::{.notes}
 
@@ -261,6 +273,23 @@ Une fois notre fichier json obtenue, chose inevitable nous avons des données ma
 
 Pour récupérer le + d'informations possibles sur ces données, nous avons décidé d'utiliser la librairie polars, ce qui rend le tout très lisible et très efficace.
 
+:::
+
+- Essentiel pour pouvoir exploiter les données.
+- Permet de récupérer + d'informations.
+
+
+Pour le nettoyage de la base de données, nous avons utilisé le package `Polars` 🐻‍❄️, qui possède de nombreux avantages comme :  
+
+-   la création de pipelines 🛢️
+-   un code plus lisible 👀
+-   dans certains cas, + efficace que `Pandas` 🐼
+
+C'est le module `datacleaning.py` qui contient toutes les fonctions essentiels pour résoudre certains problèmes.
+
+## Les problèmes rencontrées ⚠️
+
+:::{.notes}
 
 Dans cette partie, nous allons vous présenter rapidement les pb qu'on a rncontrées, et les fonctions qui ont servi à les règler et qui nous ont permis de nettoyer la base de données et d'avoir une BDD exploitable.
 
@@ -271,18 +300,56 @@ pb rencontré, nom de la f°, et la sortie.  (faire figurer l'ex des docstring)
 
 :::
 
-- 
+- Séparer la marque, le modèle et la génération à l'aide de `get_marque_modele_generation()`
 
-## gazoduc
+> [`'CITROEN C3 III'`]{.fragment .semi-fade-out} [->]{.fragment} [`('CITROEN', 'C3', 'III')`]{.fragment}
+
+- Corriger le type des variables `kilometre`, `prix` et `annee` avec `get_km_prix_annee` : 
+
+> [`"100 000 km", "15 000 €", "2015"`]{.fragment .semi-fade-out} [->]{.fragment} [`(100000, 15000, 2015)`]{.fragment}
+
+- Diviser la chaine de caractere de `cylindre` en plusieurs variable avec `get_cylindre`: 
+
+> [`"6.3 V8 460 GT"`]{.fragment .semi-fade-out} [->]{.fragment} [`('6.3', 'V8', 460, 'GT')`]{.fragment}
+
+## Le gazoduc 🛢️
 
 :::{.notes}
 f° qui permet de faire tout le traitement automatiquement à l'aide des autres fonctions. 
 
+Comme on peut le voir, il y a d'autre fonction dans cette pipeline que l'on ne vous a pas présenté. On va donc le faire très rapidement. 
 
+get_garantie traite les données de la colonne "garantie" dans en transformant le Garantie 12 mois en gardant uniquement les valeurs numériques. Elle contient aussi d'autre filtre pour écarter les valeurs abérantes 
 
-export de la base en parquet : exlpiquer avantages de parquet
+filter_data permet de supprimer les valeurs abérante pour le kilométrage et l'année 2024. 
 
+supp_doublons permet de supprimer les annonces en double en ce basant sur les liens des annonces. 
+
+supp_na: Elle permet aussi de supprimer les valeurs manquantes pour la puissance. et pour les marques et modeles de véhicule
+
+Une fois le dataframe nettoyé il sera exporté en format parquet car parquet a une Compression efficace et permet d'avoir des économies de stockage. 
 :::
+
+
+C'est une fonction qui applique un pipeline de traitement de données sur le DataFrame donné.
+ 
+```python
+def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFrame:
+    data = (data.pipe(get_marque_modele_generation, nom_marques_modeles)🛢️
+                .pipe(get_km_prix_annee)                                🛢️
+                .pipe(get_garantie)                                     🛢️
+                .pipe(get_cylindre)                                     🛢️
+                .pipe(filter_data)                                      🛢️
+                .pipe(supp_doublons)                                    🛢️  
+                .pipe(supp_na)                                          🛢️
+        )
+    return data
+```
+
+- Extrait dataframe
+
+Ce dataframe sera exporté en format parquet qui possède un avantage important : 
+-   permet de stocker des bases volumineuse. 
 
 ## Machine learning
 
