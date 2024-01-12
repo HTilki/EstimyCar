@@ -733,3 +733,16 @@ expliquer streamlit
 
 
 :::
+
+## Poetry et Pytest 'emojivalidé'
+
+- les poetry ...
+
+- les tests avec test sur application
+-> screen des tests passed de la console
+
+
+## What's Next 🏎️
+
+- Objectif pour la suite : 
+- Scraper d'autre site ?
