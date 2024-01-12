@@ -454,7 +454,7 @@ L'utilisation de ce package à plusieurs avantages, tel que sa documentation et 
 - preprocesseur avec `get_preprocessor`
 - modèles et grille de paramètres avec `set_models` et `get_params`
 - pour récupérer et exporter les meilleurs modèles : `get_all_models`
-- `predict_prix`
+- `predict_prix` pour charger le modèle et prédire
 
 ## Le split 👨‍👩‍👧‍👦
 
@@ -502,6 +502,15 @@ $\rightarrow$ [`'boite' = 'Automatique''`]{.fragment .semi-fade-out} [->]{.fragm
 
 ## Les modèles 📊
 
+:::{.notes}
+Nous avons testé différents modèles tel que les SVM, les Boosting, etc.. Mais les meilleurs modèles à chaque fois étaient : (ceux sur la slide)
+
+Le nombre de modèle à creer étant de 40, le procédés est assez long. C'esst pour cela que pour optimiser notre temps nous avons décider de tester certaines grille de parametres en amont pour en determiner une finale, la plus réduite possible.
+
+Nous allons donc rapidement vous présentez les résultats préliminaires qui nous on permis d'avoir une grille finale.
+
+:::
+
 Après quelques tests, nous avons décidé d'utiliser uniquement les modèles suivant : 
 
 - Regression linéaire 📈
@@ -521,6 +530,8 @@ C'est pour cette raison que plusieurs grilles ont été testé en amont afin de 
 :::{.notes}
 Au lieu de se lancer directement dans des validations croisées avec un grille de paramètres choisi aléatoirement, 
 
+
+Nous avons testé des grilles de paramètres entre 0 et 15 voisins. Le maximum retenu était 10 voisins. Cette pour cette raison que nous avons retenu cette grille.
 :::
 
 :::{.fragment}
@@ -547,7 +558,7 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
                 mean_test_score,
                 '{modele}' as modele,
                 params
-                FROM 'cv_results_nestimators copy/{marque[0]}_{modele}_results.json'
+                FROM 'cv_results_neighbors/{marque[0]}_{modele}_results.json'
                 WHERE rank_test_score = 1
                 """).pl().unnest('params')
         else :
@@ -557,7 +568,7 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
                 mean_test_score,
                 '{modele}' as modele,
                 params
-                FROM 'cv_results_nestimators copy/{marque[0]}_{modele}_results.json'
+                FROM 'cv_results_neighbors/{marque[0]}_{modele}_results.json'
                
                 WHERE rank_test_score = 1
                 """).pl().unnest('params')
@@ -567,7 +578,135 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
 px.bar(cv_result_into_df("KNeighbors", marques_array), x='marque', y='mean_test_score', color = 'n_neighbors', color_continuous_scale=px.colors.sequential.Blues)
 ```
 :::
+
+:::{.fragment}
+La grille retenue: `'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`
+:::
+
+## min_samples_leaf 🍃
+
+:::{.fragment}
+```{python}
+
+def cv_result_into_df(modele: str, marques_array: np.ndarray): 
+    for marque in marques_array:
+        if marque[0] == marques_array[0,0]:
+            cv_results = duckdb.sql(
+                f"""
+                SELECT '{marque[0]}' as marque,
+                mean_test_score,
+                '{modele}' as modele,
+                params
+                FROM 'cv_results_leaf/{marque[0]}_{modele}_results.json'
+                WHERE rank_test_score = 1
+                """).pl().unnest('params')
+        else :
+            cv_results_2 = duckdb.sql(
+                f"""
+                SELECT '{marque[0]}' as marque,
+                mean_test_score,
+                '{modele}' as modele,
+                params
+                FROM 'cv_results_leaf/{marque[0]}_{modele}_results.json'
+               
+                WHERE rank_test_score = 1
+                """).pl().unnest('params')
+            cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
+    return cv_results
+
+px.bar(cv_result_into_df("RandomForest", marques_array), x='marque', y='mean_test_score', color = 'min_samples_leaf', color_continuous_scale=px.colors.sequential.Mint)
+```
+:::
+
+:::{.fragment}
+La grille retenue: `'min_samples_leaf': [2]`
+:::
+
+## n_estimators
+:::{.notes}
+Ici on avait testé plusieurs valeurs allant de 100 à 1000. 
+
+On a décidé de garder uniquement 500 et 800
+
+:::
+
+:::{.fragment}
+```{python}
+
+def cv_result_into_df(modele: str, marques_array: np.ndarray): 
+    for marque in marques_array:
+        if marque[0] == marques_array[0,0]:
+            cv_results = duckdb.sql(
+                f"""
+                SELECT '{marque[0]}' as marque,
+                mean_test_score,
+                '{modele}' as modele,
+                params
+                FROM 'cv_results_nestimators_2/{marque[0]}_{modele}_results.json'
+                WHERE rank_test_score = 1
+                """).pl().unnest('params')
+        else :
+            cv_results_2 = duckdb.sql(
+                f"""
+                SELECT '{marque[0]}' as marque,
+                mean_test_score,
+                '{modele}' as modele,
+                params
+                FROM 'cv_results_nestimators_2/{marque[0]}_{modele}_results.json'
+               
+                WHERE rank_test_score = 1
+                """).pl().unnest('params')
+            cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
+    return cv_results
+
+px.bar(cv_result_into_df("RandomForest", marques_array), x='marque', y='mean_test_score', color = 'n_estimators', color_continuous_scale=px.colors.sequential.Blues)
+```
+:::
+
+:::{.fragment}
+La grille retenue: `'n_estimators': [500, 800]`
+:::
+
+## L'utilisation des modèles
+
+:::{.notes}
+Une fois l'optimisation des paramètres effectué via une seconde validation croisée. On garde le meilleur modèle parmis les trois, on l'entraine avec tout le dataset pour la marque en question, et on l'export en fichier joblib, ainsi que le preprocesseur pour réutilisation. 
+:::
+
+Une fois que les meilleurs modèles ont été trouvés on les exporte :
+
+:::{.fragment}
+```py
+def export_models(model: LinearRegression|KNeighborsRegressor|RandomForestRegressor, preprocessor: ColumnTransformer, marque: str) -> None:
+  # Sauvegarder le modèle
+  dump(model, f'models/{marque}_best_model.joblib')
+  # Sauvegarder le préprocesseur
+  dump(preprocessor, f'models/{marque}_preprocessor.joblib')
+```
+:::
+
+:::{.fragment}
+Pour ensuite les importer lorsque l'on voudra prédire les prix ! 💰
+:::
+
+:::{.fragment}
+```py
+def predict_prix(data: pl.DataFrame, marque: str) -> np.ndarray:
+    try:
+        modele, preprocessor = charger_modeles(marque)
+        prediction = modele.predict(preprocessor.transform(data.to_pandas()))
+        prediction = np.round(prediction, decimals=2)
+        return prediction
+    except Exception as e:
+        print(f"Erreur lors de la prédiction du prix. {e}")
+```
+:::
+
+Notre objectif à partir de ce moment est de rendre notre travail accessible et agréable à utiliser. 😎
+
 ## Streamlit 🚀
+
+Streamlit est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactives pour l'analyse de données et la visualisation. 
 
 
 :::{.notes}
