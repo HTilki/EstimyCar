@@ -328,7 +328,7 @@ $\rightarrow$ [`'CITROEN C3 III'`]{.fragment .semi-fade-out} [->]{.fragment} [`(
 $\rightarrow$ [`"100 000 km", "15 000 €", "2015"`]{.fragment .semi-fade-out} [->]{.fragment} [`(100000, 15000, 2015)`]{.fragment}
 :::
 
-- Diviser la chaine de caractere de `cylindre` en plusieurs variable avec `get_cylindre`: 
+- Diviser la chaine de caractere de `cylindre` en plusieurs variables avec `get_cylindre`: 
 
 :::{.fragment}
 $\rightarrow$ [`"6.3 V8 460 GT"`]{.fragment .semi-fade-out} [->]{.fragment} [`('6.3', 'V8', 460, 'GT')`]{.fragment}
@@ -355,7 +355,8 @@ Une fois le dataframe nettoyé il sera exporté en format parquet car parquet a 
 
 
 C'est une fonction qui applique un pipeline de traitement de données sur le DataFrame donné.
- 
+
+:::{.fragment}
 ```py
 def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFrame:
     data = (data.pipe(get_marque_modele_generation, nom_marques_modeles)🛢️
@@ -368,7 +369,9 @@ def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFra
         )
     return data
 ```
+:::
 
+:::{.fragment}
 <div style="overflow-x: auto;">
   <table style="max-width: 800px; font-size: 18px;">
     <caption>Extrait du dataframe</caption>
@@ -415,10 +418,11 @@ def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFra
     </tbody>
   </table>
 </div>
+:::
 
-
-
+:::{.fragment}
 Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases volumineuse à moindre coût. 
+:::
 
 ## 📖 Machine learning 📖{background-image="imgs/ML1.jpeg" background-opacity="0.1"}
 
@@ -454,11 +458,13 @@ L'utilisation de ce package à plusieurs avantages, tel que sa documentation et 
 
 ## Le split 👨‍👩‍👧‍👦
 
-
+:::{.fragment}
 **Données d'entrainement** : échantillon de <span style="color:#4682B4">**80%**</span> d'observations de la marque
 
 **Données de test** : les <span style="color:#4682B4">**20%**</span> restants.
+:::
 
+:::{.fragment}
 Le split est effectué à l'aide de `split_data` : 
 
 ```py
@@ -476,18 +482,23 @@ def split_data(data: pl.DataFrame, marque: str) -> tuple[pl.DataFrame, pl.DataFr
     return X, y, X_train, X_test, y_train, y_test
 
 ```
+:::
 
 ## Le preprocesseur ⏹️
 
 La plupart des modèles ne supportent pas les variables qualitatives et requiert donc un prétraitement. 
 
+:::{.fragment}
 `OneHotEncoder` est utilisé pour convertir les caractéristiques catégorielles en une représentation binaire.
 
 Exemple : 
 
 $\rightarrow$ [`'boite' = 'Automatique''`]{.fragment .semi-fade-out} [->]{.fragment} [`boite.Automatique = 1`]{.fragment}
+:::
 
+:::{.fragment}
 `StandardScaler` est utilisé pour effectuer une mise à l'échelle des caractéristiques numériques. Il standardise les données en soustrayant la moyenne et en divisant par l'écart type, de sorte que chaque caractéristique ait une moyenne de zéro et une variance de un.
+:::
 
 ## Les modèles 📊
 
@@ -498,11 +509,21 @@ Après quelques tests, nous avons décidé d'utiliser uniquement les modèles su
 - Random Forest 🌳
 
 :::{.fragment}
-Pour les paramètres, plusieurs grilles ont été testé, voici les résultats intermédiaires qui nous ont permis de déterminer la grille finale.
+La quantité de données étant importantes, l'optimisation des paramètres peut-être très longues.⏳
+::: 
+
+:::{.fragment}
+C'est pour cette raison que plusieurs grilles ont été testé en amont afin de determiner une grille finale, voici les résultats intermédiaires.
 :::
 
 ## Le nombre de voisins 👬👬👬
 
+:::{.notes}
+Au lieu de se lancer directement dans des validations croisées avec un grille de paramètres choisi aléatoirement, 
+
+:::
+
+:::{.fragment}
 ```{python}
 import numpy as np
 import polars as pl
@@ -545,7 +566,7 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
 
 px.bar(cv_result_into_df("KNeighbors", marques_array), x='marque', y='mean_test_score', color = 'n_neighbors', color_continuous_scale=px.colors.sequential.Blues)
 ```
-
+:::
 ## Streamlit 🚀
 
 
