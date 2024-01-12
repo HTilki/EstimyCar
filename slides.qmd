@@ -702,11 +702,27 @@ def predict_prix(data: pl.DataFrame, marque: str) -> np.ndarray:
 ```
 :::
 
+:::{.fragment}
 Notre objectif à partir de ce moment est de rendre notre travail accessible et agréable à utiliser. 😎
+:::
 
 ## Streamlit 🚀
+:::{.notes}
+Streamlit est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactives pour l'analyse de données et la visualisation. 
+
+Bien que l'on vous à déjà présenté l'application. L'objectif ici est de vous montrer le travail derrière
+
+:::
 
 Streamlit est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactives pour l'analyse de données et la visualisation. 
+
+
+Notre application s'organise en trois parties : 
+
+- un accueil
+- un onglet acheteur
+- un onglet vendeur
+
 
 
 :::{.notes}
