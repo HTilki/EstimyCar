@@ -120,7 +120,7 @@ Extraction en **3 parties** :
 :::
 
 
-## Processus du Scraping : 1/3
+## Processus du Scraping 📥: 1/3
 
 :::{.notes}
 
@@ -164,7 +164,7 @@ Pour obtenir ces différentes marques, il suffit juste d'aller dans l'accueil du
 
 :::
 
-## Processus du Scraping : (2/3)
+## Processus du Scraping 📥 : (2/3)
 :::{.notes}
 
 Une fois qu'on a récupéré les marques, on peut maintenant à l'aide d'une boucle et de fonctions bien ficellées, extraire toutes les annonces sur le site. 
@@ -177,7 +177,7 @@ Cette fonction : `extraire_toutes_annonces()`, en contient d'autre. Ce qui perme
 :::
 
 - Extraction de toutes les annonces disponibles sur le site à l'aide de la fonction `extract_toutes_annonces()`, elle permet :
-  - d'iterer sur chaque marques et modèles de véhicule
+  - d'itérer sur chaque marque et modèles de véhicule
   - d'extraire les pages correspondantes
   
 :::{.fragment}
@@ -200,7 +200,7 @@ def recup_annonces(page: BeautifulSoup) -> list:
 
 :::
 
-## Processus du Scraping : (3/3)
+## Processus du Scraping 📥 : (3/3)
 
 :::{.notes}
 
@@ -300,7 +300,7 @@ Pour le nettoyage de la base de données, nous avons utilisé le package `Polars
 -   dans certains cas, + efficace que `Pandas` 🐼
 
 :::{.fragment}
-C'est le module `datacleaning.py` qui contient toutes les fonctions essentiels pour résoudre certains problèmes.
+C'est le module `datacleaning.py` qui contient toutes les fonctions essentielles pour résoudre certains problèmes.
 :::
 
 ## Les problèmes rencontrées ⚠️
@@ -328,7 +328,7 @@ $\rightarrow$ [`'CITROEN C3 III'`]{.fragment .semi-fade-out} [->]{.fragment} [`(
 $\rightarrow$ [`"100 000 km", "15 000 €", "2015"`]{.fragment .semi-fade-out} [->]{.fragment} [`(100000, 15000, 2015)`]{.fragment}
 :::
 
-- Diviser la chaine de caractere de `cylindre` en plusieurs variables avec `get_cylindre`: 
+- Diviser la chaîne de caractère de `cylindre` en plusieurs variables avec `get_cylindre`: 
 
 :::{.fragment}
 $\rightarrow$ [`"6.3 V8 460 GT"`]{.fragment .semi-fade-out} [->]{.fragment} [`('6.3', 'V8', 460, 'GT')`]{.fragment}
@@ -440,18 +440,18 @@ Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases 
 
 Pour des raisons d'efficacité pour la prédiction, **chaque marque de véhicule aura son propre modèle de prédiction**.
 
-Ces modèles de prédiction ne peuvent être choisi au hasard. Il faut effectuer des tests et choisir le modèle le plus adapté.
+Ces modèles de prédiction ne peuvent être choisis au hasard. Il faut effectuer des tests et choisir le modèle le plus adapté.
 
 
 
 - package utilisé : `sklearn`
 
 :::{.fragment}
-L'utilisation de ce package à plusieurs avantages, tel que sa documentation et une utilisation avec des **pipelines** possibles. Cependant, il ne fonctionne pas avec des bases de données `Polars`.
+L'utilisation de ce package à plusieurs avantages, tel que sa documentation et une utilisation avec des **pipelines** possibles. Cependant, il ne fonctionne pas avec des bases de données `Polars`🐻‍❄️.
 :::
 
 - split des données avec `split_data`
-- preprocesseur avec `get_preprocessor`
+- préprocesseur avec `get_preprocessor`
 - modèles et grille de paramètres avec `set_models` et `get_params`
 - pour récupérer et exporter les meilleurs modèles : `get_all_models`
 - `predict_prix` pour charger le modèle et prédire
@@ -486,7 +486,7 @@ def split_data(data: pl.DataFrame, marque: str) -> tuple[pl.DataFrame, pl.DataFr
 
 ## Le preprocesseur ⏹️
 
-La plupart des modèles ne supportent pas les variables qualitatives et requiert donc un prétraitement. 
+La plupart des modèles **ne supportent pas les variables qualitatives** et requiert donc un prétraitement. 
 
 :::{.fragment}
 `OneHotEncoder` est utilisé pour convertir les caractéristiques catégorielles en une représentation binaire.
@@ -497,7 +497,7 @@ $\rightarrow$ [`'boite' = 'Automatique''`]{.fragment .semi-fade-out} [->]{.fragm
 :::
 
 :::{.fragment}
-`StandardScaler` est utilisé pour effectuer une mise à l'échelle des caractéristiques numériques. Il standardise les données en soustrayant la moyenne et en divisant par l'écart type, de sorte que chaque caractéristique ait une moyenne de zéro et une variance de un.
+`StandardScaler` est utilisé pour **effectuer une mise à l'échelle des caractéristiques numériques**. Il standardise les données en soustrayant la moyenne et en divisant par l'écart-type, de sorte que chaque caractéristique ait une moyenne de **0** et une variance de **1**.
 :::
 
 ## Les modèles 📊
@@ -511,18 +511,18 @@ Nous allons donc rapidement vous présentez les résultats préliminaires qui no
 
 :::
 
-Après quelques tests, nous avons décidé d'utiliser uniquement les modèles suivant : 
+Après quelques tests, nous avons décidé d'utiliser uniquement les modèles suivants : 
 
 - Regression linéaire 📈
 - K-neighbors 👬👭
 - Random Forest 🌳
 
 :::{.fragment}
-La quantité de données étant importantes, l'optimisation des paramètres peut-être très longues.⏳
+La quantité de données étant importantes, l'optimisation des paramètres peut-être très longue.⏳
 ::: 
 
 :::{.fragment}
-C'est pour cette raison que plusieurs grilles ont été testé en amont afin de determiner une grille finale, voici les résultats intermédiaires.
+C'est pour cette raison que plusieurs grilles ont été testées en amont afin de déterminer une grille finale, voici les résultats intermédiaires.
 :::
 
 ## Le nombre de voisins 👬👬👬
@@ -569,7 +569,7 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
                 '{modele}' as modele,
                 params
                 FROM 'cv_results_neighbors/{marque[0]}_{modele}_results.json'
-               
+
                 WHERE rank_test_score = 1
                 """).pl().unnest('params')
             cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
@@ -583,7 +583,7 @@ px.bar(cv_result_into_df("KNeighbors", marques_array), x='marque', y='mean_test_
 La grille retenue: `'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`
 :::
 
-## min_samples_leaf 🍃
+## min_samples_leaf 🍃 {background-image="imgs/randomforest.jpeg" background-opacity="0.2"}
 
 :::{.fragment}
 ```{python}
@@ -653,7 +653,7 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray):
                 '{modele}' as modele,
                 params
                 FROM 'cv_results_nestimators_2/{marque[0]}_{modele}_results.json'
-               
+
                 WHERE rank_test_score = 1
                 """).pl().unnest('params')
             cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
@@ -673,7 +673,7 @@ La grille retenue: `'n_estimators': [500, 800]`
 Une fois l'optimisation des paramètres effectué via une seconde validation croisée. On garde le meilleur modèle parmis les trois, on l'entraine avec tout le dataset pour la marque en question, et on l'export en fichier joblib, ainsi que le preprocesseur pour réutilisation. 
 :::
 
-Une fois que les meilleurs modèles ont été trouvés on les exporte :
+Une fois que les meilleurs modèles ont été trouvés, on les exporte :
 
 :::{.fragment}
 ```py
@@ -706,22 +706,22 @@ def predict_prix(data: pl.DataFrame, marque: str) -> np.ndarray:
 Notre objectif à partir de ce moment est de rendre notre travail accessible et agréable à utiliser. 😎
 :::
 
-## Streamlit 🚀
+## Streamlit 🚀{background-image="imgs/streamlit1.jpeg" background-opacity="0.1"}
 :::{.notes}
-Streamlit est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactives pour l'analyse de données et la visualisation. 
+Streamlit est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactif pour l'analyse de données et la visualisation. 
 
 Bien que l'on vous à déjà présenté l'application. L'objectif ici est de vous montrer le travail derrière
 
 :::
 
-Streamlit est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactives pour l'analyse de données et la visualisation. 
+**Streamlit** est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactives pour l'analyse de données et la visualisation. 
 
 
-Notre application s'organise en trois parties : 
+Notre application s'organise en **trois parties** : 
 
 - un accueil
-- un onglet acheteur
-- un onglet vendeur
+- un onglet acheteur 🕵️‍♂️
+- un onglet vendeur 💰
 
 
 
@@ -734,7 +734,7 @@ expliquer streamlit
 
 :::
 
-## Poetry et Pytest 'emojivalidé'
+## Poetry et Pytest 🧪✅{background-image="imgs/pytest.jpeg" background-opacity="0.1"}
 
 - les poetry ...
 
