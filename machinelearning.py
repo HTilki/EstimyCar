@@ -336,7 +336,7 @@ def charger_modeles(marque: str) -> tuple[LinearRegression|KNeighborsRegressor|R
         print(f"Erreur lors de l'importation du modèle : {str(e)}")
         
 
-def predict_prix(data: pl.DataFrame, marque: str) -> np.ndarray:
+def predict_prix(data: pl.DataFrame, marque: str) -> float:
     """
     Prédit les prix des véhicules pour une marque donnée en utilisant le modèle chargé.
 
@@ -345,7 +345,7 @@ def predict_prix(data: pl.DataFrame, marque: str) -> np.ndarray:
         marque (str): Nom de la marque pour laquelle les prix sont prédits.
 
     ## Returns:
-        np.ndarray: Tableau NumPy contenant les prédictions de prix.
+        float: La prédictions du prix.
 
     ## Example:
         >>> predict_prix(data_to_predict, 'PORSCHE')
@@ -358,11 +358,20 @@ def predict_prix(data: pl.DataFrame, marque: str) -> np.ndarray:
         modele, preprocessor = charger_modeles(marque)
         prediction = modele.predict(preprocessor.transform(data.to_pandas()))
         prediction = np.round(prediction, decimals=2)
-        return prediction
+        if isinstance(modele, LinearRegression|KNeighborsRegressor):
+            if(len(data) == 1):
+                return prediction[0][0]
+            else:
+                return prediction.flatten()
+        elif isinstance(modele, RandomForestRegressor):
+            if(len(data) == 1):
+                return prediction[0]
+            else:
+                return prediction.flatten()
     except Exception as e:
         print(f"Erreur lors de la prédiction du prix. {e}")
 
-def predict_prix_autre_km(data: pl.DataFrame, marque: str) -> Figure:
+def predict_prix_autre_km(data: pl.DataFrame, marque: str) -> None:
     """
     Prédit les prix des véhicules pour une marque donnée en utilisant le modèle chargé, en simulant différents kilométrages.
 
@@ -371,11 +380,11 @@ def predict_prix_autre_km(data: pl.DataFrame, marque: str) -> Figure:
         marque (str): Nom de la marque pour laquelle les prix sont prédits.
 
     ## Returns:
-        Figure: Objet Figure de Plotly contenant le graphique interactif des prédictions de prix. 
+        None
 
     ## Example:
-        >>> predict_prix_autre_km(data_origine, marque)
-        # Prédit les prix du véhicule de la marque en utilisant le modèle chargé,
+        >>> predict_prix_autre_km(data_origine, 'PORSCHE')
+        # Prédit les prix des véhicules pour la marque PORSCHE en utilisant le modèle chargé,
         # en simulant différents kilométrages.
     """
     data_fictif = data.with_columns(type_km=pl.lit("Kilométrage fictif"))
@@ -383,7 +392,7 @@ def predict_prix_autre_km(data: pl.DataFrame, marque: str) -> Figure:
 
     for i in range(0, 310000, 10000):
         data = pl.concat([data,
-                          data_fictif.with_columns(kilometrage=i).cast({"kilometrage": pl.Int64})])
+                        data_fictif.with_columns(kilometrage=i).cast({"kilometrage": pl.Int64})])
 
     prix_predit = predict_prix(data.drop('type_km'), marque)
 
@@ -391,36 +400,43 @@ def predict_prix_autre_km(data: pl.DataFrame, marque: str) -> Figure:
         pl.Series(name='Prix estimé', values=prix_predit)
     ).sort(
         "kilometrage"
-    ).with_columns(
-        pl.col("Prix estimé").map_batches(_convert_list_float).alias("Prix estimé")
     )
 
-    fig = px.line(data, 
-                x="kilometrage", 
-                y="Prix estimé", 
+    fig = px.line(data,
+                x="kilometrage",
+                y="Prix estimé",
                 title="Prix estimé en fonction du kilométrage du véhicule",
                 markers=True,
                 color="type_km",
                 )
     fig.update_layout(legend_title_text=None)
     fig.update_layout(xaxis=dict(tickformat='d'),
-                      yaxis=dict(tickformat='d'))
+                    yaxis=dict(tickformat='d'))
     return fig
 
 
-def _convert_list_float(series: pl.Series) -> pl.Series:
-    """
-    Convertit une série de listes en une série de valeurs flottantes.
+def cv_result_into_df(modele: str, marques_array: np.ndarray):
+    for marque in marques_array:
+        if marque[0] == marques_array[0,0]:
+            cv_results = duckdb.sql(
+                f"""
+                SELECT '{marque[0]}' as marque,
+                mean_test_score,
+                '{modele}' as modele,
+                params
+                FROM 'cv_results/{marque[0]}_{modele}_results.json'
+                WHERE rank_test_score = 1
+                """).pl().unnest('params')
+        else :
+            cv_results_2 = duckdb.sql(
+                f"""
+                SELECT '{marque[0]}' as marque,
+                mean_test_score,
+                '{modele}' as modele,
+                params
+                FROM 'cv_results/{marque[0]}_{modele}_results.json'
 
-    ## Parameters:
-        series (pl.Series): Série Polars contenant des listes de valeurs.
-
-    ## Returns:
-        pl.Series: Série Polars contenant des valeurs flottantes.
-
-    ## Example:
-        >>> _convert_list_float(data['Prix estimé'])
-        # Convertit une série de listes de prix en une série de valeurs flottantes.
-    """
-    return pl.Series(values=[val[0] for val in series])
-
+                WHERE rank_test_score = 1
+                """).pl().unnest('params')
+            cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
+    return cv_results

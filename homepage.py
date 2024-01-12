@@ -5,6 +5,7 @@ from fonctions_tab import show_dataframe, predict_button, predict_km_fictif_butt
 from fonctions_menu import *
 import polars as pl
 from requetes_stats import *
+from accueil import *
 
 nom_marques_modeles = pl.DataFrame(import_marques_modeles())
 
@@ -18,8 +19,14 @@ st.title("🚗 CarScraping")
 st.sidebar.title("Menu")
 style_markdown()
 
-user_role = st.sidebar.selectbox("Selectionnez votre profil", ["Acheteur", "Vendeur"])
+user_role = st.sidebar.selectbox("Votre profil", 
+                                ["Acheteur", "Vendeur"], 
+                                placeholder="Choisir un profil",
+                                index=None)
 
+
+if user_role == None:
+    accueil()
 
 if user_role == "Acheteur":
     nb_annonces, prix_moyen = st.columns(2)
@@ -34,13 +41,17 @@ if user_role == "Acheteur":
     energie = energie_select(user_role)
     prix_min, prix_max = display_prix_selection()
     with tab_data:
-        nb_annonces.metric(
-            label="Nombre total de voitures", 
-            value=get_count_car(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max),
-            delta=calcul_delta(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max))
-        prix_moyen.metric(
-            "Prix moyen", 
-            value=get_avg_price(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max))
+        with nb_annonces:
+            with st.container(border=True):
+                st.metric(
+                label="Nombre total de voitures", 
+                value=get_count_car(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max),
+                delta=calcul_delta(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max))
+        with prix_moyen:
+            with st.container(border=True):
+                st.metric(
+                    "Prix moyen", 
+                value=get_avg_price(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max))
         show_dataframe(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max)
 
     if st.sidebar.button("Reset"):
@@ -54,6 +65,9 @@ if user_role == "Acheteur":
 
     with tab2:
         st.balloons()
+        with st.expander("**Les cerveaux derrière cette app ont été concoctés par…**"):
+            st.write("- 👩‍💻 Aybuké BICAT : https://github.com/aybuke-b")
+            st.write("- 👨‍💻 Hassan TILKI : https://github.com/HTilki")
 
 
 if user_role == "Vendeur":
