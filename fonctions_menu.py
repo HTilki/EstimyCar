@@ -49,7 +49,7 @@ def display_km(user_role):
         with kmmax:
             km_max = st.number_input("Km max", step=10000, min_value=0, value=1000000, max_value=1000000)
         if km_min > km_max:
-            st.warning("⚠️ La valeur min doit être inférieure à max !")
+            st.sidebar.warning("⚠️ La valeur min doit être inférieure à max !")
         st.markdown("""
         <style>
             button.step-up {display: none;}
@@ -215,7 +215,7 @@ def display_prix_selection():
     with prixmax:
         prix_max = st.number_input("Prix max", step=1000, min_value=0, value=3000000, max_value=3000000)
     if prix_min > prix_max:
-        st.warning("⚠️ La valeur min doit être inférieure à max !")
+        st.sidebar.warning("⚠️ La valeur min doit être inférieure à max !")
     st.markdown("""
     <style>
         button.step-up {display: none;}

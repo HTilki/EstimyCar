@@ -91,9 +91,9 @@ def predict_button(marque: str, modele: str, annee: int, moteur: str, cylindre: 
         None: Affiche le résultat de la prédiction du prix dans l'interface utilisateur lorsqu'on appuie sur le bouton. En cas d'erreur, aucun résultat n'est affiché.
     """
 
-    if st.button('Estimer la valeur du véhicule.'):
+    if st.button('**Estimer la valeur du véhicule.**'):
         data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
-        st.write('Prix estimé : ', format_prediction(predict_prix(data, marque)))
+        st.metric('**:orange[Prix estimé :]** ', value=format_prediction(predict_prix(data, marque)))
 
 def transform_input(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str) -> pl.DataFrame:
     """
@@ -145,7 +145,7 @@ def format_prediction(prix_predit: ndarray) -> str:
     ## Returns:
         str: Prix prédit formaté en euros.
     """
-    return str(prix_predit[0, 0]) + ' €' 
+    return str(prix_predit) + ' €' 
 
 
 def predict_km_fictif_button(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str):
@@ -169,9 +169,9 @@ def predict_km_fictif_button(marque: str, modele: str, annee: int, moteur: str, 
     ## Displays:
         Affiche un graphique interactif pour estimer la valeur du véhicule en fonction de kilométrage fictif.
     """
-    if st.button('Estimer la valeur de votre véhicule selon le kilométrage.'):
+    if st.button('**Estimer la valeur de votre véhicule selon le kilométrage.**'):
         data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
         fig = predict_prix_autre_km(data, marque)
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True, height=600)
 
 

@@ -30,7 +30,7 @@ if user_role == None:
 
 if user_role == "Acheteur":
     nb_annonces, prix_moyen = st.columns(2)
-    tab_data, tab_stats, tab2 = st.tabs(["🗃 Data", "📊 Statistiques Descriptives", ":balloon: fni"])
+    tab_data, tab_stats, tab2 = st.tabs(["🗃 Data", "📊 Statistiques Descriptives", "🎈 Créateurs"])
     
     st.sidebar.header("Caractéristiques")
     marques = marques_select(nom_marques_modeles, user_role)
@@ -54,26 +54,20 @@ if user_role == "Acheteur":
                 value=get_avg_price(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max))
         show_dataframe(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max)
 
-    if st.sidebar.button("Reset"):
-        st.session_state.reset = True  # Mark reset as True if button is pressed
-        st.experimental_rerun()  # Rerun the script
-    else:
-        st.session_state.reset = False
-
     with tab_stats:
         show_selected_chart()
 
     with tab2:
         st.balloons()
-        with st.expander("**Les cerveaux derrière cette app ont été concoctés par…**"):
+        with st.expander("**Cette app géniale ? Le fruit d'une alchimie numérique orchestrée par…**"):
             st.write("- 👩‍💻 Aybuké BICAT : https://github.com/aybuke-b")
             st.write("- 👨‍💻 Hassan TILKI : https://github.com/HTilki")
 
 
 if user_role == "Vendeur":
 
-    tab_prediction = st.tabs(["Estimation"])
-    estimation, estimation_km = st.columns(2)
+    tab_prediction = st.tabs(["🎯 Estimation"])
+    #estimation, estimation_km = st.columns(2)
     st.sidebar.header("Caractéristiques")
     
     marque = marques_select(nom_marques_modeles, user_role)
@@ -86,12 +80,12 @@ if user_role == "Vendeur":
     boite = boite_select(user_role)
     energie = energie_select(user_role)
     batterie = batterie_select(energie)
-    # changer class de batterie en int ???
     generation = generation_select(marque, modele)
     finition = finition_select(marque, modele)
-    with estimation:
-        predict_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
+    
+    with st.container():
 
-    with estimation_km:
-        predict_km_fictif_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
+        predict_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
+        resultat = st.empty()  
+    predict_km_fictif_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
 
