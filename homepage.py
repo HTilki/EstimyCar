@@ -1,7 +1,7 @@
 import streamlit as st
 from webscraping import import_marques_modeles
 from requetes_kpi import get_count_car, get_avg_price, calcul_delta
-from fonctions_tab import show_dataframe, predict_button, predict_km_fictif_button
+from fonctions_tab import show_dataframe, predict_button, get_prix_pred_displayed, get_prix_moy_displayed,predict_km_fictif_button
 from fonctions_menu import *
 import polars as pl
 from requetes_stats import *
@@ -51,7 +51,7 @@ if user_role == "Acheteur":
             with st.container(border=True):
                 st.metric(
                     "Prix moyen", 
-                value=get_avg_price(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max))
+                value=str(get_avg_price(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max, user_role)) + '€')
         show_dataframe(marques, modeles, annee_min, annee_max, km_min, km_max, boite, energie, prix_min, prix_max)
 
     with tab_stats:
@@ -62,6 +62,7 @@ if user_role == "Acheteur":
         with st.expander("**Cette app géniale ? Le fruit d'une alchimie numérique orchestrée par…**"):
             st.write("- 👩‍💻 Aybuké BICAT : https://github.com/aybuke-b")
             st.write("- 👨‍💻 Hassan TILKI : https://github.com/HTilki")
+        st.write(st.session_state)
 
 
 if user_role == "Vendeur":
@@ -84,8 +85,9 @@ if user_role == "Vendeur":
     finition = finition_select(marque, modele)
     
     with st.container():
-
-        predict_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
-        resultat = st.empty()  
+        predict_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition, user_role)
+        resultat = st.empty()
+        get_prix_pred_displayed()
+        get_prix_moy_displayed()
     predict_km_fictif_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
 

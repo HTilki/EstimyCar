@@ -229,7 +229,10 @@ def display_prix_selection():
 
 
 def display_annee(user_role):
-    annee_min, annee_max = get_plage_annee(user_role)
+    try:
+        annee_min, annee_max = get_plage_annee(user_role)
+    except:
+        annee_min, annee_max = 1928, 2024
     annee = range(annee_min, annee_max + 1, 1)
     annee_min, annee_max = st.sidebar.select_slider(
         "Année",

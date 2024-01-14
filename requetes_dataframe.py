@@ -47,7 +47,7 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             CASE WHEN generation = 'NA' THEN '' ELSE generation END,
             ' ', finition
             ) as Véhicule, 
-            cylindre, puissance, moteur, annee, boite, energie, prix, 
+            cylindre, puissance, moteur, annee, boite, energie, kilometrage, prix, 
             CASE
                 WHEN position_marché = 'Bonne affaire' THEN 'Bonne affaire 👍'
                 WHEN position_marché = 'Très bonne affaire' THEN 'Très bonne affaire 🌟'
@@ -73,7 +73,7 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             CASE WHEN generation = 'NA' THEN '' ELSE generation END,
             ' ', finition
             ) as Véhicule, 
-            cylindre, puissance, moteur, annee, boite, energie, prix, 
+            cylindre, puissance, moteur, annee, boite, energie, kilometrage, prix, 
             CASE
                 WHEN position_marché = 'Bonne affaire' THEN 'Bonne affaire 👍'
                 WHEN position_marché = 'Très bonne affaire' THEN 'Très bonne affaire 🌟'
@@ -127,7 +127,7 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             CASE WHEN generation = 'NA' THEN '' ELSE generation END,
             ' ', finition
             ) as Véhicule, 
-            cylindre, puissance, moteur, annee, boite, energie, prix, 
+            cylindre, puissance, moteur, annee, boite, energie, kilometrage, prix, 
             CASE
                 WHEN position_marché = 'Bonne affaire' THEN 'Bonne affaire 👍'
                 WHEN position_marché = 'Très bonne affaire' THEN 'Très bonne affaire 🌟'

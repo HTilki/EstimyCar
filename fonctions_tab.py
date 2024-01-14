@@ -1,5 +1,6 @@
 import streamlit as st
 from requetes_dataframe import get_dataframe
+from requetes_kpi import get_avg_price
 from machinelearning import predict_prix, predict_prix_autre_km
 from numpy import ndarray
 import polars as pl
@@ -50,10 +51,13 @@ def show_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int,
                                             "Cylindre 🛢️"
                                         ),
                                         'puissance': st.column_config.NumberColumn(
-                                            "Puissance 💥"
+                                            "Puissance 🐎"
+                                        ),
+                                        'kilometrage': st.column_config.NumberColumn(
+                                            "Kilométrage ⚙️"
                                         ),
                                         'moteur': st.column_config.TextColumn(
-                                            "Moteur 🐎"
+                                            "Moteur 💥"
                                         ),
                                         'Véhicule': st.column_config.TextColumn(
                                             "Véhicule 🚘"
@@ -69,7 +73,7 @@ def show_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int,
 
 
 
-def predict_button(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str):
+def predict_button(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str, user_role: str = 'Vendeur'):
     """
     Crée un bouton interactif pour estimer la valeur d'un véhicule en fonction des paramètres spécifiés.
 
@@ -86,6 +90,7 @@ def predict_button(marque: str, modele: str, annee: int, moteur: str, cylindre: 
         batterie (str): Type de batterie pour les véhicules électriques.
         generation (str): Génération du modèle de véhicule.
         finition (str): Finition du véhicule.
+        user_role (str): 'Vendeur' par défaut, le type d'utilisateur .
 
     ## Returns:
         None: Affiche le résultat de la prédiction du prix dans l'interface utilisateur lorsqu'on appuie sur le bouton. En cas d'erreur, aucun résultat n'est affiché.
@@ -93,7 +98,23 @@ def predict_button(marque: str, modele: str, annee: int, moteur: str, cylindre: 
 
     if st.button('**Estimer la valeur du véhicule.**'):
         data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
-        st.metric('**:orange[Prix estimé :]** ', value=format_prediction(predict_prix(data, marque)))
+        prix_pred = predict_prix(data, marque)
+        prix_moyen = get_avg_price(marque, modele, 0, annee, 0, km, boite, energie, 0, 0, user_role, cylindre, puissance)
+        st.session_state['prix_pred'] = prix_pred
+        st.session_state['prix_moy_pred'] = prix_moyen
+
+def get_prix_pred_displayed() -> None:
+    if 'prix_pred' in st.session_state:
+        st.metric('**:orange[Prix estimé :]** ', value=format_prix(st.session_state['prix_pred']))
+
+def get_prix_moy_displayed() -> None:
+    if 'prix_moy_pred' in st.session_state:
+        if st.session_state['prix_moy_pred'] != 0:
+            st.metric('**:blue[Prix moyen :]** ', value=format_prix(st.session_state['prix_moy_pred']),
+                      help="Ce prix est calculé par rapport à la marque, le modèle, l'année, l'energie, la boite, la cylindre, la puissance ± 10, le kilométrage ± 3000.")
+        else:
+            st.metric('**:red[Prix moyen :]** ', value="Prix moyen indisponible.",
+                      help = "Le prix moyen n'a pas pu être calculé car il n'y a pas de véhicule avec les mêmes caractéristiques renseignées.")
 
 def transform_input(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str) -> pl.DataFrame:
     """
@@ -135,17 +156,17 @@ def transform_input(marque: str, modele: str, annee: int, moteur: str, cylindre:
     )
     return data
 
-def format_prediction(prix_predit: ndarray) -> str:
+def format_prix(prix: float) -> str:
     """
-    Formate la prédiction du prix en tant que chaîne de caractères.
+    Formate le prix en tant que chaîne de caractères.
 
     ## Parameters:
-        prix_predit (numpy.ndarray): Matrice contenant le prix prédit.
+        prix (float): Le prix.
 
     ## Returns:
-        str: Prix prédit formaté en euros.
+        str: Prix formaté en euros.
     """
-    return str(prix_predit) + ' €' 
+    return str(prix) + ' €' 
 
 
 def predict_km_fictif_button(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str):

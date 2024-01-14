@@ -9,13 +9,13 @@ def get_avg_price_by_brand():
     """
     prix_moyen_m = duckdb.sql(
         f"""
-        SELECT marque, AVG(prix) AS prix_moyen
+        SELECT marque, ROUND(AVG(prix), 2) AS prix_moyen
         FROM 'data/database.parquet'
         GROUP BY marque
         ORDER BY prix_moyen DESC
-        """).df()
+        """).pl()
     
-    fig = px.bar(prix_moyen_m, x="marque", y="prix_moyen", title="Prix moyen par marque", color= "prix_moyen",
+    fig = px.bar(prix_moyen_m[0:140], x="marque", y="prix_moyen", title="Prix moyen par marque", color= "prix_moyen",
                 color_continuous_scale='YlOrRd')
     fig.update_xaxes(title="Marque")
     fig.update_yaxes(title="Prix moyen")
@@ -32,7 +32,7 @@ def get_price_histogram():
         SELECT prix
         FROM 'data/database.parquet'
         WHERE prix BETWEEN 0 AND 150000
-        """).df()
+        """).pl()
 
     fig = px.histogram(prices, x= "prix", nbins=30, title= "Distribution des prix des véhicules")
     fig.update_xaxes(title= "Prix")
@@ -47,13 +47,13 @@ def get_count_models_by_brand():
     """
     count_models = duckdb.sql(
         f"""
-        SELECT marque, COUNT(DISTINCT modele) AS nombre_modeles
+        SELECT marque, COUNT(DISTINCT modele) AS 'nombre de modeles'
         FROM 'data/database.parquet'
         GROUP BY marque
-        ORDER BY nombre_modeles DESC
-        """).df()
+        ORDER BY COUNT(DISTINCT modele) DESC
+        """).pl()
     
-    fig = px.bar(count_models, x="marque", y="nombre_modeles", title="Nombre de modèles par marque", color="nombre_modeles", 
+    fig = px.bar(count_models, x="marque", y="nombre de modeles", title="Nombre de modèles par marque", color="nombre de modeles", 
                 color_continuous_scale='Reds')
     fig.update_xaxes(title="Marque")
     fig.update_yaxes(title="Nombre de modèles")
