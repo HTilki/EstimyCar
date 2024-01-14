@@ -34,19 +34,26 @@ jupyter: python3
 ## Introduction
 
 :::{.notes}
-on s'est intéressé au marché de la voiture et on s'est posé la question de ce qu'on peut prédire sur les voitures. Quand on pense à ça, on pense forcément au prix, comment prédire le prix d'un véhivule?
+**HAS**: On s'est intéressé au marché de la voiture et on s'est posé la question de ce qu'on peut prédire sur les voitures. Quand on pense à ça, on pense forcément au prix, comment prédire le prix d'un véhivule?
 
-La plupart des français utilisent la côte argus mais est-ce que vous vous êtes déjà demandé comment celle-ci fonctionne?
+**BUK** : La plupart des français utilisent la côte argus mais est-ce que vous vous êtes déjà demandé comment celle-ci fonctionne?
 
+**HAS**:
 - Argus :
 Elle est basée sur le cours-moyen d'argus qui est constitué à l'aide de professionnels du secteur, d'un concessionnaire allant jusqu'au constructeur, mais aussi à l'aide de simples particuliers et des annonces de ventes de véhicule.
+De plus cette cote est payante et manque de transparence sur la facon d'estimer la valeur d'un véhicule.
 
+**BUK**:
+Pour les autres estimateur gratuit en ligne, ils demandent souvent les données des utilisateurs en échange d'une estimation 
 
-En apprenant cela, nous avons eu comme objectif de créer notre propre estimateur de prix de voiture.
+C'est pour ces raisons, que avons eu comme objectif de créer notre propre estimateur de prix de voiture.
 
-Pour ce faire, vu qu'on est que 2 jeunes étudiants et ne sommes pas entourés de professionnels, la seule option que nus avons est de scraper des annonces de voitures d'occasion en ligne.
+Un estimateur accessible, gratuit et sans filtre.
 
-Avant de vous montrer comment on a scrapper tout ça on va directement passer au + croustillant qui est une démonstration de l'application que nous avons créée.
+**HAS**:
+Pour ce faire, vu qu'on est que 2 jeunes étudiants et ne sommes pas entourés de professionnels, la seule option que nous avons est de recuperer des annonces de voitures d'occasion en ligne.
+
+Avant de vous montrer comment on a recuperer tout ça on va directement passer au + croustillant qui est une démonstration de l'application que nous avons créée.
 
 Présentation Streamlit:
 
@@ -57,7 +64,6 @@ Démo acheteur, démo vendeur.
 On va pouvoir visualiser
 
 démo acheteur : Hassan est-ce que tu es interessé par l'achat d'un véhicule?
-
 
 si lien inexistant : c'était tellement une bonne affaire qu'elle est déjà partie...
 
@@ -86,22 +92,22 @@ Est-ce que vous avez une voiture à vendre? ou des caractéristiques
 ## Web Scraping 🕸️ {background-image="imgs/webscraping.jpeg" background-opacity="0.1"}
 
 :::{.notes}
-Alors maintenant qu'on a vu le produit final, on va le disséquer pour voir comment on en est arrivé là avec une approche technique!
+**BUK**: Alors maintenant qu'on a vu le produit final, on va le disséquer pour voir comment on en est arrivé là avec une approche technique!
 
-Vous avez vu le voir peut être mais il y a des liens dans l'onglet acheteur qui renvoie vers le site "La Centrale".
+**HAS**: C’est une technique d’extraction de données présentes sur le web.
 
-Alors nous avons scrapé ce site et l'intégralité des 300 000 annonces qui étaient présentes sur le site au moment du scraping.
+**BUK**: Vous avez pu le voir peut être mais il y a des liens dans l'onglet acheteur qui renvoie vers le site "La Centrale".
 
-Pour la partie scraping
 
+**HAS**: Alors nous avons scrapé ce site et l'intégralité des 300 000 annonces qui étaient présentes sur le site au moment du scraping.
+Avec plus de 150 marques, 900 modeles
 
 On va vous montrer le processus de scraping en 3 parties : récupération des noms des marques, puis la récupération des annonces, et enfin la récupération des caractéristiques.
 
-pas d'utilisation de Selenium car le site bloque tous les bot.
-
+On a un module `webscraping.py` qui nous permet d'extraire toutes ces données depuis le site.
 :::
 
-> C'est une technique d'extraction de données présentes sur des sites  web par l'utilisation d'un script ou programme informatique.
+> C'est une technique d'extraction de données présentes sur des sites web par l'utilisation d'un script ou programme informatique.
 
 :::{.fragment}
 Données récupérées depuis **La Centrale** :
@@ -113,19 +119,19 @@ Données récupérées depuis **La Centrale** :
 
 :::{.fragment}
 Extraction en **3 parties** :
-
+:::
   - Récupération des noms des marques
   - Récupération des annonces
   - Récupération des caractéristiques
+:::{.fragment}
+Tout est présent dans le module `webscraping.py`
 :::
 
 
 ## Processus du Scraping 📥: 1/3
 
 :::{.notes}
-
-On a un module `webscraping.py` qui nous permet d'extraire toutes ces données depuis le site.
-
+**BUK**:
 
 Il faut savoir que le nombre maximum de pages sur La Centrale est de 500.
 
@@ -166,7 +172,7 @@ Pour obtenir ces différentes marques, il suffit juste d'aller dans l'accueil du
 
 ## Processus du Scraping 📥 : (2/3)
 :::{.notes}
-
+**HAS**:
 Une fois qu'on a récupéré les marques, on peut maintenant à l'aide d'une boucle et de fonctions bien ficellées, extraire toutes les annonces sur le site. 
 *extrait f° recup_pages()*
 
@@ -203,8 +209,8 @@ def recup_annonces(page: BeautifulSoup) -> list:
 ## Processus du Scraping 📥 : (3/3)
 
 :::{.notes}
-
-Une fois toutes les pages récuperées, sous cette forme de liste **pointe la slide**, on récupère chacune des caractéristiques du v"hicule pour chq annonce. 
+**BUK**
+Une fois toutes les pages récuperées, sous cette forme de liste **pointe la slide**, on récupère chacune des caractéristiques du véhicule pour chq annonce. 
 La fonction permettant de récuperer toutes les caractéristiques d'une annonce s'appelle recup_info_voitures() qui elle aussi fait appel à pls fonctions dédiées à pls caractéristiques. Ces fonctions permette à l'aide de bs4, de recuperer des information précise stocké dans certain élement de la page. 
 
 Chacune des caractéristiques des voitures est stockée dans une dataclass `voiture`. 
@@ -237,6 +243,7 @@ def recup_nom_vehicule(annonce: str) -> str:
 
 
 :::{.notes}
+**HAS**:
 Et une fois le tout executé, les données sont exportés sous format brut JSON. 
 
 le nb d'annonces étant très conséquent et l'extraction étant très longue, nous avons fait l'extraction en 4 parties. Nous avons obtenus donc  'fichiers json qu'on a fusionner en un fichier à l'aide de la f° `fusionner_fichiers_json()`. 
@@ -282,7 +289,7 @@ On les fusionne à l'aide de la fonction `fusionner_fichiers_json` pour obtenir 
 
 
 :::{.notes}
-
+**BUK**
 Une fois notre fichier json obtenue, chose inevitable nous avons des données mal renseignées, des pb de types de données mais aussi des informations à extraire de ces données brutes.
 
 Pour récupérer le + d'informations possibles sur ces données, nous avons décidé d'utiliser la librairie polars, ce qui rend le tout très lisible et très efficace.
@@ -306,7 +313,7 @@ C'est le module `datacleaning.py` qui contient toutes les fonctions essentielles
 ## Les problèmes rencontrées ⚠️
 
 :::{.notes}
-
+**HAS**
 Dans cette partie, nous allons vous présenter rapidement les pb qu'on a rncontrées, et les fonctions qui ont servi à les règler et qui nous ont permis de nettoyer la base de données et d'avoir une BDD exploitable.
 
 
@@ -338,6 +345,7 @@ $\rightarrow$ [`"6.3 V8 460 GT"`]{.fragment .semi-fade-out} [->]{.fragment} [`('
 ## Le gazoduc 🛢️{background-image="imgs/gazoduc1.jpeg" background-opacity="0.1"}
 
 :::{.notes}
+**HAS**:
 f° qui permet de faire tout le traitement automatiquement à l'aide des autres fonctions. 
 
 Comme on peut le voir, il y a d'autre fonction dans cette pipeline que l'on ne vous a pas présenté. On va donc le faire très rapidement. 
@@ -429,6 +437,8 @@ Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases 
 
 
 :::{.notes}
+**HAS**:
+
 - split
 - les modèles -> pourquoi avoir choisi ces modèles ? car après test, ces modèles se sont averée être meilleurs.
 - les grilles de paramètres associées -> pourquoi ces grilles ? car après test, se sont les résultats qui sont sortie le plus souvent.
@@ -457,6 +467,9 @@ L'utilisation de ce package à plusieurs avantages, tel que sa documentation et 
 - `predict_prix` pour charger le modèle et prédire
 
 ## Le split 👨‍👩‍👧‍👦
+:::{.notes}
+
+:::
 
 :::{.fragment}
 **Données d'entrainement** : échantillon de <span style="color:#4682B4">**80%**</span> d'observations de la marque
@@ -486,6 +499,11 @@ def split_data(data: pl.DataFrame, marque: str) -> tuple[pl.DataFrame, pl.DataFr
 
 ## Le preprocesseur ⏹️
 
+:::{.notes}
+**HAS**:
+
+:::
+
 La plupart des modèles **ne supportent pas les variables qualitatives** et requiert donc un prétraitement. 
 
 :::{.fragment}
@@ -503,6 +521,7 @@ $\rightarrow$ [`'boite' = 'Automatique''`]{.fragment .semi-fade-out} [->]{.fragm
 ## Les modèles 📊
 
 :::{.notes}
+**BUK**:
 Nous avons testé différents modèles tel que les SVM, les Boosting, etc.. Mais les meilleurs modèles à chaque fois étaient : (ceux sur la slide)
 
 Le nombre de modèle à creer étant de 40, le procédés est assez long. C'esst pour cela que pour optimiser notre temps nous avons décider de tester certaines grille de parametres en amont pour en determiner une finale, la plus réduite possible.
@@ -528,8 +547,9 @@ C'est pour cette raison que plusieurs grilles ont été testées en amont afin d
 ## Le nombre de voisins 👬👬👬
 
 :::{.notes}
+**BUK**:
+Graph décroissant par rapport au nb d'annonces sur l'axe X
 Au lieu de se lancer directement dans des validations croisées avec un grille de paramètres choisi aléatoirement, 
-
 
 Nous avons testé des grilles de paramètres entre 0 et 15 voisins. Le maximum retenu était 10 voisins. Cette pour cette raison que nous avons retenu cette grille.
 :::
@@ -585,6 +605,11 @@ La grille retenue: `'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`
 
 ## min_samples_leaf 🍃 {background-image="imgs/randomforest.jpeg" background-opacity="0.2"}
 
+:::{.notes}
+**BUK**:
+grille entre 1 et 6 
+:::
+
 :::{.fragment}
 ```{python}
 
@@ -624,10 +649,9 @@ La grille retenue: `'min_samples_leaf': [2]`
 
 ## n_estimators
 :::{.notes}
+**HAS**:
 Ici on avait testé plusieurs valeurs allant de 100 à 1000. 
-
 On a décidé de garder uniquement 500 et 800
-
 :::
 
 :::{.fragment}
@@ -670,6 +694,7 @@ La grille retenue: `'n_estimators': [500, 800]`
 ## L'utilisation des modèles
 
 :::{.notes}
+**HAS**:
 Une fois l'optimisation des paramètres effectué via une seconde validation croisée. On garde le meilleur modèle parmis les trois, on l'entraine avec tout le dataset pour la marque en question, et on l'export en fichier joblib, ainsi que le preprocesseur pour réutilisation. 
 :::
 
@@ -708,7 +733,12 @@ Notre objectif à partir de ce moment est de rendre notre travail accessible et 
 
 ## Streamlit 🚀{background-image="imgs/streamlit1.jpeg" background-opacity="0.1"}
 :::{.notes}
-Streamlit est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactif pour l'analyse de données et la visualisation. 
+**BUK**:
+Streamlit est une bibliothèque Python qui simplifie considérablement le processus de création d'applications web interactif pour l'analyse de données et la visualisation.
+
+Streamlit propre une palette de fonctionnalités. Avec des box, boutons, multiselect, etc.. les possibilités sont presques infinies.
+
+Avantage de Streamlit, faciliter le déploiement sur le web. Avec le repos github, constamment connecté à l'application sur streamlit. Si on met a jour la branche main/master, ça met à jour l'application sur streamlit. 
 
 Bien que l'on vous à déjà présenté l'application. L'objectif ici est de vous montrer le travail derrière
 
@@ -723,26 +753,62 @@ Notre application s'organise en **trois parties** :
 - un onglet acheteur 🕵️‍♂️
 - un onglet vendeur 💰
 
-
+## DuckDB 🦆
 
 :::{.notes}
-expliquer streamlit
-- onglet acheteur : fonctionnement avec des requêtes, 
-- onglet vendeur : import du modèle et prédictions estimation du prix 
+**HAS**:
+l'API python de duck db est open source et permet d'intéragir rapidement avec des bases de données, en particulier sur de grands ensembles de données,Il prend aussi en charge un sous-ensemble de SQL standard, ce qui le rend accessible aux utilisateurs familiers avec les requêtes SQL. Il prend également en charge des extensions pour l'analyse de données plus avancée.
+:::
 
+Avantages : 
 
+- Open source
+- Rapide et gère grand ensembles de données
+- Prend en charge un sous-ensemble de SQL standard
+- Sortie en `polars` 🐻‍❄️ DataFrame
 
+:::{.fragment}
+```py
+import duckdb
+duckdb.sql(
+    """
+    SELECT *
+    FROM 'data/database.parquet';
+    """).pl()
+```
 :::
 
 ## Poetry et Pytest 🧪✅{background-image="imgs/pytest.jpeg" background-opacity="0.1"}
+:::{.notes}
+**BUK**:
+parler de poetry, on peut retrouver les packages necessaires dans le fichier toml
+my py
 
-- les poetry ...
+**HAS**:
+test
+:::
 
-- les tests avec test sur application
+- Gestion des dépendances avec `poetry`.
+- Vérification du typage avec `mypy`
+- Test des différents modules avec `pytest`
 -> screen des tests passed de la console
 
 
-## What's Next 🏎️
+## What's Next ➡️🏎️
 
-- Objectif pour la suite : 
-- Scraper d'autre site ?
+:::{.notes}
+**BUK**:
+Comme sur la centrale, creer notre propre analyse de prix, pour dénicher les bonnes affaires. 
+
+Si possible, essayer de dénicher ses bonnes affaires sur dautres site que la centrale (qui est réputé pour vendre des voitures à prix plutot élevé.)
+Comme le bon coin ou des sites de ventes au enchere comme alcopa
+
+Déployer une application sans bug, et optimisé pour le coté utilisateur. 
+:::
+
+**Nos objectifs pour la suite :** 
+
+- Créer notre propre analyse de prix. 
+- Essayer d'ajouter d'autres fonctionnalités (ex: nombre de portes)
+- Essayer de scraper d'autres sites (ex : le bon coin)
+- Déployer l'application sur le web.
