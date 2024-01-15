@@ -1,29 +1,14 @@
 import streamlit as st
 import polars as pl
-from fonctions_app.requetes.requetes_dataframe import *
-from fonctions_app.requetes.requetes_val_unique import *
+from src.modules.requetes.requetes_dataframe import *
+from src.modules.requetes.requetes_val_unique import *
 
 
-def style_markdown():
-    st.markdown(
-        """
-        <style>
-                .block-container {
-                    padding-top: 2rem;
-                    padding-bottom: 0rem;
-                    padding-left: 2rem;
-                    padding-right: 2rem;
-                }
-                .st-emotion-cache-16txtl3{
-                    padding-top: 2rem;
-                    padding-right: 0rem;
-                    padding-bottom: 1rem;
-                    padding-left: 0rem;
-                }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+def select_user_role() -> str:
+    return st.sidebar.selectbox("Votre profil", 
+                                ["Acheteur", "Vendeur"], 
+                                placeholder="Choisir un profil",
+                                index=None)
 
 
 def display_km(user_role):

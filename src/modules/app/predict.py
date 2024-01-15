@@ -24,8 +24,8 @@ def charger_modeles(marque: str) -> tuple[LinearRegression|KNeighborsRegressor|R
         # Charge le modèle de régression et le préprocesseur associé pour la marque PORSCHE.
     """    
     try:
-        model = load(f"models/{marque}_best_model.joblib")
-        preprocessor = load(f"models/{marque}_preprocessor.joblib")
+        model = load(f"src/models/{marque}_best_model.joblib")
+        preprocessor = load(f"src/models/{marque}_preprocessor.joblib")
         return model, preprocessor
     except Exception as e:
         print(f"Erreur lors de l'importation du modèle : {str(e)}")

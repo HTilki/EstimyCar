@@ -1,7 +1,7 @@
 import streamlit as st
-from fonctions_app.requetes.requetes_dataframe import get_dataframe
-from fonctions_app.requetes.requetes_kpi import get_avg_price
-from fonctions_app.app.predict import predict_prix, predict_prix_autre_km
+from src.modules.requetes.requetes_dataframe import get_dataframe
+from src.modules.requetes.requetes_kpi import get_avg_price
+from src.modules.app.predict import predict_prix, predict_prix_autre_km
 import polars as pl
 
 def show_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, km_min: int, km_max: int, boite: list, energie: list, prix_min: int, prix_max: int):
@@ -104,8 +104,10 @@ def predict_button(marque: str, modele: str, annee: int, moteur: str, cylindre: 
 
 def get_prix_pred_displayed() -> None:
     if 'prix_pred' in st.session_state:
-        st.metric('**:orange[Prix estimé :]** ', value=format_prix(st.session_state['prix_pred']))
-
+        if st.session_state['prix_pred'] != None:
+            st.metric('**:orange[Prix estimé :]** ', value=format_prix(st.session_state['prix_pred']))
+        else : 
+            st.metric('**:red[Prix estimé :]** ', value="Erreur lors de l'estimation du prix.")
 def get_prix_moy_displayed() -> None:
     if 'prix_moy_pred' in st.session_state:
         if st.session_state['prix_moy_pred'] != 0:
@@ -190,8 +192,10 @@ def predict_km_fictif_button(marque: str, modele: str, annee: int, moteur: str, 
         Affiche un graphique interactif pour estimer la valeur du véhicule en fonction de kilométrage fictif.
     """
     if st.button('**Estimer la valeur de votre véhicule selon le kilométrage.**'):
-        data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
-        fig = predict_prix_autre_km(data, marque)
-        st.plotly_chart(fig, use_container_width=True, height=600)
-
+        try:
+            data = transform_input(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
+            fig = predict_prix_autre_km(data, marque)
+            st.plotly_chart(fig, use_container_width=True, height=600)
+        except:
+            st.error("Erreur lors de la génération du graphique. Vérifiez que toutes les caractéristiques sont bien renseignées.")
 

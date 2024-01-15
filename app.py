@@ -1,35 +1,25 @@
 import streamlit as st
-from fonctions_app.app.import_mm import import_marques_modeles
-from fonctions_app.requetes.requetes_kpi import get_count_car, get_avg_price, calcul_delta
-from fonctions_app.app.fonctions_tab import show_dataframe, predict_button, get_prix_pred_displayed, get_prix_moy_displayed,predict_km_fictif_button
-from fonctions_app.app.fonctions_menu import *
+from src.modules.app.import_mm import import_marques_modeles
+from src.modules.requetes.requetes_kpi import get_count_car, get_avg_price, calcul_delta
+from src.modules.requetes.requetes_stats import show_selected_chart
+from src.modules.app.title import title
+from src.modules.app.menu import *
+from src.modules.app.accueil import *
+from src.modules.app.tabs import show_dataframe, predict_button, get_prix_pred_displayed, get_prix_moy_displayed, predict_km_fictif_button
 import polars as pl
-from fonctions_app.requetes.requetes_stats import show_selected_chart
-from fonctions_app.app.accueil import *
 
 nom_marques_modeles = pl.DataFrame(import_marques_modeles())
 
-st.set_page_config( 
-    page_title="CarScraping",
-    page_icon="🚗",
-    layout="wide")
-st.title("🚗 CarScraping")
+title()
 
-st.sidebar.title("Menu")
-style_markdown()
-
-user_role = st.sidebar.selectbox("Votre profil", 
-                                ["Acheteur", "Vendeur"], 
-                                placeholder="Choisir un profil",
-                                index=None)
-
+user_role = select_user_role()
 
 if user_role == None:
     accueil()
 
 if user_role == "Acheteur":
     nb_annonces, prix_moyen = st.columns(2)
-    tab_data, tab_stats, tab2 = st.tabs(["🗃 Data", "📊 Statistiques Descriptives", "🎈 Créateurs"])
+    tab_data, tab_stats, tab_surprise = st.tabs(["🗃 Data", "📊 Statistiques Descriptives", "🎈 Créateurs"])
     
     st.sidebar.header("Caractéristiques")
     marques = marques_select(nom_marques_modeles, user_role)
@@ -56,7 +46,7 @@ if user_role == "Acheteur":
     with tab_stats:
         show_selected_chart()
 
-    with tab2:
+    with tab_surprise:
         st.balloons()
         with st.expander("**Cette app géniale ? Le fruit d'une alchimie numérique orchestrée par…**"):
             st.write("- 👩‍💻 Aybuké BICAT : https://github.com/aybuke-b")
@@ -81,7 +71,6 @@ if user_role == "Vendeur":
     batterie = batterie_select(energie)
     generation = generation_select(marque, modele)
     finition = finition_select(marque, modele)
-    
     with st.container():
         predict_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition, user_role)
         resultat = st.empty()
