@@ -4,9 +4,9 @@ telles que la plage d'années, les noms de marques, de modèles, les différente
 """
 
 import duckdb
-from numpy import ndarray 
+from numpy import ndarray
 
-def get_plage_annee(user_role: str, marque: str = None, modele: str = None) -> ndarray:
+def get_plage_annee(user_role: str, marque: str = None, modele: str = None) -> ndarray|list:
     """
     Récupère la plage d'années des véhicules disponibles en fonction du rôle choisi par l'utilisateur.
 
@@ -16,8 +16,7 @@ def get_plage_annee(user_role: str, marque: str = None, modele: str = None) -> n
         modele (str, optional): Le nom du modèle du véhicule.
 
     ## Returns:
-        ndarray:
-            Un tableau NumPy contenant la plage d'années [annee_min, annee_max].
+        ndarray|list: Un tableau NumPy contenant la plage d'années [annee_min, annee_max] ou une liste.
 
     Example:
         >>> get_plage_annee("Acheteur")
@@ -36,15 +35,17 @@ def get_plage_annee(user_role: str, marque: str = None, modele: str = None) -> n
                 """).pl().to_numpy()[0]
     
     if user_role == "Vendeur":
-        return duckdb.sql(
-                f"""
-                SELECT MIN(annee) as annee_min,
-                MAX(annee) as annee_max
-                FROM 'data/database.parquet'
-                WHERE marque == '{marque.upper()}' 
-                AND modele == '{modele.upper()}'
-                """).pl().to_numpy()[0]
-
+        try:
+            return duckdb.sql(
+                    f"""
+                    SELECT MIN(annee) as annee_min,
+                    MAX(annee) as annee_max
+                    FROM 'data/database.parquet'
+                    WHERE marque == '{marque.upper()}' 
+                    AND modele == '{modele.upper()}'
+                    """).pl().to_numpy()[0]
+        except:
+            return [1928, 2024]
 
     
 def get_unique_marque() -> list:

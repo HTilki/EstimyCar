@@ -232,6 +232,8 @@ def display_annee(user_role):
 def select_annee(user_role: str, marque: str = "", modele: str = "") -> int:
     annee_min, annee_max = get_plage_annee(user_role, marque, modele)
     annee = range(annee_min, annee_max + 1, 1)
+    if len(annee) == 1: 
+        annee = range(annee_min-1, annee_max + 2, 1)
     annee_choisi = st.sidebar.select_slider(
         "Année",
         options=sorted(annee),
