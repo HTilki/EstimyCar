@@ -1,5 +1,5 @@
 ---
-title: "🚙 EstimyCar 🚙"
+title: "🚙 Estimy[Car]{style='color:#0F52BA;'} 🚙"
 subtitle: "<script>const currentDT = new Date().toLocaleDateString();document.write(currentDT);</script>"
 author: "`Aybuké BICAT` & `Hassan TILKI`"
 format:
