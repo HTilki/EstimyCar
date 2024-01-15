@@ -62,7 +62,6 @@ if user_role == "Acheteur":
         with st.expander("**Cette app géniale ? Le fruit d'une alchimie numérique orchestrée par…**"):
             st.write("- 👩‍💻 Aybuké BICAT : https://github.com/aybuke-b")
             st.write("- 👨‍💻 Hassan TILKI : https://github.com/HTilki")
-        st.write(st.session_state)
 
 
 if user_role == "Vendeur":
