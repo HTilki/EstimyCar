@@ -1,8 +1,7 @@
 import streamlit as st
-from requetes_dataframe import get_dataframe
-from requetes_kpi import get_avg_price
-from machinelearning import predict_prix, predict_prix_autre_km
-from numpy import ndarray
+from fonctions_app.requetes.requetes_dataframe import get_dataframe
+from fonctions_app.requetes.requetes_kpi import get_avg_price
+from fonctions_app.app.predict import predict_prix, predict_prix_autre_km
 import polars as pl
 
 def show_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, km_min: int, km_max: int, boite: list, energie: list, prix_min: int, prix_max: int):
@@ -114,7 +113,7 @@ def get_prix_moy_displayed() -> None:
                       help="Ce prix est calculé par rapport à la marque, le modèle, l'année, l'energie, la boite, la cylindre, la puissance ± 10, le kilométrage ± 3000.")
         else:
             st.metric('**:red[Prix moyen :]** ', value="Prix moyen indisponible.",
-                      help = "Le prix moyen n'a pas pu être calculé car il n'y a pas de véhicule avec les mêmes caractéristiques renseignées.")
+                      help = "Le prix moyen n'a pas pu être calculé car il n'y a pas de véhicule avec les mêmes caractéristiques renseignées dans notre base de données.")
 
 def transform_input(marque: str, modele: str, annee: int, moteur: str, cylindre: str, puissance: int, km: int, boite: str, energie: str, batterie: str, generation: str, finition: str) -> pl.DataFrame:
     """

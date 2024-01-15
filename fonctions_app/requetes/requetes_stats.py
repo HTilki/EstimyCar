@@ -1,5 +1,4 @@
 import duckdb
-import polars as pl
 import plotly.express as px
 import streamlit as st
 
@@ -72,11 +71,11 @@ def show_selected_chart():
                                         "Histogramme des prix"))
 
     if selected_chart == "Nombre de modèles par marque":
-        model_brand = get_count_models_by_brand()
+        get_count_models_by_brand()
 
     elif selected_chart == "Prix moyen par marque":
-        prix_moyen = get_avg_price_by_brand()
+        get_avg_price_by_brand()
 
     elif selected_chart == "Histogramme des prix":
         st.markdown("Distribution des prix des véhicules entre `0`  et  `150 000 `€")
-        price = get_price_histogram()
+        get_price_histogram()

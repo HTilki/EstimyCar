@@ -1,7 +1,7 @@
 import streamlit as st
 import polars as pl
-from requetes_dataframe import *
-from requetes_val_unique import *
+from fonctions_app.requetes.requetes_dataframe import *
+from fonctions_app.requetes.requetes_val_unique import *
 
 
 def style_markdown():

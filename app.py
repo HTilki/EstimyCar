@@ -1,14 +1,13 @@
 import streamlit as st
-from webscraping import import_marques_modeles
-from requetes_kpi import get_count_car, get_avg_price, calcul_delta
-from fonctions_tab import show_dataframe, predict_button, get_prix_pred_displayed, get_prix_moy_displayed,predict_km_fictif_button
-from fonctions_menu import *
+from fonctions_app.app.import_mm import import_marques_modeles
+from fonctions_app.requetes.requetes_kpi import get_count_car, get_avg_price, calcul_delta
+from fonctions_app.app.fonctions_tab import show_dataframe, predict_button, get_prix_pred_displayed, get_prix_moy_displayed,predict_km_fictif_button
+from fonctions_app.app.fonctions_menu import *
 import polars as pl
-from requetes_stats import *
-from accueil import *
+from fonctions_app.requetes.requetes_stats import show_selected_chart
+from fonctions_app.app.accueil import *
 
 nom_marques_modeles = pl.DataFrame(import_marques_modeles())
-
 
 st.set_page_config( 
     page_title="CarScraping",
@@ -89,4 +88,3 @@ if user_role == "Vendeur":
         get_prix_pred_displayed()
         get_prix_moy_displayed()
     predict_km_fictif_button(marque, modele, annee, moteur, cylindre, puissance, km, boite, energie, batterie, generation, finition)
-
