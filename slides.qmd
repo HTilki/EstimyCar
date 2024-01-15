@@ -802,7 +802,7 @@ test
 
 
 
-## What's Next ➡️🏎️
+## What's Next ➡️🏎️{background-image="imgs/whats_next.jpg" background-opacity="0.1"}
 
 :::{.notes}
 **BUK**:
