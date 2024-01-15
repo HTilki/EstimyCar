@@ -1,5 +1,5 @@
 ---
-title: "🚙 CarScraping 🚙"
+title: "🚙 EstimyCar 🚙"
 subtitle: "<script>const currentDT = new Date().toLocaleDateString();document.write(currentDT);</script>"
 author: "`Aybuké BICAT` & `Hassan TILKI`"
 format:
@@ -76,7 +76,7 @@ Est-ce que vous avez une voiture à vendre? ou des caractéristiques
 
 
 
-*CarScraping qu'est-ce que c'est ?*
+*EstimyCar qu'est-ce que c'est ?*
 
 - Comment se calcule la **Côte ARGUS** ?
 
