@@ -119,10 +119,12 @@ Données récupérées depuis **La Centrale** :
 
 :::{.fragment}
 Extraction en **3 parties** :
-:::
+
   - Récupération des noms des marques
   - Récupération des annonces
   - Récupération des caractéristiques
+:::
+
 :::{.fragment}
 Tout est présent dans le module `webscraping.py`
 :::
@@ -647,7 +649,7 @@ px.bar(cv_result_into_df("RandomForest", marques_array), x='marque', y='mean_tes
 La grille retenue: `'min_samples_leaf': [2]`
 :::
 
-## n_estimators
+## n_estimators {background-image="imgs/RF2.jpeg" background-opacity="0.1"}
 :::{.notes}
 **HAS**:
 Ici on avait testé plusieurs valeurs allant de 100 à 1000. 
@@ -753,7 +755,7 @@ Notre application s'organise en **trois parties** :
 - un onglet acheteur 🕵️‍♂️
 - un onglet vendeur 💰
 
-## DuckDB 🦆
+## DuckDB 🦆{background-image="imgs/duckdb.jpeg" background-opacity="0.1"}
 
 :::{.notes}
 **HAS**:
@@ -781,17 +783,23 @@ duckdb.sql(
 ## Poetry et Pytest 🧪✅{background-image="imgs/pytest.jpeg" background-opacity="0.1"}
 :::{.notes}
 **BUK**:
-parler de poetry, on peut retrouver les packages necessaires dans le fichier toml
-my py
+Dans un soucis d'accessibilité, l'utilisation de poetry est obligatoire afin de permettre de reproduire rapidement l'environnement nécessaire pour faire tourner l'app en local par ex. 
+Et permet aussi de connaitre les dépendances nécessaires pour faire tourner l'app qui peuvent être retrouvées dans un fichier toml.
 
+
+Pout la visibilité et la cohérence du code, on a vérifier le typage des f° avec mypy et formater le codee à l'aide de `black`. 
+
+Ces outils contribuent à la qualité, à la maintenabilité et la stabilité du code tout en améliorant l'efficacité du processus de développement.
 **HAS**:
 test
 :::
 
 - Gestion des dépendances avec `poetry`.
 - Vérification du typage avec `mypy`
+- Formatage à l'aide de `black`
 - Test des différents modules avec `pytest`
 -> screen des tests passed de la console
+
 
 
 ## What's Next ➡️🏎️
