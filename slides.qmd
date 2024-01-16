@@ -118,16 +118,13 @@ Données récupérées depuis **La Centrale** :
 - \+ de <span style="color:#4682B4">**900**</span> modèles
 
 :::{.fragment}
-Extraction en **3 parties** :
+Extraction en **3 parties**, présent dans le module `webscraping.py`:
 
   - Récupération des noms des marques
   - Récupération des annonces
   - Récupération des caractéristiques
 :::
 
-:::{.fragment}
-Tout est présent dans le module `webscraping.py`
-:::
 
 
 ## Processus du Scraping 📥: 1/3
@@ -801,6 +798,7 @@ Notre application s'organise en **trois parties** :
 
 :::{.fragment}
 Avantages : 
+
 - Facilite le déploiement sur le web
 - Mise à jour de l'application lorsque le GitHub est mis à jour
 :::
@@ -812,7 +810,7 @@ Avantages :
 l'API python de duck db est open source et permet d'intéragir rapidement avec des bases de données, en particulier sur de grands ensembles de données,Il prend aussi en charge un sous-ensemble de SQL standard, ce qui le rend accessible aux utilisateurs familiers avec les requêtes SQL. Il prend également en charge des extensions pour l'analyse de données plus avancée.
 :::
 
-Avantages : 
+**Avantages :** 
 
 - Open source
 - Rapide et gère grand ensembles de données
