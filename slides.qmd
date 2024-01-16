@@ -81,7 +81,8 @@ Est-ce que vous avez une voiture à vendre? ou des caractéristiques
 - Comment se calcule la **Côte ARGUS** ?
 
 :::{.fragment}
-> Elle est basée sur le cours-moyen d'argus qui est constitué à l'aide de professionnels du secteur, d'un concessionnaire allant jusqu'au constructeur, mais aussi à l'aide de simples particuliers et des annonces de ventes de véhicule.
+> Elle est basée sur le cours moyen de l'Argus, constitué en collaboration avec des professionnels du secteur, des concessionnaires allant jusqu'au constructeur, ainsi que des particuliers et des annonces de vente de véhicules.
+
 :::
 
 - **Inconvénients** : Payant, manque de transparence.
@@ -306,7 +307,7 @@ Pour récupérer le + d'informations possibles sur ces données, nous avons déc
 - Permet de récupérer + d'informations.
 
 :::{.fragment}
-Pour le nettoyage de la base de données, nous avons utilisé le package `Polars` 🐻‍❄️, qui possède de nombreux avantages comme :  
+Pour le nettoyage de la base de données, nous avons utilisé le package `Polars` 🐻‍❄️, qui possède de nombreux avantages tels que :  
 :::
 -   la création de pipelines 🛢️
 -   un code plus lisible 👀
@@ -435,7 +436,7 @@ def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFra
 :::
 
 :::{.fragment}
-Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases volumineuse à moindre coût. 
+Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases volumineuses à moindre coût. 
 :::
 
 ## 📖 Machine learning 📖{background-image="imgs/ML1.jpeg" background-opacity="0.1"}
@@ -486,7 +487,7 @@ L'utilisation de ce package à plusieurs avantages, tel que sa documentation et 
 :::
 
 :::{.fragment}
-**Données d'entrainement** : échantillon de <span style="color:#4682B4">**80%**</span> d'observations de la marque
+**Données d'entrainement** : échantillon de <span style="color:#4682B4">**80%**</span> des observations de la marque
 
 **Données de test** : les <span style="color:#4682B4">**20%**</span> restants.
 :::
@@ -511,14 +512,14 @@ def split_data(data: pl.DataFrame, marque: str) -> tuple[pl.DataFrame, pl.DataFr
 ```
 :::
 
-## Le preprocesseur ⏹️
+## Le préprocesseur ⏹️
 
 :::{.notes}
 **HAS**:
 
 :::
 
-La plupart des modèles **ne supportent pas les variables qualitatives** et requiert donc un prétraitement. 
+La plupart des modèles **ne supportent pas les variables qualitatives** et requièrent donc un prétraitement. 
 
 :::{.fragment}
 `OneHotEncoder` est utilisé pour convertir les caractéristiques catégorielles en une représentation binaire.
@@ -559,12 +560,12 @@ Nous allons donc rapidement vous présentez les résultats préliminaires qui no
 
 Après quelques tests, nous avons décidé d'utiliser uniquement les modèles suivants : 
 
-- Regression linéaire 📈
+- Régression linéaire 📈
 - K-neighbors 👬👭
 - Random Forest 🌳
 
 :::{.fragment}
-La quantité de données étant importantes, l'optimisation des paramètres peut-être très longue.⏳
+La quantité de données étant importante, l'optimisation des paramètres peut-être très longue.⏳
 ::: 
 
 :::{.fragment}
@@ -849,7 +850,7 @@ Ici l'avantage est de pouvoir intéragir avec notre base de données directement
 **Avantages :** 
 
 - Open source
-- Rapide et gère grand ensembles de données
+- Rapide et capable de gérer de grands ensembles de données
 - Prend en charge un sous-ensemble de SQL standard
 - Sortie en `polars` 🐻‍❄️ DataFrame
 
@@ -882,7 +883,7 @@ Ces outils contribuent à la qualité, à la maintenabilité et la stabilité du
 
 :::
 
-- Docstring pour chaque fonctions et modules
+- Docstring pour chaque fonction et module
 - Gestion des dépendances avec `poetry`.
 - Vérification du typage avec `mypy`
 - Formatage à l'aide de `black`
@@ -904,8 +905,8 @@ Déployer une application sans bug, et optimisé pour le coté utilisateur.
 
 **Nos objectifs pour la suite :** 
 
-- Avoir une base de données actualisé et récente
+- Avoir une base de données actualisée et récente.
 - Créer notre propre analyse de prix. 
-- Essayer d'ajouter d'autres fonctionnalités (ex: nombre de portes)
-- Essayer de scraper d'autres sites (ex : le bon coin)
+- Essayer d'ajouter d'autres fonctionnalités (ex: nombre de portes).
+- Essayer de scraper d'autres sites (ex : Le Bon Coin).
 - Déployer l'application sur le web.
