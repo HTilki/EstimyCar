@@ -120,7 +120,7 @@ Données récupérées depuis **La Centrale** :
 :::{.fragment}
 Extraction en **3 parties**, présent dans le module `webscraping.py`:
 
-  - Récupération des noms des marques
+  - Récupération des noms des marques et modèles
   - Récupération des annonces
   - Récupération des caractéristiques
 :::
@@ -165,6 +165,13 @@ Pour obtenir ces différentes marques, il suffit juste d'aller dans l'accueil du
     "AIWAYS": [
         "u5"
     ], ...}
+
+
+
+
+
+
+
 ```
 
 :::
@@ -357,7 +364,7 @@ supp_doublons permet de supprimer les annonces en double en ce basant sur les li
 
 supp_na: Elle permet aussi de supprimer les valeurs manquantes pour la puissance. et pour les marques et modeles de véhicule
 
-Une fois le dataframe nettoyé il sera exporté en format parquet car parquet a une Compression efficace et permet d'avoir des économies de stockage. 
+Une fois le dataframe nettoyé, nous avons désormais 16 variables au lieu de 10 auparavant, celui-ci exporté en format parquet car parquet a une Compression efficace et permet d'avoir des économies de stockage. 
 :::
 
 
@@ -438,12 +445,20 @@ Ce dataframe sera exporté en format `.parquet` qui permet de stocker des bases 
 :::{.notes}
 **HAS**:
 
-- split
-- les modèles -> pourquoi avoir choisi ces modèles ? car après test, ces modèles se sont averée être meilleurs.
-- les grilles de paramètres associées -> pourquoi ces grilles ? car après test, se sont les résultats qui sont sortie le plus souvent.
-- trouver le meilleur modèle (CV) -> on montre la fonction 
-- export du Modèle et préprocesseur
-- import du modèle et utilisation pour prédiction
+une fois la base de données nettoyé on va pouvoir commencer à l'exploiter et creer nos modèles de prediction. 
+
+Pour des raisons d'efficacité, nous n'avons pas fait un seul modèle qui predit pour n'importe quel véhicule, car ceux ci était moins performant que d'avoir un modele dédié par marque de véhicule. c'est donc la méthode que nous avons choisi.
+
+Une fois fixé, on ne peux pas choisir un model au hasard, nous avons donc effectué different test au préalable à l'aide du package sklearn qui possede.
+
+Sklearn possede une documentation tres fourni et nous permet d'utiliser des Pipelines pour effectuer plusieurs opération d'un seul coup, ce qui facilite son utilisation. Cepednant ellenne fonctionne pas avec Dataframe polars.
+
+Dans cette partie on va vous montrer le:
+split des données que l'on a fait
+l'étape de prétraitement
+les modeles et grilles de parametres choisies
+comment on exporte et recupere les meilleurs modeles
+comment on effectue l'estimation du prix d'un vehicule
 
 :::
 
@@ -515,6 +530,19 @@ $\rightarrow$ [`'boite' = 'Automatique''`]{.fragment .semi-fade-out} [->]{.fragm
 
 :::{.fragment}
 `StandardScaler` est utilisé pour **effectuer une mise à l'échelle des caractéristiques numériques**. Il standardise les données en soustrayant la moyenne et en divisant par l'écart-type, de sorte que chaque caractéristique ait une moyenne de **0** et une variance de **1**.
+:::
+
+:::{.fragment}
+```py
+    numeric_transformer = Pipeline(steps=[
+        ('scaler', StandardScaler())])
+    categorical_transformer = Pipeline(steps=[
+        ('encoder', OneHotEncoder(handle_unknown='ignore'))])
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, numeric_features),
+            ('cat', categorical_transformer, categorical_features)])
+```
 :::
 
 ## Les modèles 📊
@@ -783,7 +811,7 @@ Streamlit propre une palette de fonctionnalités. Avec des box, boutons, multise
 
 Avantage de Streamlit, faciliter le déploiement sur le web. Avec le repos github, constamment connecté à l'application sur streamlit. Si on met a jour la branche main/master, ça met à jour l'application sur streamlit. 
 
-Bien que l'on vous à déjà présenté l'application. L'objectif ici est de vous montrer le travail derrière
+Bien que l'on vous à déjà présenté l'application. Nous n'allons pas rentrer dans les détails de sa conception, car nous ne trouvons pas interessant le fait de vous montrer le code de la mis en page.
 
 :::
 
@@ -807,7 +835,15 @@ Avantages :
 
 :::{.notes}
 **HAS**:
-l'API python de duck db est open source et permet d'intéragir rapidement avec des bases de données, en particulier sur de grands ensembles de données,Il prend aussi en charge un sous-ensemble de SQL standard, ce qui le rend accessible aux utilisateurs familiers avec les requêtes SQL. Il prend également en charge des extensions pour l'analyse de données plus avancée.
+Le seul aspect de notre application que nous allons vous présenter est l'utilisation de DuckDB qui nous a apporté beaucoup de chose. Premierement quesque c'est ?
+
+l'API python de duck db est open source et permet d'intéragir rapidement avec des bases de données, 
+en particulier sur de grands ensembles de données,
+Il prend aussi en charge un sous-ensemble de SQL standard, ce qui le rend accessible aux utilisateurs familiers avec les requêtes SQL. 
+Il prend également en charge des extensions pour l'analyse de données plus avancée comme par exemple la sortie en polars, pandas et bien d'autres.
+
+Voici donc un exemple d'utilisation :
+Ici l'avantage est de pouvoir intéragir avec notre base de données directement depuis le fichier. 
 :::
 
 **Avantages :** 
@@ -821,14 +857,16 @@ l'API python de duck db est open source et permet d'intéragir rapidement avec d
 ```py
 import duckdb
 duckdb.sql(
-    """
+    f"""
     SELECT *
-    FROM 'data/database.parquet';
+    FROM 'data/database.parquet'
+    WHERE marque = {marque}
+    ...;
     """).pl()
 ```
 :::
 
-## Poetry et Pytest 🧪✅{background-image="imgs/pytest.jpeg" background-opacity="0.1"}
+## Code et qualité 🧪✅{background-image="imgs/pytest.jpeg" background-opacity="0.1"}
 :::{.notes}
 **BUK**:
 Dans un soucis d'accessibilité, l'utilisation de poetry est obligatoire afin de permettre de reproduire rapidement l'environnement nécessaire pour faire tourner l'app en local par ex. 
@@ -837,16 +875,18 @@ Et permet aussi de connaitre les dépendances nécessaires pour faire tourner l'
 
 Pout la visibilité et la cohérence du code, on a vérifier le typage des f° avec mypy et formater le codee à l'aide de `black`. 
 
-Ces outils contribuent à la qualité, à la maintenabilité et la stabilité du code tout en améliorant l'efficacité du processus de développement.
 **HAS**:
-test
+Nous avons donc testé nos différents modules à l'aide de pytest. 
+
+Ces outils contribuent à la qualité, à la maintenabilité et la stabilité du code tout en améliorant l'efficacité du processus de développement.
+
 :::
 
+- Docstring pour chaque fonctions et modules
 - Gestion des dépendances avec `poetry`.
 - Vérification du typage avec `mypy`
 - Formatage à l'aide de `black`
 - Test des différents modules avec `pytest`
--> screen des tests passed de la console
 
 
 
@@ -864,6 +904,7 @@ Déployer une application sans bug, et optimisé pour le coté utilisateur.
 
 **Nos objectifs pour la suite :** 
 
+- Avoir une base de données actualisé et récente
 - Créer notre propre analyse de prix. 
 - Essayer d'ajouter d'autres fonctionnalités (ex: nombre de portes)
 - Essayer de scraper d'autres sites (ex : le bon coin)
