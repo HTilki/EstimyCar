@@ -693,6 +693,39 @@ px.bar(cv_result_into_df("RandomForest", marques_array), x='marque', y='mean_tes
 La grille retenue: `'n_estimators': [500, 800]`
 :::
 
+## Le choix des meilleurs modèles 1️⃣
+:::{.notes}
+**HAS**: Après avoir optimisé les paramètres, on effectue une seconde validation croisée avec les nouvelles grilles. 
+Voici donc à quoi ressemble les modèles utilisés et les grilles de parametres.
+:::
+
+```py
+models = {
+        'LinearRegression': LinearRegression(),
+        'KNeighbors': KNeighborsRegressor(),
+        'RandomForest': RandomForestRegressor(n_jobs=-1)
+    }
+param_grids = {
+        'LinearRegression': {},
+        'KNeighbors': {
+            'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            'weights': ['uniform', 'distance']
+        },
+        'RandomForest': {
+            'n_estimators': [500, 800],
+            'max_depth': [10, 15],
+            'min_samples_split': [5, 10, 15],
+            'min_samples_leaf': [2]
+        }
+    }
+...
+    for model_name, model in models.items():
+        GridSearchCV(model, param_grids[model_name], cv=5)
+...
+return best_model, best_model_name
+```
+
+
 ## L'utilisation des modèles
 
 :::{.notes}
@@ -718,12 +751,21 @@ Pour ensuite les importer lorsque l'on voudra prédire les prix ! 💰
 
 :::{.fragment}
 ```py
-def predict_prix(data: pl.DataFrame, marque: str) -> np.ndarray:
+def predict_prix(data: pl.DataFrame, marque: str) -> float:
     try:
         modele, preprocessor = charger_modeles(marque)
         prediction = modele.predict(preprocessor.transform(data.to_pandas()))
         prediction = np.round(prediction, decimals=2)
-        return prediction
+        if isinstance(modele, LinearRegression|KNeighborsRegressor):
+            if(len(data) == 1):
+                return prediction[0][0]
+            else:
+                return prediction.flatten()
+        elif isinstance(modele, RandomForestRegressor):
+            if(len(data) == 1):
+                return prediction[0]
+            else:
+                return prediction.flatten()
     except Exception as e:
         print(f"Erreur lors de la prédiction du prix. {e}")
 ```
