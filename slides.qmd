@@ -736,6 +736,7 @@ Une fois l'optimisation des paramètres effectué via une seconde validation cro
 Une fois que les meilleurs modèles ont été trouvés, on les exporte :
 
 :::{.fragment}
+
 ```py
 def export_models(model: LinearRegression|KNeighborsRegressor|RandomForestRegressor, preprocessor: ColumnTransformer, marque: str) -> None:
   # Sauvegarder le modèle
@@ -749,8 +750,9 @@ def export_models(model: LinearRegression|KNeighborsRegressor|RandomForestRegres
 Pour ensuite les importer lorsque l'on voudra prédire les prix ! 💰
 :::
 
+
 :::{.fragment}
-```py
+```{py}
 def predict_prix(data: pl.DataFrame, marque: str) -> float:
     try:
         modele, preprocessor = charger_modeles(marque)
@@ -796,6 +798,12 @@ Notre application s'organise en **trois parties** :
 - un accueil
 - un onglet acheteur 🕵️‍♂️
 - un onglet vendeur 💰
+
+:::{.fragment}
+Avantages : 
+- Facilite le déploiement sur le web
+- Mise à jour de l'application lorsque le GitHub est mis à jour
+:::
 
 ## DuckDB 🦆{background-image="imgs/duckdb.jpeg" background-opacity="0.1"}
 
