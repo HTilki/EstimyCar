@@ -1,17 +1,20 @@
 import polars as pl
 import re
 
-def recup_marque_modele_generation(row: tuple, nom_marques_modeles: pl.DataFrame) -> tuple|None:
+
+def recup_marque_modele_generation(
+    row: tuple, nom_marques_modeles: pl.DataFrame
+) -> tuple | None:
     """
     Récupère les informations sur la marque, le modèle et la génération d'un véhicule.
 
     ## Parameters:
         row (tuple): Tuple contenant une chaîne de caractères représentant les informations du véhicule.
-        nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et les modèles associés des véhicules. 
+        nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et les modèles associés des véhicules.
 
     ## Returns:
         tuple: Un tuple contenant la marque, le modèle et la génération du véhicule s'ils sont identifiés.
-        
+
     ## Example:
         >>> row_ex = ("CITROEN C3 III",)
         >>> car_ex = pl.DataFrame({
@@ -23,31 +26,35 @@ def recup_marque_modele_generation(row: tuple, nom_marques_modeles: pl.DataFrame
     """
     for marque in nom_marques_modeles["marque"]:
         # On teste la presence de la marque dans la chaine de caractère
-        if marque + ' ' in row[0]:
-            modeles = nom_marques_modeles.filter(pl.col('marque') == marque)['modeles'][0]
+        if marque + " " in row[0]:
+            modeles = nom_marques_modeles.filter(pl.col("marque") == marque)["modeles"][
+                0
+            ]
             # Si la marque est présente on teste la présence d'un des modèles de la marques
             for modele in modeles:
-                if modele.upper() + ' ' in row[0]:
+                if modele.upper() + " " in row[0]:
                     # Si il y a le modèle + d'autre caractere après ceux ci sont attribué à la génération du véhicule
-                    generation = row[0].replace(marque + ' ' + modele.upper() + ' ', '')
+                    generation = row[0].replace(marque + " " + modele.upper() + " ", "")
                     return (marque, modele.upper(), generation)
                 elif modele.upper() in row[0]:
-                    # cas où il n'y a que la marque et le modèle 
+                    # cas où il n'y a que la marque et le modèle
                     pattern = f"{marque} {modele.upper()}(.*$)"
                     match = re.match(pattern, row[0])
                     if match:
                         generation = "NA"
                         return (marque, modele.upper(), generation)
     return None
-    
-                    
-def get_marque_modele_generation(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFrame:
+
+
+def get_marque_modele_generation(
+    data: pl.DataFrame, nom_marques_modeles: pl.DataFrame
+) -> pl.DataFrame:
     """
     Extrait les informations sur la marque, le modèle et la génération à partir des données fournies.
 
     ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
-        nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et  les modèles associés des véhicules. 
+        nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et  les modèles associés des véhicules.
 
 
     ## Returns:
@@ -71,10 +78,15 @@ def get_marque_modele_generation(data: pl.DataFrame, nom_marques_modeles: pl.Dat
         | MERCEDES  | 280    | SL 1971    |
 
     """
-    return data.with_columns(
-        data.select(pl.col('marque')).map_rows(lambda row: recup_marque_modele_generation(row, nom_marques_modeles))
-        ).drop("marque").rename({"column_0": "marque", "column_1": "modele", "column_2": "generation"})
-
+    return (
+        data.with_columns(
+            data.select(pl.col("marque")).map_rows(
+                lambda row: recup_marque_modele_generation(row, nom_marques_modeles)
+            )
+        )
+        .drop("marque")
+        .rename({"column_0": "marque", "column_1": "modele", "column_2": "generation"})
+    )
 
 
 def get_km_prix_annee(data: pl.DataFrame) -> pl.DataFrame:
@@ -103,13 +115,16 @@ def get_km_prix_annee(data: pl.DataFrame) -> pl.DataFrame:
 
     """
     return data.with_columns(
-        pl.col("kilometrage").str.replace_all(" ", "").str.replace("km", "").cast(pl.Int64),
+        pl.col("kilometrage")
+        .str.replace_all(" ", "")
+        .str.replace("km", "")
+        .cast(pl.Int64),
         pl.col("prix").str.replace("€", "").str.replace_all(" ", "").cast(pl.Int64),
-        pl.col("annee").cast(pl.Int32)
-        )
+        pl.col("annee").cast(pl.Int32),
+    )
 
 
-def get_garantie(data : pl .DataFrame) -> pl.DataFrame :
+def get_garantie(data: pl.DataFrame) -> pl.DataFrame:
     """
     Traite les données de la colonne "garantie" dans le DataFrame fourni.
 
@@ -122,7 +137,7 @@ def get_garantie(data : pl .DataFrame) -> pl.DataFrame :
     ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "garantie": ["Livraison", "NA", "Garantie 12 mois", "3 mois", "-300 mois"]
-        ...     # ... 
+        ...     # ...
         ... })
 
         >>> get_garantie(data_ex)
@@ -134,11 +149,18 @@ def get_garantie(data : pl .DataFrame) -> pl.DataFrame :
         | 3       |
 
     """
-    return data.with_columns(
-        pl.col("garantie").str.replace("Livraison", "0").str.replace("NA", "0").str.replace("Garantie", "").str.replace("mois", "").str.replace_all(" ", "")
-        ).filter(~(pl.col("garantie").str.contains(r"-\d{3}"))).with_columns(
-        pl.col("garantie").str.replace("-", "").cast(pl.Int64)
+    return (
+        data.with_columns(
+            pl.col("garantie")
+            .str.replace("Livraison", "0")
+            .str.replace("NA", "0")
+            .str.replace("Garantie", "")
+            .str.replace("mois", "")
+            .str.replace_all(" ", "")
         )
+        .filter(~(pl.col("garantie").str.contains(r"-\d{3}")))
+        .with_columns(pl.col("garantie").str.replace("-", "").cast(pl.Int64))
+    )
 
 
 def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
@@ -149,12 +171,12 @@ def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
 
     ## Returns:
-        pl.DataFrame: DataFrame Polars traité, avec les nouvelles colonnes "cylindre_2"", "moteur", "puissance", "finition", 
+        pl.DataFrame: DataFrame Polars traité, avec les nouvelles colonnes "cylindre_2"", "moteur", "puissance", "finition",
         "puissance_2", "puissance_elec", "batterie", "finition_2" extraites de la colonne "cylindre".
 
     ## Example:
         >>> data_ex = pl.DataFrame({
-        ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "3.0", 
+        ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "3.0",
                             "2.0 HDI 90", "320ch 75kWh"]
         ...     # ...
         ... })
@@ -171,25 +193,25 @@ def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
         | "300ch 80kWh E-TECH 300"             | null       | null      | null      | null                | null        | "E-TECH"  | "300"       | "80kWh"        | null     | "300ch"    | "80kWh"          | "E-TECH"   |
 
     """
-    MOTIF1 = r'(?P<cylindre>\d+\.\d+)\s+(?:(?P<moteur>[\w-]+)\s+)?(?P<puissance>\d+)\s+(?P<finition>\w+.*)'
-    MOTIF2 = r'(?P<cylindre>\d+\.\d+)\s+(?P<puissance>\d+)'
-    MOTIF3 = r'(?P<cylindre>\d+\.\d+)\s+(?P<moteur>[\w-]+)\s+?(?P<puissance>\d+)'
-    MOTIF_ELEC = r'(?P<puissance>\d+ch)\s+(?P<batterie>\d+kWh)\s+(?P<finition>\w+.*)'
-    MOTIF_ELEC2 = r'(?P<puissance>\d+ch)\s+(?P<batterie>\d+kWh+)'
-    MOTIF_CYLINDRE = r'(?P<cylindre>\d+\.\d+)'
+    MOTIF1 = r"(?P<cylindre>\d+\.\d+)\s+(?:(?P<moteur>[\w-]+)\s+)?(?P<puissance>\d+)\s+(?P<finition>\w+.*)"
+    MOTIF2 = r"(?P<cylindre>\d+\.\d+)\s+(?P<puissance>\d+)"
+    MOTIF3 = r"(?P<cylindre>\d+\.\d+)\s+(?P<moteur>[\w-]+)\s+?(?P<puissance>\d+)"
+    MOTIF_ELEC = r"(?P<puissance>\d+ch)\s+(?P<batterie>\d+kWh)\s+(?P<finition>\w+.*)"
+    MOTIF_ELEC2 = r"(?P<puissance>\d+ch)\s+(?P<batterie>\d+kWh+)"
+    MOTIF_CYLINDRE = r"(?P<cylindre>\d+\.\d+)"
     return data.with_columns(
-        pl.col('cylindre').str.extract(MOTIF_CYLINDRE, 1).alias("cylindre_2"),
-        pl.col('cylindre').str.extract(MOTIF1, 2).alias("moteur"),
-        pl.col('cylindre').str.extract(MOTIF1, 3).alias("puissance"),
-        pl.col('cylindre').str.extract(MOTIF1, 4).alias("finition"),
-        pl.col('cylindre').str.extract(MOTIF2, 2).alias("puissance_2"),
-        pl.col('cylindre').str.extract(MOTIF3, 2).alias("moteur_2"),
-        pl.col('cylindre').str.extract(MOTIF3, 3).alias("puissance_3"),
-        pl.col('cylindre').str.extract(MOTIF_ELEC, 1).alias("puissance_elec"),
-        pl.col('cylindre').str.extract(MOTIF_ELEC, 2).alias("batterie"),
-        pl.col('cylindre').str.extract(MOTIF_ELEC, 3).alias("finition_2"),
-        pl.col('cylindre').str.extract(MOTIF_ELEC2, 1).alias("puissance_elec_2"),
-        pl.col('cylindre').str.extract(MOTIF_ELEC2, 2).alias("batterie_2")
+        pl.col("cylindre").str.extract(MOTIF_CYLINDRE, 1).alias("cylindre_2"),
+        pl.col("cylindre").str.extract(MOTIF1, 2).alias("moteur"),
+        pl.col("cylindre").str.extract(MOTIF1, 3).alias("puissance"),
+        pl.col("cylindre").str.extract(MOTIF1, 4).alias("finition"),
+        pl.col("cylindre").str.extract(MOTIF2, 2).alias("puissance_2"),
+        pl.col("cylindre").str.extract(MOTIF3, 2).alias("moteur_2"),
+        pl.col("cylindre").str.extract(MOTIF3, 3).alias("puissance_3"),
+        pl.col("cylindre").str.extract(MOTIF_ELEC, 1).alias("puissance_elec"),
+        pl.col("cylindre").str.extract(MOTIF_ELEC, 2).alias("batterie"),
+        pl.col("cylindre").str.extract(MOTIF_ELEC, 3).alias("finition_2"),
+        pl.col("cylindre").str.extract(MOTIF_ELEC2, 1).alias("puissance_elec_2"),
+        pl.col("cylindre").str.extract(MOTIF_ELEC2, 2).alias("batterie_2"),
     )
 
 
@@ -205,7 +227,7 @@ def clean_cylindre(data: pl.DataFrame) -> pl.DataFrame:
 
     ## Example:
         >>> data_ex = pl.DataFrame({
-        ... "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY", 
+        ... "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY",
                          "2.0 HDI 90", "320ch 75kWh", "300ch 80kWh E-TECH"]
         ...     # ...
         ... })
@@ -221,44 +243,65 @@ def clean_cylindre(data: pl.DataFrame) -> pl.DataFrame:
         | null     | null      | "320ch"   | null                | "75kWh"  |
         | null     | null      | "300ch"   | "E-TECH"            | "80kWh"  |
     """
-    return data.with_columns(
-    pl.when(pl.col("puissance").is_null())
-    .then(pl.col("puissance_2"))
-    .otherwise(pl.col("puissance"))
-    .alias("puissance")
-    ).with_columns(
-    pl.when(pl.col("puissance").is_null())
-    .then(pl.col("puissance_3"))
-    .otherwise(pl.col("puissance"))
-    .alias("puissance")
-    ).with_columns(
-    pl.when(pl.col("puissance").is_null())
-    .then(pl.col("puissance_elec"))
-    .otherwise(pl.col("puissance"))
-    .alias("puissance")
-    ).with_columns(
-    pl.when(pl.col("puissance").is_null())
-    .then(pl.col("puissance_elec_2"))
-    .otherwise(pl.col("puissance"))
-    .alias("puissance")
-    ).with_columns(
-    pl.when(pl.col("finition").is_null())
-    .then(pl.col("finition_2"))
-    .otherwise(pl.col("finition"))
-    .alias("finition")
-    ).drop(['cylindre', 'puissance_2', 'finition_2', 'puissance_elec']
-    ).with_columns(
-    pl.when(pl.col("batterie").is_null())
-    .then(pl.col("batterie_2"))
-    .otherwise(pl.col("batterie"))
-    .alias("batterie")
-    ).with_columns(
-    pl.when(pl.col("moteur").is_null())
-    .then(pl.col("moteur_2"))
-    .otherwise(pl.col("moteur"))
-    .alias("moteur")
-    ).drop(['cylindre', 'moteur_2', 'puissance_2', 'puissance_3', 'finition_2', 'puissance_elec', 'puissance_elec_2', 'batterie_2']
-           ).rename({'cylindre_2': "cylindre"})
+    return (
+        data.with_columns(
+            pl.when(pl.col("puissance").is_null())
+            .then(pl.col("puissance_2"))
+            .otherwise(pl.col("puissance"))
+            .alias("puissance")
+        )
+        .with_columns(
+            pl.when(pl.col("puissance").is_null())
+            .then(pl.col("puissance_3"))
+            .otherwise(pl.col("puissance"))
+            .alias("puissance")
+        )
+        .with_columns(
+            pl.when(pl.col("puissance").is_null())
+            .then(pl.col("puissance_elec"))
+            .otherwise(pl.col("puissance"))
+            .alias("puissance")
+        )
+        .with_columns(
+            pl.when(pl.col("puissance").is_null())
+            .then(pl.col("puissance_elec_2"))
+            .otherwise(pl.col("puissance"))
+            .alias("puissance")
+        )
+        .with_columns(
+            pl.when(pl.col("finition").is_null())
+            .then(pl.col("finition_2"))
+            .otherwise(pl.col("finition"))
+            .alias("finition")
+        )
+        .drop(["cylindre", "puissance_2", "finition_2", "puissance_elec"])
+        .with_columns(
+            pl.when(pl.col("batterie").is_null())
+            .then(pl.col("batterie_2"))
+            .otherwise(pl.col("batterie"))
+            .alias("batterie")
+        )
+        .with_columns(
+            pl.when(pl.col("moteur").is_null())
+            .then(pl.col("moteur_2"))
+            .otherwise(pl.col("moteur"))
+            .alias("moteur")
+        )
+        .drop(
+            [
+                "cylindre",
+                "moteur_2",
+                "puissance_2",
+                "puissance_3",
+                "finition_2",
+                "puissance_elec",
+                "puissance_elec_2",
+                "batterie_2",
+            ]
+        )
+        .rename({"cylindre_2": "cylindre"})
+    )
+
 
 def convert_puissance(data: pl.DataFrame) -> pl.DataFrame:
     """
@@ -273,7 +316,7 @@ def convert_puissance(data: pl.DataFrame) -> pl.DataFrame:
     ## Example:
         >>> data_ex = pl.DataFrame({
         ...     "puissance": ["320", "130ch", "60ch", None]
-        ...     # ... 
+        ...     # ...
         ... })
 
         >>> convert_puissance(data_ex)
@@ -286,7 +329,9 @@ def convert_puissance(data: pl.DataFrame) -> pl.DataFrame:
 
     """
     return data.with_columns(
-        pl.col("puissance").str.replace_all("ch", "").cast(pl.Int64))
+        pl.col("puissance").str.replace_all("ch", "").cast(pl.Int64)
+    )
+
 
 def get_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     """
@@ -300,7 +345,7 @@ def get_cylindre(data: pl.DataFrame) -> pl.DataFrame:
 
     ## Example:
         >>> data_ex = pl.DataFrame({
-        ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY", 
+        ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY",
                             "2.0 HDI 90", "320ch 75kWh"]
         ...     # ...
         ... })
@@ -316,15 +361,12 @@ def get_cylindre(data: pl.DataFrame) -> pl.DataFrame:
         | null     | null      |  320      | null                | "75kWh"  |
 
     """
-    return (data.pipe(split_cylindre)
-            .pipe(clean_cylindre)
-            .pipe(convert_puissance)
-            )
+    return data.pipe(split_cylindre).pipe(clean_cylindre).pipe(convert_puissance)
 
 
 def filter_data(data: pl.DataFrame) -> pl.DataFrame:
     """
-    Filtre les données en supprimant les lignes ayant une année égale à 2024 et un kilométrage supérieur à 50000 ou les véhicules ayant un kilométrage inférieur à 450000, 
+    Filtre les données en supprimant les lignes ayant une année égale à 2024 et un kilométrage supérieur à 50000 ou les véhicules ayant un kilométrage inférieur à 450000,
     les lignes ayant une énergie marquée comme "erreur", ainsi que les lignes n'ayant pas de puissance.
 
 
@@ -349,13 +391,13 @@ def filter_data(data: pl.DataFrame) -> pl.DataFrame:
         | 2023  | 80700       | "diesel" | 100       |
 
     """
-    return data.filter(
-        ~((pl.col("annee") == 2024) & (pl.col("kilometrage") > 50000))
-        ).filter(
-            pl.col("kilometrage") < 450000
-        ).filter(
-            pl.col("energie") != "erreur"
-            ).filter(pl.col("puissance").is_not_null())
+    return (
+        data.filter(~((pl.col("annee") == 2024) & (pl.col("kilometrage") > 50000)))
+        .filter(pl.col("kilometrage") < 450000)
+        .filter(pl.col("energie") != "erreur")
+        .filter(pl.col("puissance").is_not_null())
+    )
+
 
 def supp_doublons(data: pl.DataFrame) -> pl.DataFrame:
     """
@@ -367,9 +409,9 @@ def supp_doublons(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame: DataFrame Polars avec les doublons supprimés.
 
-    ## Example: 
+    ## Example:
         >>> data_ex = pl.DataFrame({
-        ...     "lien": ["https://www.lacentrale.fr/auto-occasion-annonce-69111069227.html", 
+        ...     "lien": ["https://www.lacentrale.fr/auto-occasion-annonce-69111069227.html",
         ...             "https://www.lacentrale.fr/auto-occasion-annonce-87102790043.html",
         ...             "https://www.lacentrale.fr/auto-occasion-annonce-87102779033.html",
         ...             "https://www.lacentrale.fr/auto-occasion-annonce-69111069227.html"]
@@ -383,6 +425,7 @@ def supp_doublons(data: pl.DataFrame) -> pl.DataFrame:
         | https://www.lacentrale.fr/auto-occasion-annonce-87102779033.html  |
     """
     return data.unique(subset=["lien"], maintain_order=True)
+
 
 def supp_na(data: pl.DataFrame) -> pl.DataFrame:
     """
@@ -424,16 +467,17 @@ def gazoduc(data: pl.DataFrame, nom_marques_modeles: pl.DataFrame) -> pl.DataFra
 
     ## Parameters:
         data (pl.DataFrame): DataFrame Polars contenant les caractéristiques des véhicules à traiter.
-        nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et les modèles associés des véhicules. 
+        nom_marques_modeles (pl.DataFrame): DataFrame Polars contenant la liste des marques et les modèles associés des véhicules.
 
     ## Returns:
         pl.DataFrame: DataFrame Polars suite au traitement de pipeline, après avoir appliqué plusieurs étapes de transformation et de nettoyage.
     """
-    return (data.pipe(get_marque_modele_generation, nom_marques_modeles)
-            .pipe(get_km_prix_annee)
-            .pipe(get_garantie)
-            .pipe(get_cylindre)
-            .pipe(filter_data)
-            .pipe(supp_doublons)
-            .pipe(supp_na)
-            )
+    return (
+        data.pipe(get_marque_modele_generation, nom_marques_modeles)
+        .pipe(get_km_prix_annee)
+        .pipe(get_garantie)
+        .pipe(get_cylindre)
+        .pipe(filter_data)
+        .pipe(supp_doublons)
+        .pipe(supp_na)
+    )

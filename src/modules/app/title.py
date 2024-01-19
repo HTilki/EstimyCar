@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 def style_markdown():
     """
     Applique un style personnalisé avec des règles de style CSS pour ajuster le padding de certains éléments dans l'interface Streamlit.
@@ -25,14 +26,12 @@ def style_markdown():
         unsafe_allow_html=True,
     )
 
+
 def title():
     """
     Configure le titre de la page et affiche le titre principal et le menu dans l'interface Streamlit.
     """
-    st.set_page_config( 
-    page_title="EstimyCar",
-    page_icon="🚗",
-    layout="wide")
+    st.set_page_config(page_title="EstimyCar", page_icon="🚗", layout="wide")
     st.title("🚗 Esti*my*:red[Car]")
 
     st.sidebar.title("Menu")

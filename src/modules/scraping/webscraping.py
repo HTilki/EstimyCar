@@ -8,26 +8,28 @@ import time
 from serde.json import to_json
 
 
-def recup_nom_vehicule(annonce: Tag) -> str: 
+def recup_nom_vehicule(annonce: Tag) -> str:
     """
     Récupère le nom du véhicule à partir d'une balise h2 HTML représentant une annonce.
 
     ## Parameters:
         annonce (Tag): Balise HTML d'une annonce de vente de voiture.
-        
+
     ## Returns:
         str: Nom du véhicule extrait de l'annonce.
     """
 
-    nom_vehicule = annonce.find_all('h2', class_='Text_Text_text Vehiculecard_Vehiculecard_title Text_Text_subtitle2')
+    nom_vehicule = annonce.find_all(
+        "h2",
+        class_="Text_Text_text Vehiculecard_Vehiculecard_title Text_Text_subtitle2",
+    )
     return nom_vehicule[0].text
 
 
-# pour recuperer la cylindré / modele 
-def recup_cylindre(annonce: Tag) -> str: 
+def recup_cylindre(annonce: Tag) -> str:
     """
     Récupère le cylindre à partir d'une Balise HTML d'une annonce de vente de voiture.
-    
+
     ## Parameters:
         annonce (Tag): Balise HTML d'une annonce de vente de voiture.
 
@@ -35,48 +37,60 @@ def recup_cylindre(annonce: Tag) -> str:
         str: Cylindre extrait de l'annonce.
     """
 
-    cylindre = annonce.find_all('div', class_='Text_Text_text Vehiculecard_Vehiculecard_subTitle Text_Text_body2')
+    cylindre = annonce.find_all(
+        "div",
+        class_="Text_Text_text Vehiculecard_Vehiculecard_subTitle Text_Text_body2",
+    )
     return cylindre[0].text
 
-
-# faire la gestion d'erreur ! souvent le type d'energie est manquant, à vérifier !
-def recup_caracteristiques(annonce: Tag) -> tuple: 
+def recup_caracteristiques(annonce: Tag) -> tuple:
     """
     Récupère les caractéristiques d'une annonce à partir de balises HTML spécifiques.
 
     ## Parameters:
         annonce (Tag): Balise HTML d'une annonce de vente de voiture.
-        
+
     ## Returns:
         tuple: Un tuple contenant l'année, le kilométrage, le type de boîte et le type d'énergie de l'annonce.
     """
 
-    caracteristiques = annonce.find_all('div', class_='Text_Text_text Vehiculecard_Vehiculecard_characteristicsItems Text_Text_body2')
-    try :
-        annee, kilometrage, boite, energie = [caracteristiques[n].text for n in range(len(caracteristiques))]
-    except ValueError: 
-        annee, kilometrage, boite, energie = caracteristiques[0].text,caracteristiques[1].text,caracteristiques[2].text, "erreur"
+    caracteristiques = annonce.find_all(
+        "div",
+        class_="Text_Text_text Vehiculecard_Vehiculecard_characteristicsItems Text_Text_body2",
+    )
+    try:
+        annee, kilometrage, boite, energie = [
+            caracteristiques[n].text for n in range(len(caracteristiques))
+        ]
+    except ValueError:
+        annee, kilometrage, boite, energie = (
+            caracteristiques[0].text,
+            caracteristiques[1].text,
+            caracteristiques[2].text,
+            "erreur",
+        )
     return annee, kilometrage, boite, energie
 
 
-
-def recup_prix(annonce: Tag) -> str: 
+def recup_prix(annonce: Tag) -> str:
     """
     Récupère le prix à partir d'une Balise HTML d'une annonce de vente de voiture.
-    
+
     ## Parameters:
-        annonce (Tag): Balise HTML d'une annonce de vente de voiture. 
-        
+        annonce (Tag): Balise HTML d'une annonce de vente de voiture.
+
     ## Returns:
         str: Prix extrait de l'annonce.
     """
 
-    prix = annonce.find_all('span', class_='Text_Text_text Vehiculecard_Vehiculecard_price Text_Text_subtitle2')
+    prix = annonce.find_all(
+        "span",
+        class_="Text_Text_text Vehiculecard_Vehiculecard_price Text_Text_subtitle2",
+    )
     return prix[0].text
 
 
-
-def recup_position_marché(annonce: Tag) -> str: 
+def recup_position_marché(annonce: Tag) -> str:
     """
     Récupère la position sur le marché à partir d'une balise HTML spécifique.
 
@@ -87,12 +101,13 @@ def recup_position_marché(annonce: Tag) -> str:
         str: Position sur le marché extraite de l'annonce.
     """
 
-    position_marché = annonce.find_all('div', class_='Text_Text_text Text_Text_bold Text_Text_label2')
+    position_marché = annonce.find_all(
+        "div", class_="Text_Text_text Text_Text_bold Text_Text_label2"
+    )
     return position_marché[0].text
 
 
-
-def recup_garantie(annonce: Tag) -> str: 
+def recup_garantie(annonce: Tag) -> str:
     """
     Récupère les informations sur la garantie à partir d'une balise HTML spécifique.
 
@@ -103,13 +118,14 @@ def recup_garantie(annonce: Tag) -> str:
         str: Détails sur la garantie extraite de l'annonce, ou "NA" s'il n'y a pas d'informations sur la garantie.
     """
 
-    garanties = annonce.find_all('div', class_='Text_Text_text Text_Text_bold Text_Text_label2')
-    if (len(garanties) >= 2):
+    garanties = annonce.find_all(
+        "div", class_="Text_Text_text Text_Text_bold Text_Text_label2"
+    )
+    if len(garanties) >= 2:
         garantie = str(garanties[1].text)
     else:
         return "NA"
     return garantie
-
 
 
 def recup_href(annonce: Tag) -> str:
@@ -118,21 +134,25 @@ def recup_href(annonce: Tag) -> str:
 
     ## Parameters:
         annonce (Tag): Balise HTML d'une annonce de vente de voiture.
-    
+
     ## Returns:
         str: L'url de l'annonce, ou "NA" s'il n'y a pas d'url trouvée.
     """
 
-    href = annonce.find("a", attrs={"class":"Vehiculecard_Vehiculecard_vehiculeCard Containers_Containers_containers Containers_Containers_borderRadius Containers_Containers_darkShadowWide"})
+    href = annonce.find(
+        "a",
+        attrs={
+            "class": "Vehiculecard_Vehiculecard_vehiculeCard Containers_Containers_containers Containers_Containers_borderRadius Containers_Containers_darkShadowWide"
+        },
+    )
     if isinstance(href, Tag):
         id = "https://www.lacentrale.fr" + str(href.get("href"))
         return id
     else:
         return "NA"
 
-# Création de la dataclass
 @dataclass
-class voiture: 
+class voiture:
     marque: str
     cylindre: str
     annee: str
@@ -144,8 +164,6 @@ class voiture:
     garantie: str
     lien: str
 
-
-# Fonction permettant de recuperer toutes les informations disponible sur une annonce.
 def recup_informations_voiture(annonce: Tag) -> voiture:
     """
     Récupère les informations disponibles sur une annonce de véhicule et les renvoie sous forme d'un objet "voiture".
@@ -154,8 +172,8 @@ def recup_informations_voiture(annonce: Tag) -> voiture:
         annonce (Tag): Balise HTML d'une annonce de vente de voiture.
 
     ## Returns:
-        voiture: Objet représentant les informations extraites de l'annonce, telles que la marque, le cylindre, 
-        l'année, le kilométrage, la boîte de vitesse, le type d'énergie, le prix, la position sur le marché, 
+        voiture: Objet représentant les informations extraites de l'annonce, telles que la marque, le cylindre,
+        l'année, le kilométrage, la boîte de vitesse, le type d'énergie, le prix, la position sur le marché,
         la garantie et le lien.
     """
 
@@ -172,23 +190,23 @@ def recup_informations_voiture(annonce: Tag) -> voiture:
         annee=annee,
         kilometrage=kilometrage,
         boite=boite,
-        energie=energie, 
+        energie=energie,
         prix=prix,
         position_marché=position_marché,
         garantie=garantie,
-        lien=lien
+        lien=lien,
     )
 
 
 @dataclass
 class NomMarquesModeles:
-        marque: str
-        modeles: list[str]
+    marque: str
+    modeles: list[str]
 
-        def __iter__(self):
-        # Retourne un générateur qui émet la marque suivie de chaque modèle
-            yield self.marque
-            yield from self.modeles
+    def __iter__(self):
+        yield self.marque
+        yield from self.modeles
+
 
 def import_marques_modeles() -> list:
     """
@@ -196,7 +214,7 @@ def import_marques_modeles() -> list:
 
     ## Returns:
         list: Liste de tuples représentant chaque marque avec une liste de ses modèles associés.
-    
+
     ## Exemple:
     fichier json: {
     "Marque A": ["Modèle 1", "Modèle 2"],
@@ -210,13 +228,17 @@ def import_marques_modeles() -> list:
     """
 
     nom_marques_modeles_list = []
-    with open(Path(".").resolve() / "json/marques_modeles.json", "r", encoding="utf-8") as json_file:
-            data = json.load(json_file)
+    with open(
+        Path(".").resolve() / "json/marques_modeles.json", "r", encoding="utf-8"
+    ) as json_file:
+        data = json.load(json_file)
     for marque, modeles in data.items():
-            nom_marques_modeles_list.append(NomMarquesModeles(marque=marque, modeles=modeles))
-    return(nom_marques_modeles_list)
+        nom_marques_modeles_list.append(
+            NomMarquesModeles(marque=marque, modeles=modeles)
+        )
+    return nom_marques_modeles_list
 
-# Fonction qui récupère les informations d'une page spécifique
+
 def recup_page(numero_page: int, marque: str, modele: str) -> BeautifulSoup:
     """
     Récupère les informations d'une page spécifique.
@@ -232,27 +254,24 @@ def recup_page(numero_page: int, marque: str, modele: str) -> BeautifulSoup:
     ## Returns:
         BeautifulSoup: Objet BeautifulSoup contenant le contenu de la page.
     """
-    #rajouter de la gestion d'erreur en fonction du nombre de page et donc si la requete http marche.
+
     adresse = f"https://www.lacentrale.fr/listing?makesModelsCommercialNames={marque.upper()}%3A{modele.upper()}&options=&page={numero_page}"
     max_attempts = 3  # Nombre maximal de tentatives
     current_attempt = 0
 
     while current_attempt < max_attempts:
-        try: 
+        try:
             requete = rq.get(url=adresse)
             page = BeautifulSoup(requete.content, "html.parser")
             return page
         except rq.ConnectionError as e:
             print(f"Erreur de connexion : {e}")
             print("Tentative de reconnexion...")
-            time.sleep(60)  # Pause de 1 minute entre les tentatives
+            time.sleep(60)
             current_attempt += 1
     print("Échec des tentatives de connexion. Arrêt du programme.")
     raise rq.ConnectionError("Échec des tentatives de connexion.")
 
-
-
-# Fonction qui récupère les div qui contienent les informations de chaque annonce pour une page
 def recup_annonces(page: BeautifulSoup) -> ResultSet:
     """
     Récupère les éléments div contenant les informations de chaque annonce pour une page donnée.
@@ -263,9 +282,8 @@ def recup_annonces(page: BeautifulSoup) -> ResultSet:
     ## Returns:
         ResultSet: Une liste qui contient les éléments div contenant les informations de chaque annonce sur la page.
     """
-    annonces = page.find_all('div', class_='searchCardContainer')
+    annonces = page.find_all("div", class_="searchCardContainer")
     return annonces
-
 
 
 def recup_data_voitures(annonces: ResultSet) -> list[voiture]:
@@ -285,7 +303,6 @@ def recup_data_voitures(annonces: ResultSet) -> list[voiture]:
     return voitures
 
 
-
 def print_info_scraping(pages_extraites: int, temps_execution: float) -> None:
     """
     Affiche les informations sur le scraping effectué.
@@ -300,10 +317,13 @@ def print_info_scraping(pages_extraites: int, temps_execution: float) -> None:
     if temps_execution != 0:
         pages_par_minute = (pages_extraites / temps_execution) * 60
         info_string = f"Nombre total de pages extraites : {pages_extraites} ||| {pages_par_minute:.2f} pages/min."
-        print(info_string, end='\r')
+        print(info_string, end="\r")
     return None
 
-def extraire_toutes_annonces(nombre_pages: int, nom_marques_modeles: NomMarquesModeles) -> list:
+
+def extraire_toutes_annonces(
+    nombre_pages: int, nom_marques_modeles: NomMarquesModeles
+) -> list:
     """
     Récupère toutes les annonces pour une liste de marques et de modèles sur un certain nombre de pages.
 
@@ -332,22 +352,27 @@ def extraire_toutes_annonces(nombre_pages: int, nom_marques_modeles: NomMarquesM
                     annonces_page = recup_annonces(page)
                     if annonces_page == []:
                         break
-                    else: 
+                    else:
                         liste_annonces.append(annonces_page)
                         pages_extraites += 1
-                        temps_execution = time.time()-temps_debut
+                        temps_execution = time.time() - temps_debut
                         print_info_scraping(pages_extraites, temps_execution)
                         if pages_extraites % 2000 == 0:
                             time.sleep(30)
     except rq.ConnectionError:
-        print(f"""
+        print(
+            f"""
             \nIl y a eu une erreur au bout de : {pages_extraites + 1} extraites.
-            """)
-    
-    annonces = [annonce for sous_liste_annonce in liste_annonces for annonce in sous_liste_annonce]
+            """
+        )
+
+    annonces = [
+        annonce
+        for sous_liste_annonce in liste_annonces
+        for annonce in sous_liste_annonce
+    ]
     print(f"\nNombre total d'annonces extraites : {len(annonces)}")
     return annonces
-
 
 
 def export_to_json(voitures: list[voiture], chemin_sortie: str) -> None:
@@ -361,14 +386,13 @@ def export_to_json(voitures: list[voiture], chemin_sortie: str) -> None:
     ## Returns:
         None
     """
-    try : 
+    try:
         voitures_json = to_json(voitures)
         with open(chemin_sortie, "w", encoding="utf-8") as json_file:
             json_file.write(voitures_json)
     except:
         print("Erreur lors de l'exportation en format json.")
         return None
-
 
 
 def fusionner_fichiers_json(fichiers_entree: list[str]) -> list[dict]:
@@ -383,19 +407,19 @@ def fusionner_fichiers_json(fichiers_entree: list[str]) -> list[dict]:
     """
     if not isinstance(fichiers_entree, list):
         raise TypeError("L'argument doit être une liste.")
-        
-    elif len(fichiers_entree) >= 1 :
+
+    elif len(fichiers_entree) >= 1:
         try:
-            # Liste pour stocker les données de tous les fichiers JSON
             donnees_finales = []
-            # Lire chaque fichier d'entrée et ajouter ses données à la liste
             for fichier_entree in fichiers_entree:
-                with open("json/" + fichier_entree, 'r', encoding='utf-8') as file:
+                with open("json/" + fichier_entree, "r", encoding="utf-8") as file:
                     donnees_fichier = json.load(file)
                     donnees_finales.extend(donnees_fichier)
         except FileNotFoundError:
-            raise FileNotFoundError("Impossible d'importer les fichiers spécifiés. Vérifiez que le dossier 'json' existe bien et qu'il contient bien les fichiers renseignés.")
+            raise FileNotFoundError(
+                "Impossible d'importer les fichiers spécifiés. Vérifiez que le dossier 'json' existe bien et qu'il contient bien les fichiers renseignés."
+            )
     elif len(fichiers_entree) == 0:
         raise ValueError("La liste ne doit pas être vide.")
-    
+
     return donnees_finales

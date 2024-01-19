@@ -6,7 +6,10 @@ telles que la plage d'années, les noms de marques, de modèles, les différente
 import duckdb
 from typing import cast
 
-def get_plage_annee(user_role: str, marque: str = "", modele: str = "") -> tuple[int, int]:
+
+def get_plage_annee(
+    user_role: str, marque: str = "", modele: str = ""
+) -> tuple[int, int]:
     """
     Récupère la plage d'années des véhicules disponibles en fonction du rôle choisi par l'utilisateur.
 
@@ -25,31 +28,46 @@ def get_plage_annee(user_role: str, marque: str = "", modele: str = "") -> tuple
         >>> get_plage_annee("Vendeur", marque="MERCEDES", modele="C220")
         # Retourne la valeur minimum et maximum d'année pour un véhicule de la marque MERCEDES et du modèle C220 disponible dans la base de données.
     """
-    
 
     if user_role == "Acheteur":
-        return cast(tuple[int, int], tuple(duckdb.sql(
-                f"""
+        return cast(
+            tuple[int, int],
+            tuple(
+                duckdb.sql(
+                    f"""
                 SELECT MIN(annee) as annee_min,
                 MAX(annee) as annee_max
                 FROM 'data/database.parquet'
-                """).pl().to_numpy()[0]))
+                """
+                )
+                .pl()
+                .to_numpy()[0]
+            ),
+        )
     elif user_role == "Vendeur":
         try:
-            return cast(tuple[int, int], tuple(duckdb.sql(
-                    f"""
+            return cast(
+                tuple[int, int],
+                tuple(
+                    duckdb.sql(
+                        f"""
                     SELECT MIN(annee) as annee_min,
                     MAX(annee) as annee_max
                     FROM 'data/database.parquet'
                     WHERE marque == '{marque.upper()}' 
                     AND modele == '{modele.upper()}'
-                    """).pl().to_numpy()[0]))
+                    """
+                    )
+                    .pl()
+                    .to_numpy()[0]
+                ),
+            )
         except:
             return (1928, 2024)
     else:
         return (1928, 2024)
 
-    
+
 def get_unique_marque() -> list:
     """
     Récupère la liste des marques disponibles dans la base de données.
@@ -63,8 +81,10 @@ def get_unique_marque() -> list:
         FROM 'data/database.parquet'
         WHERE marque IS NOT NULL
         ORDER BY unique_mar
-        """).df()
-    return list(marques['unique_mar']) 
+        """
+    ).df()
+    return list(marques["unique_mar"])
+
 
 def get_unique_modele(marque: str) -> list:
     """
@@ -87,8 +107,10 @@ def get_unique_modele(marque: str) -> list:
         WHERE marque == '{marque.upper()}'
         AND modele IS NOT NULL
         ORDER BY unique_mod
-        """).df()
-    return list(modeles['unique_mod'])
+        """
+    ).df()
+    return list(modeles["unique_mod"])
+
 
 def get_unique_generation(marque: str, modele: str) -> list:
     """
@@ -113,8 +135,10 @@ def get_unique_generation(marque: str, modele: str) -> list:
         AND modele == '{modele.upper()}'
         AND generation IS NOT NULL
         ORDER BY unique_gen
-        """).df()
-    return list(generations['unique_gen'])    
+        """
+    ).df()
+    return list(generations["unique_gen"])
+
 
 def get_unique_moteur(marque: str, modele: str) -> list:
     """
@@ -135,8 +159,10 @@ def get_unique_moteur(marque: str, modele: str) -> list:
         AND modele == '{modele.upper()}'
         AND moteur IS NOT NULL
         ORDER BY unique_mot 
-        """).df()
-    return list(moteurs['unique_mot'])
+        """
+    ).df()
+    return list(moteurs["unique_mot"])
+
 
 def get_unique_cylindre(marque: str, modele: str) -> list:
     """
@@ -159,8 +185,10 @@ def get_unique_cylindre(marque: str, modele: str) -> list:
         AND modele == '{modele.upper()}'
         AND cylindre IS NOT NULL
         ORDER BY unique_cyl
-        """).df()
-    return list(cylindres['unique_cyl'])
+        """
+    ).df()
+    return list(cylindres["unique_cyl"])
+
 
 def get_unique_finition(marque: str, modele: str) -> list:
     """
@@ -181,8 +209,10 @@ def get_unique_finition(marque: str, modele: str) -> list:
         AND modele == '{modele.upper()}'
         AND finition IS NOT NULL
         ORDER BY unique_fin
-        """).df()
-    return list(finitions['unique_fin'])
+        """
+    ).df()
+    return list(finitions["unique_fin"])
+
 
 def get_unique_batterie() -> list:
     """
@@ -197,5 +227,6 @@ def get_unique_batterie() -> list:
         FROM 'data/database.parquet'
         WHERE batterie IS NOT NULL
         ORDER BY unique_bat
-        """).df()
-    return list(batteries['unique_bat'])
+        """
+    ).df()
+    return list(batteries["unique_bat"])

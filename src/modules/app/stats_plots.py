@@ -2,6 +2,7 @@ import duckdb
 import plotly.express as px
 import streamlit as st
 
+
 def get_avg_price_by_brand():
     """
     Affiche un barplot représentant le prix moyen par marque de véhicule.
@@ -12,13 +13,20 @@ def get_avg_price_by_brand():
         FROM 'data/database.parquet'
         GROUP BY marque
         ORDER BY prix_moyen DESC
-        """).pl()
-    
-    fig = px.bar(prix_moyen_m[0:140], x="marque", y="prix_moyen", title="Prix moyen par marque", color= "prix_moyen",
-                color_continuous_scale='YlOrRd')
+        """
+    ).pl()
+
+    fig = px.bar(
+        prix_moyen_m[0:140],
+        x="marque",
+        y="prix_moyen",
+        title="Prix moyen par marque",
+        color="prix_moyen",
+        color_continuous_scale="YlOrRd",
+    )
     fig.update_xaxes(title="Marque")
     fig.update_yaxes(title="Prix moyen")
-    fig.update_coloraxes(showscale=False) 
+    fig.update_coloraxes(showscale=False)
     st.plotly_chart(fig, use_container_width=True, height=600)
 
 
@@ -31,11 +39,14 @@ def get_price_histogram():
         SELECT prix
         FROM 'data/database.parquet'
         WHERE prix BETWEEN 0 AND 150000
-        """).pl()
+        """
+    ).pl()
 
-    fig = px.histogram(prices, x= "prix", nbins=30, title= "Distribution des prix des véhicules")
-    fig.update_xaxes(title= "Prix")
-    fig.update_traces(marker=dict(color='#d62728', opacity=0.7))
+    fig = px.histogram(
+        prices, x="prix", nbins=30, title="Distribution des prix des véhicules"
+    )
+    fig.update_xaxes(title="Prix")
+    fig.update_traces(marker=dict(color="#d62728", opacity=0.7))
     fig.update_yaxes(title="Nombre de voitures")
     st.plotly_chart(fig, use_container_width=True, height=600)
 
@@ -50,25 +61,35 @@ def get_count_models_by_brand():
         FROM 'data/database.parquet'
         GROUP BY marque
         ORDER BY COUNT(DISTINCT modele) DESC
-        """).pl()
-    
-    fig = px.bar(count_models, x="marque", y="nombre de modeles", title="Nombre de modèles par marque", color="nombre de modeles", 
-                color_continuous_scale='Reds')
+        """
+    ).pl()
+
+    fig = px.bar(
+        count_models,
+        x="marque",
+        y="nombre de modeles",
+        title="Nombre de modèles par marque",
+        color="nombre de modeles",
+        color_continuous_scale="Reds",
+    )
     fig.update_xaxes(title="Marque")
     fig.update_yaxes(title="Nombre de modèles")
-    fig.update_coloraxes(showscale=False) 
+    fig.update_coloraxes(showscale=False)
     st.plotly_chart(fig, use_container_width=True, height=600)
-
 
 
 def show_selected_chart():
     """
     Permet à l'utilisateur d'afficher différents types de graphiques liés aux données des véhicules.
     """
-    selected_chart = st.selectbox("Choisir le graphique à afficher", 
-                                        ("Nombre de modèles par marque", 
-                                        "Prix moyen par marque", 
-                                        "Histogramme des prix"))
+    selected_chart = st.selectbox(
+        "Choisir le graphique à afficher",
+        (
+            "Nombre de modèles par marque",
+            "Prix moyen par marque",
+            "Histogramme des prix",
+        ),
+    )
 
     if selected_chart == "Nombre de modèles par marque":
         get_count_models_by_brand()

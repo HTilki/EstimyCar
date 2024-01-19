@@ -9,7 +9,19 @@ comme la marque, le modèle, l'année, le kilométrage, la boîte de vitesses, l
 import duckdb
 from polars import DataFrame
 
-def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, km_min: int, km_max: int, boite: list, energie: list, prix_min: int, prix_max: int) -> DataFrame:
+
+def get_dataframe(
+    marques: list,
+    modeles: list,
+    annee_min: int,
+    annee_max: int,
+    km_min: int,
+    km_max: int,
+    boite: list,
+    energie: list,
+    prix_min: int,
+    prix_max: int,
+) -> DataFrame:
     """
     Filtre les données des véhicules en fonction de critères spécifiés et retourne un DataFrame.
 
@@ -30,10 +42,10 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
 
     ## Note:
         Les critères de filtrage peuvent être spécifiés individuellement ou en combinaison, selon les besoins.
-    
+
     ## Example:
         >>> get_dataframe(['MERCEDES'], ['C220'], 2010, 2022, 0, 100000, ['Automatique'], ['Essence'], 10000, 50000)
-        # Retourne un DataFrame contenant les données des véhicules de la marque MERCEDES, du modèle C220, 
+        # Retourne un DataFrame contenant les données des véhicules de la marque MERCEDES, du modèle C220,
         # de l'année entre 2010 et 2022, avec un kilométrage entre 0 et 100 000, une boîte de vitesses automatique,
         # fonctionnant à l'essence et avec un prix entre 10 000 et 50 000.
 
@@ -63,7 +75,8 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             AND boite IN ({', '.join(f"'{b}'" for b in boite)})
             AND energie IN ({', '.join(f"'{erg}'" for erg in energie)})
             AND prix between {prix_min} AND {prix_max}
-            """).pl()
+            """
+        ).pl()
     elif marques != [] and modeles == []:
         return duckdb.sql(
             f"""
@@ -89,8 +102,9 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             AND boite IN ({', '.join(f"'{b}'" for b in boite)})
             AND energie IN ({', '.join(f"'{erg}'" for erg in energie)})
             AND prix between {prix_min} AND {prix_max}
-            """).pl()
-    elif marques == [] and modeles != []: 
+            """
+        ).pl()
+    elif marques == [] and modeles != []:
         return duckdb.sql(
             f"""
             SELECT CONCAT(
@@ -115,8 +129,9 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             AND boite IN ({', '.join(f"'{b}'" for b in boite)})
             AND energie IN ({', '.join(f"'{erg}'" for erg in energie)})
             AND prix between {prix_min} AND {prix_max};
-            """).pl()
-    elif marques != [] and modeles != []: 
+            """
+        ).pl()
+    elif marques != [] and modeles != []:
         return duckdb.sql(
             f"""
             SELECT CONCAT(
@@ -142,6 +157,7 @@ def get_dataframe(marques: list, modeles: list, annee_min: int, annee_max: int, 
             AND boite IN ({', '.join(f"'{b}'" for b in boite)})
             AND energie IN ({', '.join(f"'{erg}'" for erg in energie)})
             AND prix between {prix_min} AND {prix_max};
-            """).pl()
+            """
+        ).pl()
     else:
         return DataFrame()

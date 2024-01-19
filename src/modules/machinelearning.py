@@ -23,7 +23,12 @@ from joblib import dump
 import duckdb
 from src.modules.app.import_mm import import_marques_modeles
 
-def split_data(data: pl.DataFrame, marque: str) -> tuple[pl.DataFrame, pl.DataFrame, pd.DataFrame, pd.DataFrame, np.ndarray, np.ndarray]:
+
+def split_data(
+    data: pl.DataFrame, marque: str
+) -> tuple[
+    pl.DataFrame, pl.DataFrame, pd.DataFrame, pd.DataFrame, np.ndarray, np.ndarray
+]:
     """
     Sépare les données en ensembles d'entraînement et de test pour une marque spécifique.
 
@@ -44,15 +49,19 @@ def split_data(data: pl.DataFrame, marque: str) -> tuple[pl.DataFrame, pl.DataFr
 
     """
     X = data.filter(pl.col("marque") == marque)
-    y = X.select('prix')
-    X = X.select(pl.exclude("position_marché")
-                 ).select(pl.exclude("lien")
-                          ).select(pl.exclude("garantie")
-                                   ).select(pl.exclude("prix"))
+    y = X.select("prix")
+    X = (
+        X.select(pl.exclude("position_marché"))
+        .select(pl.exclude("lien"))
+        .select(pl.exclude("garantie"))
+        .select(pl.exclude("prix"))
+    )
 
-    # Split des données en ensembles d'entraînement et de test
-    X_train, X_test, y_train, y_test = train_test_split(X.to_pandas(), y.to_numpy(), test_size=0.2, random_state=21)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X.to_pandas(), y.to_numpy(), test_size=0.2, random_state=21
+    )
     return X, y, X_train, X_test, y_train, y_test
+
 
 def get_preprocessor() -> ColumnTransformer:
     """
@@ -68,22 +77,32 @@ def get_preprocessor() -> ColumnTransformer:
     ## Example:
         >>> preprocessor = get_preprocessor()
         >>> # En supposant que 'data' est une DataFrame avec les caractéristiques spécifiées
-        >>> data_transformee = preprocessor.fit_transform(data) 
+        >>> data_transformee = preprocessor.fit_transform(data)
     """
-    numeric_features = ['annee', 'kilometrage', 'puissance']
-    categorical_features = ['boite', 'cylindre', 'energie', 'marque', 'modele', 'generation', 'moteur', 'finition', 'batterie']
+    numeric_features = ["annee", "kilometrage", "puissance"]
+    categorical_features = [
+        "boite",
+        "cylindre",
+        "energie",
+        "marque",
+        "modele",
+        "generation",
+        "moteur",
+        "finition",
+        "batterie",
+    ]
 
-    numeric_transformer = Pipeline(steps=[
-        ('scaler', StandardScaler())
-    ])
-    categorical_transformer = Pipeline(steps=[
-        ('encoder', OneHotEncoder(handle_unknown='ignore'))
-    ])
-    return  ColumnTransformer(
+    numeric_transformer = Pipeline(steps=[("scaler", StandardScaler())])
+    categorical_transformer = Pipeline(
+        steps=[("encoder", OneHotEncoder(handle_unknown="ignore"))]
+    )
+    return ColumnTransformer(
         transformers=[
-            ('num', numeric_transformer, numeric_features),
-            ('cat', categorical_transformer, categorical_features)
-        ])
+            ("num", numeric_transformer, numeric_features),
+            ("cat", categorical_transformer, categorical_features),
+        ]
+    )
+
 
 def set_models() -> tuple[dict, dict]:
     """
@@ -115,28 +134,35 @@ def set_models() -> tuple[dict, dict]:
 
     # Modèles
     models = {
-        'LinearRegression': LinearRegression(),
-        'KNeighbors': KNeighborsRegressor(),
-        'RandomForest': RandomForestRegressor(n_jobs=-1)
+        "LinearRegression": LinearRegression(),
+        "KNeighbors": KNeighborsRegressor(),
+        "RandomForest": RandomForestRegressor(n_jobs=-1),
     }
 
-    # Paramètres pour la recherche sur grille
     param_grids = {
-        'LinearRegression': {},
-        'KNeighbors': {
-            'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            'weights': ['uniform', 'distance']
+        "LinearRegression": {},
+        "KNeighbors": {
+            "n_neighbors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "weights": ["uniform", "distance"],
         },
-        'RandomForest': {
-            'n_estimators': [500, 800],
-            'max_depth': [10, 15],
-            'min_samples_split': [5, 10, 15],
-            'min_samples_leaf': [2]
-        }
+        "RandomForest": {
+            "n_estimators": [500, 800],
+            "max_depth": [10, 15],
+            "min_samples_split": [5, 10, 15],
+            "min_samples_leaf": [2],
+        },
     }
     return models, param_grids
 
-def find_best_model(models: dict, param_grids: dict, preprocessor: ColumnTransformer, X_train: pd.DataFrame, y_train: np.ndarray, marque: str) -> tuple[LinearRegression|KNeighborsRegressor|RandomForestRegressor, str]:
+
+def find_best_model(
+    models: dict,
+    param_grids: dict,
+    preprocessor: ColumnTransformer,
+    X_train: pd.DataFrame,
+    y_train: np.ndarray,
+    marque: str,
+) -> tuple[LinearRegression | KNeighborsRegressor | RandomForestRegressor, str]:
     """
     Recherche et retourne le meilleur modèle de régression pour une marque donnée en utilisant la validation croisée.
 
@@ -161,20 +187,25 @@ def find_best_model(models: dict, param_grids: dict, preprocessor: ColumnTransfo
         Les résultats de la recherche sur grille sont exportés dans un fichier JSON dans le répertoire 'cv_results'
         sous le format "{marque}_{model_name}_results.json".
     """
-    best_score = float('-inf')
+    best_score = float("-inf")
 
     for model_name, model in models.items():
-        # Recherche sur grille avec validation croisée
+
         grid_search = GridSearchCV(model, param_grids[model_name], cv=5)
         grid_search.fit(preprocessor.fit_transform(X_train), y_train)
 
-        # Stocker les résultats de la recherche sur grille dans un DataFrame ou un dictionnaire
-        results = pd.DataFrame(grid_search.cv_results_).sort_values(by="rank_test_score").head(5)
-        
-        # Exporter les résultats dans un fichier JSON
-        results.to_json(f'cv_results/{marque}_{model_name}_results.json', orient='records', lines=True)
+        results = (
+            pd.DataFrame(grid_search.cv_results_)
+            .sort_values(by="rank_test_score")
+            .head(5)
+        )
 
-        # Mettre à jour le meilleur modèle si nécessaire
+        results.to_json(
+            f"cv_results/{marque}_{model_name}_results.json",
+            orient="records",
+            lines=True,
+        )
+
         if grid_search.best_score_ > best_score:
             best_score = grid_search.best_score_
             best_model = grid_search.best_estimator_
@@ -183,7 +214,12 @@ def find_best_model(models: dict, param_grids: dict, preprocessor: ColumnTransfo
     return best_model, best_model_name
 
 
-def print_best_results(marque: str, best_model_name: str, best_model: LinearRegression|KNeighborsRegressor|RandomForestRegressor, mae: float) -> None:
+def print_best_results(
+    marque: str,
+    best_model_name: str,
+    best_model: LinearRegression | KNeighborsRegressor | RandomForestRegressor,
+    mae: float,
+) -> None:
     """
     Affiche les résultats du meilleur modèle de régression pour une marque donnée.
 
@@ -203,13 +239,17 @@ def print_best_results(marque: str, best_model_name: str, best_model: LinearRegr
         Paramètres du meilleur modèle : {'algorithm': 'auto', ..., 'n_neighbors': 3, 'p': 2, 'weights': 'distance'}
         Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 8737.218
     """
-    # Print des résultats
     print(f"--- {marque} ---")
     print(f"Meilleur modèle : {best_model_name}")
     print(f"Paramètres du meilleur modèle : {best_model.get_params()}")
     print(f"Erreur Moyenne Absolue (MAE) sur l'ensemble de test : {mae}")
 
-def export_models(model: LinearRegression|KNeighborsRegressor|RandomForestRegressor, preprocessor: ColumnTransformer, marque: str) -> None:    
+
+def export_models(
+    model: LinearRegression | KNeighborsRegressor | RandomForestRegressor,
+    preprocessor: ColumnTransformer,
+    marque: str,
+) -> None:
     """
     Exporte le modèle de régression et le préprocesseur associé pour une marque donnée.
 
@@ -229,11 +269,10 @@ def export_models(model: LinearRegression|KNeighborsRegressor|RandomForestRegres
     ## Notes:
         Les fichiers sont sauvegardés dans le répertoire 'models' avec les noms '{marque}_best_model.joblib'
         et '{marque}_preprocessor.joblib'.
-    """ 
-    # Sauvegarder le modèle
-    dump(model, f'models/{marque}_best_model.joblib')
-    # Sauvegarder le préprocesseur
-    dump(preprocessor, f'models/{marque}_preprocessor.joblib')
+    """
+    dump(model, f"models/{marque}_best_model.joblib")
+    dump(preprocessor, f"models/{marque}_preprocessor.joblib")
+
 
 def preprocess_train_and_evaluate_model(data: pl.DataFrame, marque: str) -> None:
     """
@@ -257,25 +296,21 @@ def preprocess_train_and_evaluate_model(data: pl.DataFrame, marque: str) -> None
         Le meilleur modèle et le préprocesseur associé sont sauvegardés dans le répertoire 'models' avec les noms '{marque}_best_model.joblib'
         et '{marque}_preprocessor.joblib'.
     """
-    #split
     X, y, X_train, X_test, y_train, y_test = split_data(data, marque)
 
-    # Préprocesseur
     preprocessor = get_preprocessor()
-    
-    models, param_grids = set_models()
-    
-    # trouver le meilleur modele
-    best_model, best_model_name = find_best_model(models, param_grids, preprocessor, X_train, y_train, marque)
 
-    # Test sur l'ensemble de test
+    models, param_grids = set_models()
+
+    best_model, best_model_name = find_best_model(
+        models, param_grids, preprocessor, X_train, y_train, marque
+    )
+
     y_pred = best_model.predict(preprocessor.transform(X_test))
-    
-    # entrainement sur tout le dataset
+
     best_model.fit(preprocessor.fit_transform(X.to_pandas()), y.to_numpy())
     preprocessor.fit(X.to_pandas())
 
-    # Calcul de l'erreur moyenne absolue (MAE)
     mae = mean_absolute_error(y_test, y_pred)
 
     print_best_results(marque, best_model_name, best_model, mae)
@@ -297,8 +332,8 @@ def get_all_models() -> None:
     ## Notes:
         Les résultats de la recherche sur grille et les informations des meilleurs modèles sont exportés
         dans le répertoire 'cv_results' avec les noms '{marque}_{model_name}_results.json'.
-        
-        Les meilleurs modèles et preprocesseur associés sont exporté dans le dossier src/models avec les noms 
+
+        Les meilleurs modèles et preprocesseur associés sont exporté dans le dossier src/models avec les noms
         '{marque}_best_model.joblib' et '{marque}_preprocessor.joblib' respectivement.
     """
     warnings.filterwarnings("ignore")
@@ -307,8 +342,9 @@ def get_all_models() -> None:
         """
         SELECT *
         FROM 'data/database.parquet'
-        """).pl()
-    for marque in nom_marques_modeles['marque'].to_numpy():
+        """
+    ).pl()
+    for marque in nom_marques_modeles["marque"].to_numpy():
         preprocess_train_and_evaluate_model(data, marque)
 
 
@@ -325,19 +361,25 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray) -> pl.DataFrame:
     """
 
     for marque in marques_array:
-        if marque[0] == marques_array[0,0]:
-            cv_results = duckdb.sql(
-                f"""
+        if marque[0] == marques_array[0, 0]:
+            cv_results = (
+                duckdb.sql(
+                    f"""
                 SELECT '{marque[0]}' as marque,
                 mean_test_score,
                 '{modele}' as modele,
                 params
                 FROM 'cv_results/{marque[0]}_{modele}_results.json'
                 WHERE rank_test_score = 1
-                """).pl().unnest('params')
-        else :
-            cv_results_2 = duckdb.sql(
-                f"""
+                """
+                )
+                .pl()
+                .unnest("params")
+            )
+        else:
+            cv_results_2 = (
+                duckdb.sql(
+                    f"""
                 SELECT '{marque[0]}' as marque,
                 mean_test_score,
                 '{modele}' as modele,
@@ -345,6 +387,10 @@ def cv_result_into_df(modele: str, marques_array: np.ndarray) -> pl.DataFrame:
                 FROM 'cv_results/{marque[0]}_{modele}_results.json'
 
                 WHERE rank_test_score = 1
-                """).pl().unnest('params')
+                """
+                )
+                .pl()
+                .unnest("params")
+            )
             cv_results = pl.concat([cv_results, cv_results_2], rechunk=True)
     return cv_results
