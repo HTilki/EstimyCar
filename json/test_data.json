@@ -1,0 +1,50 @@
+[
+    {
+        "marque": "CITROEN C3 III",
+        "cylindre": "1.2 PURETECH 110 FEEL",
+        "annee": "2019",
+        "kilometrage": "10 698 km",
+        "boite": "Automatique",
+        "energie": "Essence",
+        "prix": "15 990 €",
+        "position_marché": "Bonne affaire",
+        "garantie": "Garantie 12 mois",
+        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69112858137.html"
+    },
+    {
+        "marque": "RENAULT CAPTUR phase 2",
+        "cylindre": "1.3 TCE 130 INTENS",
+        "annee": "2019",
+        "kilometrage": "86 450 km",
+        "boite": "Manuelle",
+        "energie": "Essence",
+        "prix": "13 990 €",
+        "position_marché": "Bonne affaire",
+        "garantie": "Garantie 12 mois",
+        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69112260625.html"
+    },
+    {
+        "marque": "PEUGEOT 208 (2E GENERATION)",
+        "cylindre": "1.2 PURETECH 130 ALLURE EAT8",
+        "annee": "2021",
+        "kilometrage": "22 935 km",
+        "boite": "Automatique",
+        "energie": "Essence",
+        "prix": "21 990 €",
+        "position_marché": "Analyse indisponible",
+        "garantie": "Livraison",
+        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69112617241.html"
+    },
+    {
+        "marque": "RENAULT CLIO V",
+        "cylindre": "1.0 SCE 65 BUSINESS",
+        "annee": "2021",
+        "kilometrage": "62 317 km",
+        "boite": "Manuelle",
+        "energie": "Essence",
+        "prix": "11 800 €",
+        "position_marché": "Bonne affaire",
+        "garantie": "Garantie 12 mois",
+        "lien": "https://www.lacentrale.fr/auto-occasion-annonce-69113055717.html"
+    }
+]
