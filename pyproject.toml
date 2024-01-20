@@ -3,7 +3,7 @@ name = "estimycar"
 version = "0.9.0"
 description = "Estimateur de prix de véhicule basé sur des annonces scrapées depuis le site lacentrale.fr"
 authors = ["Hassan TILKI, Aybuke BICAT"]
-license = "TEST"
+license = "à determiner"
 readme = "README.md"
 
 [tool.poetry.dependencies]
