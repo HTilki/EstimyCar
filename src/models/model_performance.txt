@@ -1,0 +1,160 @@
+--- PEUGEOT ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1998.1995445120006
+--- RENAULT ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1730.8647108009548
+--- CITROEN ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 15, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1839.779328734507
+--- VOLKSWAGEN ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2580.1649255654243
+--- MERCEDES ---
+Meilleur modèle : KNeighbors
+Paramètres du meilleur modèle : {'algorithm': 'auto', 'leaf_size': 30, 'metric': 'minkowski', 'metric_params': None, 'n_jobs': None, 'n_neighbors': 9, 'p': 2, 'weights': 'distance'}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 4847.7808136314015
+--- BMW ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 4163.33605107605
+--- AUDI ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 3728.658855691602
+--- FORD ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2537.2658917159642
+--- TOYOTA ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1992.1017809147606
+--- OPEL ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1768.938344460794
+--- FIAT ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1958.0624608024743
+--- NISSAN ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1693.1265560632548
+--- MINI ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2211.1166862890823
+--- DS ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 10, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 15, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2914.5844235610375
+--- DACIA ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 10, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1283.0916972347777
+--- HYUNDAI ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2152.748126123683
+--- KIA ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 10, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1961.8463002857166
+--- VOLVO ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 15, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 3520.841181357711
+--- SEAT ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1820.5776363416458
+--- SKODA ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2860.0582630528293
+--- PORSCHE ---
+Meilleur modèle : LinearRegression
+Paramètres du meilleur modèle : {'copy_X': True, 'fit_intercept': True, 'n_jobs': None, 'positive': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 10698.676101962432
+--- LAND ROVER ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 6065.63159104841
+--- JEEP ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 10, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 3352.3369145758493
+--- SUZUKI ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1658.1432010535752
+--- MAZDA ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2500.069632637601
+--- ALFA ROMEO ---
+Meilleur modèle : KNeighbors
+Paramètres du meilleur modèle : {'algorithm': 'auto', 'leaf_size': 30, 'metric': 'minkowski', 'metric_params': None, 'n_jobs': None, 'n_neighbors': 3, 'p': 2, 'weights': 'distance'}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 4659.20089724466
+--- JAGUAR ---
+Meilleur modèle : KNeighbors
+Paramètres du meilleur modèle : {'algorithm': 'auto', 'leaf_size': 30, 'metric': 'minkowski', 'metric_params': None, 'n_jobs': None, 'n_neighbors': 3, 'p': 2, 'weights': 'uniform'}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 6831.784511784512
+--- LEXUS ---
+Meilleur modèle : LinearRegression
+Paramètres du meilleur modèle : {'copy_X': True, 'fit_intercept': True, 'n_jobs': None, 'positive': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 3955.5449749071086
+--- CUPRA ---
+Meilleur modèle : LinearRegression
+Paramètres du meilleur modèle : {'copy_X': True, 'fit_intercept': True, 'n_jobs': None, 'positive': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 3404.02660842039
+--- MITSUBISHI ---
+Meilleur modèle : LinearRegression
+Paramètres du meilleur modèle : {'copy_X': True, 'fit_intercept': True, 'n_jobs': None, 'positive': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2719.9721381490085
+--- HONDA ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2236.375864975677
+--- FERRARI ---
+Meilleur modèle : KNeighbors
+Paramètres du meilleur modèle : {'algorithm': 'auto', 'leaf_size': 30, 'metric': 'minkowski', 'metric_params': None, 'n_jobs': None, 'n_neighbors': 3, 'p': 2, 'weights': 'distance'}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 52350.46517327909
+--- MASERATI ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 12621.714177936332
+--- TESLA ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 10, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 4851.589135288989
+--- ABARTH ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 15, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2512.614471942522
+--- SMART ---
+Meilleur modèle : KNeighbors
+Paramètres du meilleur modèle : {'algorithm': 'auto', 'leaf_size': 30, 'metric': 'minkowski', 'metric_params': None, 'n_jobs': None, 'n_neighbors': 4, 'p': 2, 'weights': 'distance'}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 1881.1081632288337
+--- CHEVROLET ---
+Meilleur modèle : KNeighbors
+Paramètres du meilleur modèle : {'algorithm': 'auto', 'leaf_size': 30, 'metric': 'minkowski', 'metric_params': None, 'n_jobs': None, 'n_neighbors': 6, 'p': 2, 'weights': 'uniform'}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 8493.750000000002
+--- MG ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 10, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 5, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 2660.9383178307994
+--- ASTON MARTIN ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 15, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 15797.217858744174
+--- BENTLEY ---
+Meilleur modèle : RandomForest
+Paramètres du meilleur modèle : {'bootstrap': True, 'ccp_alpha': 0.0, 'criterion': 'squared_error', 'max_depth': 15, 'max_features': 1.0, 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 10, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 800, 'n_jobs': -1, 'oob_score': False, 'random_state': None, 'verbose': 0, 'warm_start': False}
+Erreur Moyenne Absolue (MAE) sur l'ensemble de test : 22454.111358923314
