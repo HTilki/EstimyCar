@@ -17,7 +17,7 @@ L'objectif final est de fournir des estimateurs de valeurs de véhicule basés s
 ## Scraping
 Scraping des annonces de vente de voiture d'occasion sur le site de [LaCentrale.fr](https://www.lacentrale.fr).
 
-- Scraping de pages d'annonces par marque et par modèles de véhicule à l'aide de requêtes http grâce aux packages `requets` et `bs4` 🕸️.
+- Scraping de pages d'annonces par marque et par modèles de véhicule à l'aide de requêtes http grâce aux packages [`requests`](https://github.com/psf/requests) et [`bs4`](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) 🕸️.
 - Construction des URLs par marque et modèle pour l'extraction de toutes les annonces avec les fonctions `recup_pages()` et `extract_toutes_annonces()`
 - Récupération de chacune des caractéristiques du véhicule pour chaque annonce à l'aide de la fonction `recup_information_voiture()`. 
 - Extraction en plusieurs parties des données sous format JSON et fusion des fichiers avec `fusionner_fichiers_json()`.
@@ -31,20 +31,21 @@ Scraping des annonces de vente de voiture d'occasion sur le site de [LaCentrale.
 
 Que peut-on prédire sur les voitures ? Eh bien, le **prix** bien sûr ! Mais comment estimer le prix d'un véhicule ? C'est la grande interrogation au cœur de notre approche en Machine Learning.
 
-- Utilisation du package `scikit-learn` 🧠.
-- **Un modèle dédié par marque de voiture** *(au total, 40 marques ont été sélectionnées en fonction du nombre d'observations)*.
+- Utilisation du package [`scikit-learn`](https://scikit-learn.org/stable/) 🧠.
+- **Un modèle dédié par marque de voiture** *(au total, 40 marques ont été sélectionnées en fonction du nombre d'annonces)*.
 - Modèles et grille de paramètres avec `set_models()` et `get_params()`
   - Modèles retenus :
     - Régression linéaire 📈
     - K-neighbors 👬👭
     - Random Forest 🌳
-- Pour récupérer et exporter les meilleurs modèles : `get_all_models()`.
+- Pour récupérer et exporter les meilleurs modèles (à l'aide de [`joblib`](https://joblib.readthedocs.io/en/stable/#)) : `get_all_models()`.
 - `predict_prix` pour prédire le prix du véhicule 🚗💰.
+
 
 
 ## L'application  🚀
 
-Cette application offre une alternative aux estimateurs de valeurs de véhicule, garantissant la confidentialité des données personnelles des utilisateurs. Le menu latéral permet à l'utilisateur de personnaliser sa recherche en sélectionnant les caractéristiques de son véhicule.
+Cette application a été conçu à l'aide de [`streamlit`](https://github.com/streamlit/streamlit) offre une alternative aux estimateurs de valeurs de véhicule, garantissant la confidentialité des données personnelles des utilisateurs. Le menu latéral permet à l'utilisateur de personnaliser sa recherche en sélectionnant les caractéristiques de son véhicule.
 
 ### Accueil 🏠
 L'accueil fournit des informations générales sur l'application, expliquant son utilité en tant qu'alternative aux estimateurs de valeurs de véhicules. De plus, il donne un aperçu des différents onglets disponibles et indique la source des données utilisées.
@@ -113,15 +114,20 @@ Visualisez **l'évolution de la valeur de votre voiture en fonction du kilométr
 
 > Pour accéder à ces fonctionnalités, cliquez sur le bouton "Estimer la valeur du véhicule." ou "Estimer la valeur de votre véhicule selon le kilométrage.".
 
-## Comment on en est arrivé la :
-
-scraping du site lacentrale avec request et bs4
-nettoyage de la base avec polars
-Création des modeles avec scikit learn et export et import de ceux-ci avec joblib
-
 ## Installation
 
+Toutes les dépendances nécessaire pour faire fonctionner l'application ont été généré à l'aide de `poetry`. Elle peuvent être installé à l'aide de la commande suivante : 
 
+```powershell
+python -m poetry install
+python -m poetry shell
+```
+
+Ensuite il suffit de lancer l'application avec la ligne de commande suivante :
+
+```powershell
+python -m streamlit run "streamlit_app.py"
+```
 
 ## Licence
 
