@@ -131,4 +131,11 @@ python -m streamlit run "streamlit_app.py"
 
 ## Licence
 
+Encore à determiner.
 
+## Objectif pour la suite : 
+
+- Avoir une application avec plus de fonctionnalités
+- Avoir une base de données actualisée
+- Améliorer la partie machine learning pour avoir des modèles plus performants
+- Essayer de scraper d'autre site d'annonces
