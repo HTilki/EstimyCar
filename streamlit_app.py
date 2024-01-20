@@ -20,7 +20,7 @@ title()
 
 user_role = select_user_role()
 
-if user_role == None:
+if user_role == "None":
     accueil()
 
 if user_role == "Acheteur":
