@@ -3,7 +3,6 @@
 
 from streamlit.testing.v1 import AppTest
 from streamlit.testing.v1.element_tree import UnknownElement
-import pytest
 
 def test_lancement_app():
     """
@@ -74,9 +73,6 @@ def test_prediction_prix_moy():
     at.button[0].click().run()
     assert isinstance(at.session_state["prix_moy_pred"], float)
     assert at.session_state["prix_moy_pred"] != 0
-
-
-
 
 
 def test_prediction_erreur_prix_moy():
