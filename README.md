@@ -49,6 +49,8 @@ Cette application offre une alternative aux estimateurs de valeurs de véhicule,
 ### Accueil 🏠
 L'accueil fournit des informations générales sur l'application, expliquant son utilité en tant qu'alternative aux estimateurs de valeurs de véhicules. De plus, il donne un aperçu des différents onglets disponibles et indique la source des données utilisées.
 
+![](img/accueil.gif)
+
 
 ### Onglet Acheteur 🔍🚗
 Cet onglet va vous permettre de trouver la voiture de vos rêves en fonction des caractéristiques que vous aurez choisi. ✨
@@ -64,6 +66,8 @@ Vous pouvez trouver des annonces de voitures correspondant aux caractéristiques
 **Le DataFrame se mettra automatiquement à jour en fonction des caractéristiques renseignées. Vous pourrez également visualiser le nombre total de voitures correspondant à vos critères ainsi que le prix moyen.**
 
 *Démonstration :*
+
+![](img/acheteur_achat.gif)
 
 
 
