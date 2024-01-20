@@ -68,21 +68,36 @@ def get_plage_annee(
         return (1928, 2024)
 
 
-def get_unique_marque() -> list:
+def get_unique_marque(user_role: str) -> list:
     """
     Récupère la liste des marques disponibles dans la base de données.
+
+    ## Parameters:
+        user_role (str): Le rôle de l'utilisateur, soit "Acheteur" ou "Vendeur".
 
     ## Returns:
         list: Liste des noms de marques uniques.
     """
-    marques = duckdb.sql(
-        f"""
-        SELECT DISTINCT(marque) as unique_mar
-        FROM 'data/database.parquet'
-        WHERE marque IS NOT NULL
-        ORDER BY unique_mar
-        """
-    ).df()
+    if user_role == "Acheteur":
+        marques = duckdb.sql(
+            f"""
+            SELECT DISTINCT(marque) as unique_mar
+            FROM 'data/database.parquet'
+            WHERE marque IS NOT NULL
+            ORDER BY unique_mar
+            """
+        ).df()
+    if user_role == "Vendeur":
+        marques = duckdb.sql(
+            f"""
+            SELECT COUNT(*) as nb_annonces, 
+            marque as unique_mar
+            FROM 'data/database.parquet'
+            WHERE marque IS NOT NULL
+            GROUP BY marque
+            ORDER BY COUNT(*) DESC
+            """
+        ).df().head(40).sort_values("unique_mar")
     return list(marques["unique_mar"])
 
 

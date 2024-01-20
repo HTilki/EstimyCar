@@ -29,7 +29,7 @@ if user_role == "Acheteur":
         ["🗃 Data", "📊 Statistiques Descriptives", "🎈 Créateurs"]
     )
     st.sidebar.header("Caractéristiques")
-    marques = marques_select(nom_marques_modeles, user_role)
+    marques = marques_select(user_role)
     modeles = modeles_select(nom_marques_modeles, marques, user_role)
     annee_min, annee_max = display_annee(user_role)
     km_min, km_max = display_km(user_role)
@@ -115,7 +115,7 @@ if user_role == "Acheteur":
 if user_role == "Vendeur":
     tab_prediction = st.tabs(["🎯 Estimation"])
     st.sidebar.header("Caractéristiques")
-    marque = marques_select(nom_marques_modeles, user_role)
+    marque = marques_select(user_role)
     modele = modeles_select(nom_marques_modeles, marque, user_role)
     annee = display_annee(user_role, marque, modele)
     moteur = moteur_select(marque, modele)

@@ -88,7 +88,7 @@ def display_km(user_role: str) -> tuple[int, int] | int | None:
     return None
 
 
-def marques_select(nom_marques_modeles: pl.DataFrame, user_role) -> list | str | None:
+def marques_select(user_role) -> list | str | None:
     """
     Affiche une liste de marques de véhicules pour la sélection en fonction du rôle de l'utilisateur.
 
@@ -99,7 +99,7 @@ def marques_select(nom_marques_modeles: pl.DataFrame, user_role) -> list | str |
     ## Returns:
         list|str|None: Une liste des marques sélectionnées (user_role="Acheteur") ou juste la marque sélectionnée (user_role="Vendeur").
     """
-    marques = get_unique_marque()
+    marques = get_unique_marque(user_role)
 
     if user_role == "Acheteur":
         choix_marques = st.sidebar.multiselect(
@@ -115,6 +115,7 @@ def marques_select(nom_marques_modeles: pl.DataFrame, user_role) -> list | str |
             options=marques,
             placeholder="Choisir une marque",
             key="marque_select",
+            help="Seules les marques ayant un modèle de prédiction sont disponibles ici."
         )
         return choix_marque
     return None

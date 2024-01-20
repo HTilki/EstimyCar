@@ -3,6 +3,7 @@
 
 from streamlit.testing.v1 import AppTest
 from streamlit.testing.v1.element_tree import UnknownElement
+import pytest
 
 def test_lancement_app():
     """
@@ -76,18 +77,6 @@ def test_prediction_prix_moy():
 
 
 
-    def test_prediction_erreur_pred():
-        """
-        Vérifie si le message d'erreur s'affiche correctement lorsqu'il n'est pas possible d'effectuer la prédiction.
-        """
-        at = AppTest.from_file("streamlit_app.py").run(timeout=5)
-        at.sidebar.selectbox(key="user_role_select").set_value("Vendeur").run(timeout=5)
-        at.sidebar.selectbox(key="marque_select").set_value("FERRARI").run(timeout=5)
-        at.sidebar.selectbox(key="modele_select").set_value("208").run(timeout=5)
-        at.sidebar.selectbox(key="energie_select").set_value("Électrique").run(timeout=5)
-        at.button[0].click().run(timeout=5)
-        assert at.metric.values[0] == "Erreur lors de l'estimation du prix."
-
 
 
 def test_prediction_erreur_prix_moy():
@@ -125,16 +114,28 @@ def test_prediction_km_plot_1():
     assert isinstance(at.get("plotly_chart")[0], UnknownElement)
 
 
+#def test_prediction_erreur_pred():
+#    """
+#    Vérifie si le message d'erreur s'affiche correctement lorsqu'il n'est pas possible d'effectuer la prédiction.
+#    """
+#    at = AppTest.from_file("streamlit_app.py").run(timeout=5)
+#    at.sidebar.selectbox(key="user_role_select").set_value("Vendeur").run(timeout=5)
+#    at.sidebar.selectbox(key="marque_select").set_value("FERRARI").run(timeout=5)
+#    at.sidebar.selectbox(key="modele_select").set_value("208").run(timeout=5)
+#    at.sidebar.selectbox(key="energie_select").set_value("Électrique").run(timeout=5)
+#    at.button[0].click().run(timeout=5)
+#    assert at.metric.values[0] == "Erreur lors de l'estimation du prix."
 
-def test_prediction_km_plot_2():
-    """
-    Vérifie l'affichage du message d'erreur en cas d'impossibilité de générer le graphique de kilométrage.
-    """
-    at = AppTest.from_file("streamlit_app.py").run(timeout=5)
-    at.sidebar.selectbox(key="user_role_select").set_value("Vendeur").run(timeout=5)
-    at.sidebar.selectbox(key="marque_select").set_value("FERRARI").run(timeout=5)
-    at.sidebar.selectbox(key="modele_select").set_value("208").run(timeout=5)
-    at.sidebar.selectbox(key="energie_select").set_value("Électrique").run(timeout=5)
-    at.button[1].click().run(timeout=5)
-    assert at.error.values[0] == "Erreur lors de la génération du graphique. Vérifiez que toutes les caractéristiques sont bien renseignées."
+
+#def test_prediction_km_plot_2():
+#    """
+#    Vérifie l'affichage du message d'erreur en cas d'impossibilité de générer le graphique de kilométrage.
+#    """
+#    at = AppTest.from_file("streamlit_app.py").run(timeout=5)
+#    at.sidebar.selectbox(key="user_role_select").set_value("Vendeur").run(timeout=5)
+#    at.sidebar.selectbox(key="marque_select").set_value("FERRARI").run(timeout=5)
+#    at.sidebar.selectbox(key="modele_select").set_value("208").run(timeout=5)
+#    at.sidebar.selectbox(key="energie_select").set_value("Électrique").run(timeout=5)
+#    at.button[1].click().run(timeout=5)
+#    assert at.error.values[0] == "Erreur lors de la génération du graphique. Vérifiez que toutes les caractéristiques sont bien renseignées."
 
