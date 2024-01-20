@@ -3,6 +3,11 @@
 from src.modules.scraping.marques_modeles import recup_marques_modeles
 
 def test_recup_nom_marques_modeles():
+    """
+    Teste la fonction recup_marques_modeles() pour s'assurer qu'elle retourne un dictionnaire 
+    contenant les marques et modèles de voitures attendus. 
+    Si le résultat ne correspond à la structure attendue, elle lèvera une AssertionError.
+    """
 
     assert recup_marques_modeles() == {'ABARTH': ['124', '500', '595', 'punto evo', 'scorpion'],
  'AC': ['aceca', 'cobra'],

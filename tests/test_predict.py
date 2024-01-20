@@ -6,6 +6,9 @@ import polars as pl
 import numpy as np
 
 def test_predict_prix_rf():
+    """
+    Teste la fonction predict_prix() avec un exemple de données pour le modèle de prédiction de prix basé sur le Random Forest.
+    """
     data_to_predict = pl.DataFrame(
         [
             pl.Series("annee", [2015], dtype=pl.Int32),
@@ -25,7 +28,12 @@ def test_predict_prix_rf():
     pred = predict_prix(data_to_predict, "CITROEN")
     assert type(pred) == np.float64
 
+
+
 def test_predict_prix_knn():
+    """
+    Teste la fonction predict_prix() avec un exemple de données pour le modèle de prédiction de prix basé sur les KNN (K plus proches voisins).
+    """
     data_to_predict = pl.DataFrame(
         [
             pl.Series("annee", [2017], dtype=pl.Int32),
@@ -46,7 +54,11 @@ def test_predict_prix_knn():
     assert type(pred) == np.float64
 
 
+
 def test_predict_prix_lin_reg():
+    """
+    Teste la fonction predict_prix() avec un exemple de données pour le modèle de prédiction de prix basé sur la régresson linéaire.
+    """
     data_to_predict = pl.DataFrame(
         [
             pl.Series("annee", [2015], dtype=pl.Int32),

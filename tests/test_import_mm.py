@@ -1,6 +1,14 @@
 from src.modules.app.import_mm import import_marques_modeles, NomMarquesModeles
 
 def test_import_marques_modeles():
+    """
+    Cette fonction vérifie que la sortie de import_marques_modeles est égale à une liste prédéfinie d'objets
+    NomMarquesModeles, chacun représentant une marque de voiture avec ses modèles associés.
+
+    ## Returns : 
+        None: Déclenche une AssertionError si le test échoue c'est-à-dire que si la sortie de import_marques_modeles() 
+        ne correspond pas à la liste attendue.
+    """
     assert import_marques_modeles() == [NomMarquesModeles(marque='ABARTH', modeles=['124', '500', '595', 'punto evo', 'scorpion']),
  NomMarquesModeles(marque='AC', modeles=['aceca', 'cobra']),
  NomMarquesModeles(marque='AIWAYS', modeles=['u5']),

@@ -28,6 +28,14 @@ data = pl.DataFrame(
 )
     
 def test_split_data():
+    """
+    Vérifie que la fonction split_data renvoie les résultats attendus pour les données d'entrée.
+    Les tests comparent les DataFrames X et y, ainsi que les jeux de données d'entraînement et de test.
+
+    ## Returns :
+        None: Cette fonction déclenche une AssertionError si le test échoue, c'est-à-dire si les résultats
+        de split_data ne correspondent pas aux attentes.
+    """
     X, y, X_train, X_test, y_train, y_test = split_data(data, "CITROEN")
     assert_frame_equal(data[['annee', 'kilometrage', 'boite', 'energie', 'marque', 'modele', 'generation', 'cylindre', 'moteur', 'puissance', 'finition', 'batterie']], X)    
     assert_frame_equal(data[['prix']], y)
