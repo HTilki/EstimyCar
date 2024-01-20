@@ -16,35 +16,6 @@ La plupart des français utilisent la *côte ARGUS* comme estimateur de prix mai
 L'objectif final est de fournir des estimateurs de valeurs de véhicule basés sur des caractéristiques spécifiques.
 
 
-## Scraping
-Scraping des annonces de vente de voiture d'occasion sur le site de [LaCentrale.fr](https://www.lacentrale.fr).
-
-- Scraping de pages d'annonces par marque et par modèles de véhicule à l'aide de requêtes http grâce aux packages [`requests`](https://github.com/psf/requests) et [`bs4`](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) 🕸️.
-- Construction des URLs par marque et modèle pour l'extraction de toutes les annonces avec les fonctions `recup_pages()` et `extract_toutes_annonces()`
-- Récupération de chacune des caractéristiques du véhicule pour chaque annonce à l'aide de la fonction `recup_information_voiture()`. 
-- Extraction en plusieurs parties des données sous format JSON et fusion des fichiers avec `fusionner_fichiers_json()`.
-
-## Nettoyage des données brutes
-
-- Utilisation du package [`Polars`🐻‍❄️](https://pola.rs/)  pour le nettoyage et la réorganisation des données. 
-- Mise en œuvre de la fonction `gazoduc()`, une séquence de pipes, pour traiter l'ensemble de la base de données de manière structurée et efficace.
-
-## Machine Learning
-
-Que peut-on prédire sur les voitures ? Eh bien, le **prix** bien sûr ! Mais comment estimer le prix d'un véhicule ? C'est la grande interrogation au cœur de notre approche en Machine Learning.
-
-- Utilisation du package [`scikit-learn`](https://scikit-learn.org/stable/) 🧠.
-- **Un modèle dédié par marque de voiture** *(au total, 40 marques ont été sélectionnées en fonction du nombre d'annonces)*.
-- Modèles et grille de paramètres avec `set_models()` et `get_params()`
-  - Modèles retenus :
-    - Régression linéaire 📈
-    - K-neighbors 👬👭
-    - Random Forest 🌳
-- Pour récupérer et exporter les meilleurs modèles (à l'aide de [`joblib`](https://joblib.readthedocs.io/en/stable/#)) : `get_all_models()`.
-- `predict_prix` pour prédire le prix du véhicule 🚗💰.
-
-
-
 ## L'application  🚀
 
 Cette application a été conçu à l'aide de [`streamlit`](https://github.com/streamlit/streamlit) offre une alternative aux estimateurs de valeurs de véhicule, garantissant la confidentialité des données personnelles des utilisateurs. Le menu latéral permet à l'utilisateur de personnaliser sa recherche en sélectionnant les caractéristiques de son véhicule.
@@ -130,6 +101,35 @@ Ensuite il suffit de lancer l'application avec la ligne de commande suivante :
 ```powershell
 python -m streamlit run "streamlit_app.py"
 ```
+
+## Scraping
+Les données utilisées dans l'application ont été extraites via du webscraping.  
+Scraping des annonces de vente de voiture d'occasion sur le site de [LaCentrale.fr](https://www.lacentrale.fr).
+
+- Scraping de pages d'annonces par marque et par modèles de véhicule à l'aide de requêtes http grâce aux packages [`requests`](https://github.com/psf/requests) et [`bs4`](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) 🕸️.
+- Construction des URLs par marque et modèle pour l'extraction de toutes les annonces avec les fonctions `recup_pages()` et `extract_toutes_annonces()`
+- Récupération de chacune des caractéristiques du véhicule pour chaque annonce à l'aide de la fonction `recup_information_voiture()`. 
+- Extraction en plusieurs parties des données sous format JSON et fusion des fichiers avec `fusionner_fichiers_json()`.
+
+## Nettoyage des données brutes
+
+- Utilisation du package [`Polars`🐻‍❄️](https://pola.rs/)  pour le nettoyage et la réorganisation des données. 
+- Mise en œuvre de la fonction `gazoduc()`, une séquence de pipes, pour traiter l'ensemble de la base de données de manière structurée et efficace.
+
+## Machine Learning
+
+Que peut-on prédire sur les voitures ? Eh bien, le **prix** bien sûr ! Mais comment estimer le prix d'un véhicule ? C'est la grande interrogation au cœur de notre approche en Machine Learning.
+
+- Utilisation du package [`scikit-learn`](https://scikit-learn.org/stable/) 🧠.
+- **Un modèle dédié par marque de voiture** *(au total, 40 marques ont été sélectionnées en fonction du nombre d'annonces)*.
+- Modèles et grille de paramètres avec `set_models()` et `get_params()`
+  - Modèles retenus :
+    - Régression linéaire 📈
+    - K-neighbors 👬👭
+    - Random Forest 🌳
+- Pour récupérer et exporter les meilleurs modèles (à l'aide de [`joblib`](https://joblib.readthedocs.io/en/stable/#)) : `get_all_models()`.
+- `predict_prix` pour prédire le prix du véhicule 🚗💰.
+
 
 ## Licence
 
