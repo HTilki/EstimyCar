@@ -67,7 +67,7 @@ Vous pouvez trouver des annonces de voitures correspondant aux caractéristiques
 
 *Démonstration :*
 
-![](img/acheteur_achat.gif)
+![](img/demo_acheteur.gif)
 
 
 
@@ -81,6 +81,7 @@ Explorez les statistiques descriptives pour obtenir des informations clés sur l
 
 *Démonstration :*
 
+![](img/demo_stats.gif)
 
 
 ### Onglet Vendeur 💵📈
@@ -102,6 +103,9 @@ Vous obtiendrez ainsi une estimation précise et gratuite de la valeur de votre 
 
 *Démonstration*
 
+![](img/demo_vendeur.gif)
+
+
 #### - Estimation par Kilométrage 📈
 
 Visualisez **l'évolution de la valeur de votre voiture en fonction du kilométrag**e. Un graphique clair vous permettra de prendre des décisions éclairées sur le prix en fonction du kilométrage de votre véhicule.
@@ -116,7 +120,8 @@ nettoyage de la base avec polars
 Création des modeles avec scikit learn et export et import de ceux-ci avec joblib
 
 ## Installation
-Dépendance dans un poetry etc..
+
+
 
 ## Licence
 
