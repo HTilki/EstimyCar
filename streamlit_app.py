@@ -1,3 +1,4 @@
+from duckdb import InvalidInputException
 import streamlit as st
 import polars as pl
 from src.modules.app.import_mm import import_marques_modeles
@@ -29,49 +30,20 @@ if user_role == "Acheteur":
         ["🗃 Data", "📊 Statistiques Descriptives", "🎈 Créateurs"]
     )
     st.sidebar.header("Caractéristiques")
-    marques = marques_select(user_role)
-    modeles = modeles_select(nom_marques_modeles, marques, user_role)
-    annee_min, annee_max = display_annee(user_role)
-    km_min, km_max = display_km(user_role)
-    boite = boite_select(user_role)
-    energie = energie_select(user_role)
-    prix_min, prix_max = display_prix_selection()
-    with tab_data:
-        with nb_annonces:
-            with st.container(border=True):
-                st.metric(
-                    label="Nombre total de voitures",
-                    value=get_count_car(
-                        marques,
-                        modeles,
-                        annee_min,
-                        annee_max,
-                        km_min,
-                        km_max,
-                        boite,
-                        energie,
-                        prix_min,
-                        prix_max,
-                    ),
-                    delta=calcul_delta(
-                        marques,
-                        modeles,
-                        annee_min,
-                        annee_max,
-                        km_min,
-                        km_max,
-                        boite,
-                        energie,
-                        prix_min,
-                        prix_max,
-                    ),
-                )
-        with prix_moyen:
-            with st.container(border=True):
-                st.metric(
-                    "Prix moyen",
-                    value=str(
-                        get_avg_price(
+    try:
+        marques = marques_select(user_role)
+        modeles = modeles_select(nom_marques_modeles, marques, user_role)
+        annee_min, annee_max = display_annee(user_role)
+        km_min, km_max = display_km(user_role)
+        boite = boite_select(user_role)
+        energie = energie_select(user_role)
+        prix_min, prix_max = display_prix_selection()
+        with tab_data:
+            with nb_annonces:
+                with st.container(border=True):
+                    st.metric(
+                        label="Nombre total de voitures",
+                        value=get_count_car(
                             marques,
                             modeles,
                             annee_min,
@@ -82,27 +54,63 @@ if user_role == "Acheteur":
                             energie,
                             prix_min,
                             prix_max,
-                            user_role,
-                        )
+                        ),
+                        delta=calcul_delta(
+                            marques,
+                            modeles,
+                            annee_min,
+                            annee_max,
+                            km_min,
+                            km_max,
+                            boite,
+                            energie,
+                            prix_min,
+                            prix_max,
+                        ),
                     )
-                    + "€",
-                )
-        show_dataframe(
-            marques,
-            modeles,
-            annee_min,
-            annee_max,
-            km_min,
-            km_max,
-            boite,
-            energie,
-            prix_min,
-            prix_max,
-        )
-
-    with tab_stats:
-        show_selected_chart()
-
+            with prix_moyen:
+                with st.container(border=True):
+                    st.metric(
+                        "Prix moyen",
+                        value=str(
+                            get_avg_price(
+                                marques,
+                                modeles,
+                                annee_min,
+                                annee_max,
+                                km_min,
+                                km_max,
+                                boite,
+                                energie,
+                                prix_min,
+                                prix_max,
+                                user_role,
+                            )
+                        )
+                        + "€",
+                    )
+            show_dataframe(
+                marques,
+                modeles,
+                annee_min,
+                annee_max,
+                km_min,
+                km_max,
+                boite,
+                energie,
+                prix_min,
+                prix_max,
+            )
+        with tab_stats:
+            show_selected_chart()
+    except InvalidInputException as e:
+        st.error(f"""
+                 Il y a eu une erreur, recharger la page svp.
+                 Si cette erreur persiste, n'hésitez pas à nous le signaler afin qu'elle soit corrigée.
+                 Détail de l'erreur : \n 
+                 {e}
+                 """)
+    
     with tab_surprise:
         st.balloons()
         with st.expander(
