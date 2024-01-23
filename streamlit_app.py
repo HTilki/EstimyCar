@@ -106,7 +106,7 @@ if user_role == "Acheteur":
     except InvalidInputException as e:
         st.error(f"""
                  Il y a eu une erreur, recharger la page svp.
-                 Si cette erreur persiste, n'hésitez pas à nous le signaler afin qu'elle soit corrigée.
+                 Si cette erreur persiste, n'hésitez pas à nous le signaler afin qu'elle soit corrigée. \n 
                  Détail de l'erreur : \n 
                  {e}
                  """)
