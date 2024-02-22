@@ -2,3 +2,4 @@ __pycache__
 src/modules/__pycache__
 src/modules/app/__pycache__
 src/modules/requetes/__pycache__
+.ruff_cache

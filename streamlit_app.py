@@ -1,19 +1,35 @@
-from duckdb import InvalidInputException
-import streamlit as st
 import polars as pl
+import streamlit as st
+from duckdb import InvalidInputException
+
+from src.modules.app.accueil import accueil
 from src.modules.app.import_mm import import_marques_modeles
-from src.modules.requetes.requetes_kpi import get_count_car, get_avg_price, calcul_delta
-from src.modules.app.stats_plots import show_selected_chart
-from src.modules.app.title import title
-from src.modules.app.menu import *
-from src.modules.app.accueil import *
-from src.modules.app.tabs import (
-    show_dataframe,
-    predict_button,
-    get_prix_pred_displayed,
-    get_prix_moy_displayed,
-    predict_km_fictif_button,
+from src.modules.app.menu import (
+    batterie_select,
+    boite_select,
+    cylindre_select,
+    display_annee,
+    display_km,
+    display_prix_selection,
+    display_puissance,
+    energie_select,
+    finition_select,
+    generation_select,
+    marques_select,
+    modeles_select,
+    moteur_select,
+    select_user_role,
 )
+from src.modules.app.stats_plots import show_selected_chart
+from src.modules.app.tabs import (
+    get_prix_moy_displayed,
+    get_prix_pred_displayed,
+    predict_button,
+    predict_km_fictif_button,
+    show_dataframe,
+)
+from src.modules.app.title import title
+from src.modules.requetes.requetes_kpi import calcul_delta, get_avg_price, get_count_car
 
 nom_marques_modeles = pl.DataFrame(import_marques_modeles())
 
@@ -106,7 +122,8 @@ if user_role == "Acheteur":
     except InvalidInputException as e:
         st.error(f"""
                  Il y a eu une erreur, recharger la page svp.
-                 Si cette erreur persiste, n'hésitez pas à nous le signaler afin qu'elle soit corrigée. \n 
+                 Si cette erreur persiste, 
+                 n'hésitez pas à nous le signaler afin qu'elle soit corrigée. \n 
                  Détail de l'erreur : \n 
                  {e}
                  """)
