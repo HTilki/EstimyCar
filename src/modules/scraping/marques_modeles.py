@@ -6,7 +6,7 @@ from pathlib import Path
 
 def recup_marques_modeles() -> dict:
     page_accueil = Path(".").resolve() / "pages/page_accueil.html"
-    page = BeautifulSoup(page_accueil.read_text(encoding="utf8"), features="html5lib")
+    page = BeautifulSoup(page_accueil.read_text(encoding="utf8"), features="html.parser")
     div_voitures = cast(Tag, page.find("div", class_="dropdown__itemsWrapper"))
     modeles: list[str]
     marques_modeles = {}

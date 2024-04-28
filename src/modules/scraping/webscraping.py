@@ -44,6 +44,7 @@ def recup_cylindre(annonce: Tag) -> str:
     )
     return cylindre[0].text
 
+
 def recup_caracteristiques(annonce: Tag) -> tuple:
     """
     Récupère les caractéristiques d'une annonce à partir de balises HTML spécifiques.
@@ -152,6 +153,7 @@ def recup_href(annonce: Tag) -> str:
     else:
         return "NA"
 
+
 @dataclass
 class voiture:
     marque: str
@@ -164,6 +166,7 @@ class voiture:
     position_marché: str
     garantie: str
     lien: str
+
 
 def recup_informations_voiture(annonce: Tag) -> voiture:
     """
@@ -261,6 +264,7 @@ def get_random_user_agent() -> str:
     user_agent = random.choice(valid_user_agents)
     return user_agent
 
+
 def recup_page(numero_page: int, marque: str, modele: str) -> BeautifulSoup:
     """
     Récupère les informations d'une page spécifique.
@@ -293,6 +297,7 @@ def recup_page(numero_page: int, marque: str, modele: str) -> BeautifulSoup:
             current_attempt += 1
     print("Échec des tentatives de connexion. Arrêt du programme.")
     raise rq.ConnectionError("Échec des tentatives de connexion.")
+
 
 def recup_annonces(page: BeautifulSoup) -> ResultSet:
     """
