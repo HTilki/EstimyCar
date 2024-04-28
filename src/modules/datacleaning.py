@@ -15,14 +15,14 @@ def recup_marque_modele_generation(
     ## Returns:
         tuple: Un tuple contenant la marque, le modèle et la génération du véhicule s'ils sont identifiés.
 
-    ## Example:
+    ## Example(s):
         >>> row_ex = ("CITROEN C3 III",)
         >>> car_ex = pl.DataFrame({
         ...     "marque": ["CITROEN"],
         ...     "modeles": [["C3"]]
         ... })
         >>> recup_marque_modele_generation(row_ex, car_ex)
-        ('CITROEN', 'C3', 'III')
+        ... ('CITROEN', 'C3', 'III')
     """
     for marque in nom_marques_modeles["marque"]:
         # On teste la presence de la marque dans la chaine de caractère
@@ -60,7 +60,7 @@ def get_marque_modele_generation(
     ## Returns:
         pl.DataFrame: DataFrame Polars contenant les informations sur la marque, le modèle et la génération extraites des données fournies.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ... "marque": ["CITROEN C3 III", "MERCEDES 280 SL 1971"],
         ...  #...
@@ -99,7 +99,7 @@ def get_km_prix_annee(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame: DataFrame Polars traité, avec les colonnes '"kilométrage", "prix" et "année" converties dans le bon format.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ...     "kilometrage": ["100 000 km", "75 000 km", "120 000 km"],
         ...     "prix": ["15 000 €", "20 000 €", "12 500 €"],
@@ -134,7 +134,7 @@ def get_garantie(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame: DataFrame Polars traité, avec la colonne "garantie" nettoyer et convertie dans le bon format.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ...     "garantie": ["Livraison", "NA", "Garantie 12 mois", "3 mois", "-300 mois"]
         ...     # ...
@@ -174,7 +174,7 @@ def split_cylindre(data: pl.DataFrame) -> pl.DataFrame:
         pl.DataFrame: DataFrame Polars traité, avec les nouvelles colonnes "cylindre_2"", "moteur", "puissance", "finition",
         "puissance_2", "puissance_elec", "batterie", "finition_2" extraites de la colonne "cylindre".
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "3.0",
                             "2.0 HDI 90", "320ch 75kWh"]
@@ -225,7 +225,7 @@ def clean_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame: DataFrame Polars avec les colonnes "puissance" et "finition" restructurées et renommées.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ... "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY",
                          "2.0 HDI 90", "320ch 75kWh", "300ch 80kWh E-TECH"]
@@ -313,7 +313,7 @@ def convert_puissance(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame: DataFrame Polars avec la colonne "puissance" convertie au format spécifié.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ...     "puissance": ["320", "130ch", "60ch", None]
         ...     # ...
@@ -343,7 +343,7 @@ def get_cylindre(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame:  DataFrame Polars avec les colonnes formatées sur les cylindres et la puissance.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ...     "cylindre": ["1.6 BLUEHDI 100 SHINE", "1.2 PURETECH 130 FEEL PACK BUSINESS", "1.1 60 MIAMI", "DOLLY",
                             "2.0 HDI 90", "320ch 75kWh"]
@@ -376,7 +376,7 @@ def filter_data(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame: DataFrame Polars filtré selon les spécifications indiquées.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ...     "annee": [2022, 2023, 2017, 2024, 2023],
         ...     "kilometrage": [45000, 60000, 1500000, 55000, 80700],
@@ -409,7 +409,7 @@ def supp_doublons(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame: DataFrame Polars avec les doublons supprimés.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ...     "lien": ["https://www.lacentrale.fr/auto-occasion-annonce-69111069227.html",
         ...             "https://www.lacentrale.fr/auto-occasion-annonce-87102790043.html",
@@ -437,7 +437,7 @@ def supp_na(data: pl.DataFrame) -> pl.DataFrame:
     ## Returns:
         pl.DataFrame: DataFrame Polars avec les lignes contenant des valeurs manquantes dans la colonne "marque" supprimées.
 
-    ## Example:
+    ## Example(s):
         >>> data_ex = pl.DataFrame({
         ...     "marque": ["Toyota", "Ford", None, "BMW", None]
         ...     # ...

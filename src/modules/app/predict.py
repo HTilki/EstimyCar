@@ -23,7 +23,7 @@ def charger_modeles(
     ## Returns:
         tuple[LinearRegression | KNeighborsRegressor | RandomForestRegressor, ColumnTransformer]: Le modèle chargé.
 
-    ## Example:
+    ## Example(s):
         >>> model, preprocessor = charger_modeles('PORSCHE')
         # Charge le modèle de régression et le préprocesseur associé pour la marque PORSCHE.
     """
@@ -46,7 +46,7 @@ def predict_prix(data: pl.DataFrame, marque: str) -> float | None:
     ## Returns:
         float: La prédictions du prix.
 
-    ## Example:
+    ## Example(s):
         >>> predict_prix(data_to_predict, 'PORSCHE')
         # Prédit les prix des véhicules pour la marque PORSCHE en utilisant le modèle chargé.
 
@@ -83,7 +83,7 @@ def predict_prix_autre_km(data: pl.DataFrame, marque: str) -> Figure:
     ## Returns:
         Figure: le graphique plotly.
 
-    ## Example:
+    ## Example(s):
         >>> predict_prix_autre_km(data_origine, 'PORSCHE')
         # Prédit les prix des véhicules pour la marque PORSCHE en utilisant le modèle chargé,
         # en simulant différents kilométrages.

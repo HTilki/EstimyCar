@@ -5,6 +5,7 @@ from pathlib import Path
 import json
 from dataclasses import dataclass
 import time
+import random
 from serde.json import to_json
 
 
@@ -215,13 +216,14 @@ def import_marques_modeles() -> list:
     ## Returns:
         list: Liste de tuples représentant chaque marque avec une liste de ses modèles associés.
 
-    ## Exemple:
+    ## Example(s):
     fichier json: {
     "Marque A": ["Modèle 1", "Modèle 2"],
     "Marque B": ["Modèle 3", "Modèle 4"]
     }
 
-    >>> [
+    >>> import_marques_modeles()
+    ... [
     ("Marque A", ["Modèle 1", "Modèle 2"]),
     ("Marque B", ["Modèle 3", "Modèle 4"])
     ]
@@ -239,6 +241,26 @@ def import_marques_modeles() -> list:
     return nom_marques_modeles_list
 
 
+def get_random_user_agent() -> str:
+    """
+    Renvoie un User-Agent aléatoire.
+
+    ## Returns:
+        str : Un User-Agent choisi aléatoirement
+
+    ## Example(s)
+        >>> get_random_user_agent()
+        ... "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0"
+    """
+    valid_user_agents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9",
+        "Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36",
+    ]
+    user_agent = random.choice(valid_user_agents)
+    return user_agent
+
 def recup_page(numero_page: int, marque: str, modele: str) -> BeautifulSoup:
     """
     Récupère les informations d'une page spécifique.
@@ -254,14 +276,14 @@ def recup_page(numero_page: int, marque: str, modele: str) -> BeautifulSoup:
     ## Returns:
         BeautifulSoup: Objet BeautifulSoup contenant le contenu de la page.
     """
-
+    headers = get_random_user_agent()
     adresse = f"https://www.lacentrale.fr/listing?makesModelsCommercialNames={marque.upper()}%3A{modele.upper()}&options=&page={numero_page}"
     max_attempts = 3  # Nombre maximal de tentatives
     current_attempt = 0
 
     while current_attempt < max_attempts:
         try:
-            requete = rq.get(url=adresse)
+            requete = rq.get(url=adresse, headers=headers)
             page = BeautifulSoup(requete.content, "html.parser")
             return page
         except rq.ConnectionError as e:

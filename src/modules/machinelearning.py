@@ -74,7 +74,7 @@ def get_preprocessor() -> ColumnTransformer:
     ## Returns:
         ColumnTransformer: Un transformateur de colonnes scikit-learn pour prétraiter les caractéristiques numériques et catégorielles.
 
-    ## Example:
+    ## Example(s):
         >>> preprocessor = get_preprocessor()
         >>> # En supposant que 'data' est une DataFrame avec les caractéristiques spécifiées
         >>> data_transformee = preprocessor.fit_transform(data)
@@ -127,7 +127,7 @@ def set_models() -> tuple[dict, dict]:
         - 'min_samples_split': [5, 10, 15]
         - 'min_samples_leaf': [2]
 
-    ## Example:
+    ## Example(s):
         >>> models, param_grids = set_models()
         >>> # Utilisation des modèles et grilles de paramètres dans un processus de recherche sur grille
     """
@@ -178,7 +178,7 @@ def find_best_model(
         tuple[LinearRegression | KNeighborsRegressor | RandomForestRegressor, str]:
         Un tuple contenant le meilleur modèle sélectionné et le nom du modèle.
 
-    ## Example:
+    ## Example(s):
         >>> models, param_grids = set_models()
         >>> best_model, best_model_name = find_best_model(models, param_grids, preprocessor, X_train, y_train, 'CITROEN')
         >>> # Utilisation du meilleur modèle dans la suite de l'analyse
@@ -232,7 +232,7 @@ def print_best_results(
     ## Returns:
         None
 
-    ## Example:
+    ## Example(s):
         >>> print_best_results('PORSCHE', 'KNeighbors', KNeighborsRegressor(algorithm='auto',..., n_neighbors=3, p=2, weights='distance'), 8737.218)
         --- PORSCHE ---
         Meilleur modèle : KNeighbors
@@ -261,7 +261,7 @@ def export_models(
     ## Returns:
         None
 
-    ## Example:
+    ## Example(s):
         >>> export_models(KNeighborsRegressor(), preprocessor, 'PORSCHE')
         # Exporte le modèle KNeighborsRegressor et le préprocesseur associé pour la marque PORSCHE.
         # Les fichiers sont sauvegardés dans le répertoire 'models'.
@@ -285,7 +285,7 @@ def preprocess_train_and_evaluate_model(data: pl.DataFrame, marque: str) -> None
     ## Returns:
         None
 
-    ## Example:
+    ## Example(s):
         >>> preprocess_train_and_evaluate_model(data, 'PORSCHE')
         # Préprocesse les données, entraîne et évalue le meilleur modèle pour la marque PORSCHE.
         # Les résultats, le meilleur modèle et le préprocesseur associé sont exportés.
@@ -325,7 +325,7 @@ def get_all_models() -> None:
     ## Returns:
         None
 
-    ## Example:
+    ## Example(s):
         >>> get_all_models()
         # Les résultats sont exportés pour chaque modèle.
 

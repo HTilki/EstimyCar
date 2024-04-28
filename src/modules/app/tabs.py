@@ -154,7 +154,7 @@ def get_prix_pred_displayed() -> None:
         Sinon, elle affiche un message d'erreur.
     """
     if "prix_pred" in st.session_state:
-        if st.session_state["prix_pred"] != None:
+        if st.session_state["prix_pred"] is not None:
             st.metric(
                 "**:orange[Prix estimé :]** ",
                 value=format_prix(st.session_state["prix_pred"]),

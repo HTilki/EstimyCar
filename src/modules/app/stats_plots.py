@@ -8,7 +8,7 @@ def get_avg_price_by_brand():
     Affiche un barplot représentant le prix moyen par marque de véhicule.
     """
     prix_moyen_m = duckdb.sql(
-        f"""
+        """
         SELECT marque, ROUND(AVG(prix), 2) AS prix_moyen
         FROM 'data/database.parquet'
         GROUP BY marque
@@ -35,7 +35,7 @@ def get_price_histogram():
     Affiche un histogramme représentant la distribution des prix des véhicules compris entre 0 et 150 000€.
     """
     prices = duckdb.sql(
-        f"""
+        """
         SELECT prix
         FROM 'data/database.parquet'
         WHERE prix BETWEEN 0 AND 150000
@@ -56,7 +56,7 @@ def get_count_models_by_brand():
     Affiche un barplot indiquant le nombre de modèles par marque de véhicule.
     """
     count_models = duckdb.sql(
-        f"""
+        """
         SELECT marque, COUNT(DISTINCT modele) AS 'nombre de modeles'
         FROM 'data/database.parquet'
         GROUP BY marque

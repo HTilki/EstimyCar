@@ -5,7 +5,6 @@ Module pour la manipulation des données des marques et modèles de voitures.
         - NomMarquesModeles: Représente une marque et sa liste de modèles.
 """
 
-
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,15 +23,17 @@ def import_marques_modeles() -> list:
     ## Returns:
             list: Liste de dataclass représentant chaque marque avec une liste de ses modèles associés.
 
-    ## Example:
+    ## Example(s):
             fichier json: {
             "Marque A": ["Modèle 1", "Modèle 2"],
             "Marque B": ["Modèle 3", "Modèle 4"]
             }
 
-            >>> [
-            NomMarquesModeles(marque="Marque A", modeles=["Modèle 1", "Modèle 2"]),
-            NomMarquesModeles(marque="Marque B", modeles=["Modèle 3", "Modèle 4"])
+            >>> import_marques_modeles()
+            ... [
+                NomMarquesModeles(marque="Marque A", modeles=["Modèle 1", "Modèle 2"]),
+                NomMarquesModeles(marque="Marque B", modeles=["Modèle 3", "Modèle 4"])
+                ]
     """
     nom_marques_modeles_list = []
     with open(

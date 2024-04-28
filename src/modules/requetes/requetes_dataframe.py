@@ -43,7 +43,7 @@ def get_dataframe(
     ## Note:
         Les critères de filtrage peuvent être spécifiés individuellement ou en combinaison, selon les besoins.
 
-    ## Example:
+    ## Example(s):
         >>> get_dataframe(['MERCEDES'], ['C220'], 2010, 2022, 0, 100000, ['Automatique'], ['Essence'], 10000, 50000)
         # Retourne un DataFrame contenant les données des véhicules de la marque MERCEDES, du modèle C220,
         # de l'année entre 2010 et 2022, avec un kilométrage entre 0 et 100 000, une boîte de vitesses automatique,

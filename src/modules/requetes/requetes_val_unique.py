@@ -21,7 +21,7 @@ def get_plage_annee(
     ## Returns:
         tuple[int]: Un tuple contenant la plage d'années [annee_min, annee_max].
 
-    Example:
+    ## Example(s):
         >>> get_plage_annee("Acheteur")
         # Retourne la valeur minimum et maximum d'année sur toute la base de données.
 
@@ -34,7 +34,7 @@ def get_plage_annee(
             tuple[int, int],
             tuple(
                 duckdb.sql(
-                    f"""
+                    """
                 SELECT MIN(annee) as annee_min,
                 MAX(annee) as annee_max
                 FROM 'data/database.parquet'
@@ -80,7 +80,7 @@ def get_unique_marque(user_role: str) -> list:
     """
     if user_role == "Acheteur":
         marques = duckdb.sql(
-            f"""
+            """
             SELECT DISTINCT(marque) as unique_mar
             FROM 'data/database.parquet'
             WHERE marque IS NOT NULL
@@ -88,8 +88,9 @@ def get_unique_marque(user_role: str) -> list:
             """
         ).df()
     if user_role == "Vendeur":
-        marques = duckdb.sql(
-            f"""
+        marques = (
+            duckdb.sql(
+                """
             SELECT COUNT(*) as nb_annonces, 
             marque as unique_mar
             FROM 'data/database.parquet'
@@ -97,7 +98,11 @@ def get_unique_marque(user_role: str) -> list:
             GROUP BY marque
             ORDER BY COUNT(*) DESC
             """
-        ).df().head(40).sort_values("unique_mar")
+            )
+            .df()
+            .head(40)
+            .sort_values("unique_mar")
+        )
     return list(marques["unique_mar"])
 
 
@@ -111,7 +116,7 @@ def get_unique_modele(marque: str) -> list:
     ## Returns:
         list: Liste des noms de modèles uniques pour la marque spécifiée.
 
-    ## Example:
+    ## Example(s):
         >>> get_unique_modele("MERCEDES")
         # Retourne la liste des modèles uniques disponible dans la base de données pour la marque MERCEDES.
     """
@@ -138,7 +143,7 @@ def get_unique_generation(marque: str, modele: str) -> list:
     ## Returns:
         list: Liste des générations uniques pour la marque et le modèle spécifiés.
 
-    ## Example:
+    ## Example(s):
         >>> get_unique_generation("MERCEDES", "C220")
         # Retourne la liste des générations uniques pour la marque MERCEDES et le modèle C220.
     """
@@ -237,7 +242,7 @@ def get_unique_batterie() -> list:
         - list: Liste des types de batteries uniques.
     """
     batteries = duckdb.sql(
-        f"""
+        """
         SELECT DISTINCT(batterie) as unique_bat
         FROM 'data/database.parquet'
         WHERE batterie IS NOT NULL
