@@ -4,3 +4,7 @@ src/modules/app/__pycache__
 src/modules/requetes/__pycache__
 .ruff_cache
 .vscode/settings.json
+.idea
+build
+dist
+src/estimycar.egg-info/
